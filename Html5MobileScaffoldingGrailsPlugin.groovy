@@ -21,10 +21,10 @@ class Html5MobileScaffoldingGrailsPlugin {
 A plugin that scaffold HTML5 mobile application using JQuery mobile in one-page. No GSP anymore.
 '''
 
-    def documentation = 'http://3musket33rs.github.com/html5-mobile-scaffolding'
+    def documentation = 'http://3musket33rs.github.com/html5-mobile-scaffolding/'
     def license = 'MIT'
-    def issueManagement = [system: 'GitHub', url: 'https://3musket33rs.github.com/html5-mobile-scaffolding/issues']
-    def scm = [url: 'https://3musket33rs.github.com/html5-mobile-scaffolding']
+    def issueManagement = [system: 'GitHub', url: 'https://github.com/3musket33rs/html5-mobile-scaffolding/issues']
+    def scm = [url: 'https://github.com/3musket33rs/html5-mobile-scaffolding']
     
     
     def doWithSpring = {
