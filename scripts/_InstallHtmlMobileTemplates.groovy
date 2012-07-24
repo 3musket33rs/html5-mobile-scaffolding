@@ -14,7 +14,7 @@ target(htmlMobileCopyTemplates: "generate HTML5 mobile view with different secti
   }
 
   tagetPaths.each { sourcePath, targetDir ->
-    def sourceDir = "$htmlMobileScaffoldingPluginDir/src/templates/scaffolding/$sourcePath"
+    def sourceDir = "$html5MobileScaffoldingPluginDir/src/templates/scaffolding/$sourcePath"
 
     ant.mkdir dir: targetDir
     ant.copy(todir: targetDir, overwrite: overwrite) {
