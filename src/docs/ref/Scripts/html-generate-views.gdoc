@@ -1,0 +1,23 @@
+h1. html-generate-views
+
+h2. Purpose
+
+Genrate controllers and views for static scaffolding with HTML5 and jQery Mobile.
+
+h2. Exemples
+
+{code:java}
+grails html-generate-views org.bookstore.Book
+{code}
+
+h2. Description
+
+Usage:
+{code:java}
+grails html-generate-views name
+{code}
+
+where name is the full name of the domain class including package name.
+
+The command depends on install-templates command. It will copy the templates Grails uses for all code generation activities to the application's src/templates directory. The templates directories include:
+
