@@ -6,9 +6,8 @@ target(default: 'Generates HTML5 Mobile views for a specified domain class') {
 
 	promptForName type: 'Domain Class'
 	generateForName = argsMap.params[0]
-  htmlViewName = argsMap.params[1]
-  generateViews = true
-  generateController = false
+  generateViews = false
+  generateController = true
   
 	generateForOne()
 }

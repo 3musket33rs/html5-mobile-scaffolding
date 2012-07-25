@@ -11,7 +11,11 @@ includeTargets << grailsScript("_GrailsGenerate")
 includeTargets << grailsScript("_GrailsBootstrap")
 includeTargets << grailsScript('_GrailsPackage')
 
+// default values
 generateForName = null
+htmlViewName = null
+generateViews = true
+generateController = true
 
 target(generateForOne: 'Generates controllers and views for only one domain class.') {
   depends compile, loadApp
@@ -21,10 +25,10 @@ target(generateForOne: 'Generates controllers and views for only one domain clas
   //println "AFTER" + myClass
   
   def name = generateForName
-  //grailsConsole.updateStatus "name $name "
+  def viewName = htmlViewName
+  
 
   name = name.indexOf('.') > 0 ? name : GrailsNameUtils.getClassNameRepresentation(name)
-  //grailsConsole.updateStatus "name $name "
 
   def domainClass = grailsApp.getDomainClass(name)
   //grailsConsole.updateStatus "domain $domainClass "
@@ -34,12 +38,12 @@ target(generateForOne: 'Generates controllers and views for only one domain clas
     bootstrap()
     domainClass = grailsApp.getDomainClass(name)
   }
-
+  
+  //grailsConsole.updateStatus "Generating HTML view ${viewName} for ${name}"
+  
   if (domainClass) {
-    generateForDomainClass(domainClass)
-    event 'StatusFinal', [
-      "Finished generation for domain class ${domainClass.fullName}"
-    ]
+    generateForDomainClass(domainClass, viewName)
+    event 'StatusFinal', [ "Finished generation for domain class ${domainClass.fullName}" ]
   }
   else {
     event 'StatusFinal', [
@@ -48,23 +52,38 @@ target(generateForOne: 'Generates controllers and views for only one domain clas
     exit 1
   }
 }
-
-def generateForDomainClass(domainClass) {
-  def templateGenerator = new HtmlMobileTemplateGenerator(classLoader)
+HtmlMobileTemplateGenerator initHtmlMobileTemplate(viewName) {
+  def templateGenerator = new HtmlMobileTemplateGenerator(classLoader, viewName)
   templateGenerator.grailsApplication = grailsApp
   templateGenerator.pluginManager = pluginManager
   templateGenerator.event = event
+  templateGenerator
+}
 
-  templateGenerator.generateViews(domainClass, basedir)
-  templateGenerator.generateController(domainClass, basedir)
+def generateForDomainClass(domainClass, viewName) {
+  def templateGenerator = initHtmlMobileTemplate viewName
+  
+  if (generateViews) {
+    event 'StatusUpdate', ["Generating views for domain class ${domainClass.fullName}"]
+    templateGenerator.generateViews(domainClass, basedir)
+    event 'GenerateViewsEnd', [domainClass.fullName]
+  }
+
+  if (generateController) {
+    event 'StatusUpdate', ["Generating controller for domain class ${domainClass.fullName}"]
+    templateGenerator.generateController(domainClass, basedir)
+    event 'GenerateControllerEnd', [domainClass.fullName]
+  }
 }
 
 class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
 
  def event
-
- HtmlMobileTemplateGenerator(ClassLoader classLoader) {
+ def viewName
+ 
+ HtmlMobileTemplateGenerator(ClassLoader classLoader, String viewName) {
    super(classLoader)
+   this.viewName = viewName
  }
 
  @Override
@@ -72,14 +91,14 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
    Assert.hasText destdir, 'Argument [destdir] not specified'
 
    for (t in getTemplateNames()) {
-     event 'StatusUpdate', ["Generating $t for domain class ${domainClass.fullName}"]
+     //event 'StatusUpdate', ["Generating $t for domain class ${domainClass.fullName}"]
      generateView domainClass, t, new File(destdir).absolutePath
    }
  }
 
  @Override
- void generateView(GrailsDomainClass domainClass, String viewName, Writer out) {
-   def templateText = getTemplateText(viewName)
+ void generateView(GrailsDomainClass domainClass, String templateViewName, Writer out) {
+   def templateText = getTemplateText(templateViewName)
    if (templateText) {
 
      def t = engine.createTemplate(templateText)
@@ -111,8 +130,8 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
  }
 
  @Override
- void generateView(GrailsDomainClass domainClass, String viewName, String destDir) {
-   def suffix = viewName.find(/\.\w+$/)
+ void generateView(GrailsDomainClass domainClass, String templateViewName, String destDir) {
+   def suffix = templateViewName.find(/\.\w+$/)
 
    def viewsDir
    def destFile
@@ -123,14 +142,20 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
    }
    if (!viewsDir.exists()) viewsDir.mkdirs()
   
-   if (suffix == '.html' && domainClass.name == grailsApplication.config?.grails?.scaffolding?.html?.mobile?.index) {
-       destFile = new File(viewsDir, "${viewName.toLowerCase()}")
-   } else {
-     destFile = new File(viewsDir, "${domainClass.propertyName.toLowerCase()}-${viewName.toLowerCase()}")
+   if (suffix == '.html') { // for html files
+     if (viewName) { // either 2nd paramater of hGV command
+       destFile = new File(viewsDir, viewName)
+     } else if (domainClass.name == grailsApplication.config?.grails?.scaffolding?.html?.mobile?.index) { // or configured in Config 
+       destFile = new File(viewsDir, "${templateViewName.toLowerCase()}")
+     } else { //by default by convention className-index.html
+       destFile = new File(viewsDir, "${domainClass.propertyName.toLowerCase()}-${templateViewName.toLowerCase()}")
+     }
+   } else { // for js
+     destFile = new File(viewsDir, "${domainClass.propertyName.toLowerCase()}-${templateViewName.toLowerCase()}")
    }
-   
+   println ":::::::::::Generating $destFile for ${domainClass.propertyName} "
    destFile.withWriter { Writer writer ->
-     generateView domainClass, viewName, writer
+     generateView domainClass, templateViewName, writer
    }
  }
 

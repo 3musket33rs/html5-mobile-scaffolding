@@ -8,7 +8,7 @@ target(default: 'Generates HTML5 Mobile views for a specified domain class') {
 	generateForName = argsMap.params[0]
   htmlViewName = argsMap.params[1]
   generateViews = true
-  generateController = false
+  generateController = true
   
 	generateForOne()
 }
