@@ -120,14 +120,16 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
      def longitude = domainClass.properties.find { it.name == "longitude" }
      
      Closure resourceClosure = domainClass.getStaticPropertyValue('mapping', Closure)
-     def myMap = [:]
-     def populator = new grails.util.ClosureToMapPopulator(myMap)
-     populator.populate resourceClosure
-     
-     def geoProps = myMap.findAll { listProps*.name.contains(it?.key) && it?.value?.geoIndex}
-     //println listProps
-     println geoProps
-     
+     def geoProps = [:]
+     if (resourceClosure) {
+       def myMap = [:]
+       def populator = new grails.util.ClosureToMapPopulator(myMap)
+       populator.populate resourceClosure
+       
+       geoProps = myMap.findAll { listProps*.name.contains(it?.key) && it?.value?.geoIndex}
+       //println listProps
+       println geoProps
+     }
      def binding = [pluginManager: pluginManager,
        project: project,
        packageName: packageName,
