@@ -123,11 +123,8 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
      def myMap = [:]
      def populator = new grails.util.ClosureToMapPopulator(myMap)
      populator.populate resourceClosure
-
-     def innerList =myMap.find {it.key == 'location'}.value
-     def isGeolocated = innerList.geoIndex
      
-     def geoProps = myMap.findAll { listProps*.name.contains(it.key) && it.value?.geoIndex}
+     def geoProps = myMap.findAll { listProps*.name.contains(it?.key) && it?.value?.geoIndex}
      //println listProps
      println geoProps
      
