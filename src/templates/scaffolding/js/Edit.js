@@ -216,6 +216,15 @@ function serializeObject(inputs) {
 		dataType : "jsonp",
 		url : serverUrl + '/${classNameLowerCase}/' + action,
 		success : function(data) {
+			if (data.message) {
+				alert(data.message)
+				return;
+			}
+			if (data.errors) {
+				// Here I need to add to field mapping for errors
+				alert("validation issue" + data.errors)
+				return;
+			}
 			if (action == "save") {
 				add${className}OnSection(data);
 				\$('#list-${classNameLowerCase}s').listview('refresh');
@@ -243,6 +252,10 @@ function serializeObject(inputs) {
 		dataType : "jsonp",
 		url : serverUrl + '/${classNameLowerCase}/delete',
 		success : function(data) {
+			if (data.message) {
+				alert(data.message)
+				return;
+			}
 			remove${className}OnSection(data.id);
 		},
 		error : function(xhr) {
