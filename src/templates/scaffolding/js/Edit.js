@@ -87,9 +87,19 @@ function create${className}() {
     <% if (longitude && latitude) { %>
     navigator.geolocation.getCurrentPosition(foundLocation);
     <% } %>
+    <% geoProps.each { %>
+    navigator.geolocation.getCurrentPosition(foundLocationForMongoDB);
+    <% } %>
     
 	\$("#delete-${classNameLowerCase}").hide();
 }
+
+<% geoProps.each { %>
+function foundLocationForMongoDB(position) {
+	 \$("#input-${classNameLowerCase}-${it.key}").val({lat: position.coords.latitude, long:position.coords.longitude});
+}
+<% } %>
+
 <% if (longitude && latitude) { %>
 function foundLocation(position) {
 	 \$("#input-${classNameLowerCase}-latitude").val(position.coords.latitude);

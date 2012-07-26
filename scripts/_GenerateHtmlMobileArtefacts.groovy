@@ -111,10 +111,26 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
      def excludedProps = Event.allEvents.toList() << 'id' << 'version' << 'longitude' << 'latitude'
      def allowedNames = domainClass.persistentProperties*.name << 'dateCreated' << 'lastUpdated'
      def props = domainClass.properties.findAll { allowedNames.contains(it.name) && !excludedProps.contains(it.name) && it.type != null && !Collection.isAssignableFrom(it.type) }
+     
+     def listProps = domainClass.properties.findAll {Collection.isAssignableFrom(it.type)}
+     
      def oneToOneProps = props.findAll { it.isOneToOne() }
+     
      def latitude = domainClass.properties.find { it.name == "latitude" }
      def longitude = domainClass.properties.find { it.name == "longitude" }
-     //oneToManyProps.each {println it.name}
+     
+     Closure resourceClosure = domainClass.getStaticPropertyValue('mapping', Closure)
+     def myMap = [:]
+     def populator = new grails.util.ClosureToMapPopulator(myMap)
+     populator.populate resourceClosure
+
+     def innerList =myMap.find {it.key == 'location'}.value
+     def isGeolocated = innerList.geoIndex
+     
+     def geoProps = myMap.findAll { listProps*.name.contains(it.key) && it.value?.geoIndex}
+     //println listProps
+     println geoProps
+     
      def binding = [pluginManager: pluginManager,
        project: project,
        packageName: packageName,
@@ -123,6 +139,7 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
        oneToOneProps: oneToOneProps,
        latitude: latitude,
        longitude: longitude,
+       geoProps:geoProps,
        className: domainClass.shortName]
 
      t.make(binding).writeTo(out)
