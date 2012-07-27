@@ -127,8 +127,6 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
        populator.populate resourceClosure
        
        geoProps = myMap.findAll { listProps*.name.contains(it?.key) && it?.value?.geoIndex}
-       //println listProps
-       println geoProps
      }
      def binding = [pluginManager: pluginManager,
        project: project,
@@ -169,7 +167,6 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
    } else { // for js
      destFile = new File(viewsDir, "${domainClass.propertyName.toLowerCase()}-${templateViewName.toLowerCase()}")
    }
-   println ":::::::::::Generating $destFile for ${domainClass.propertyName} "
    destFile.withWriter { Writer writer ->
      generateView domainClass, templateViewName, writer
    }
