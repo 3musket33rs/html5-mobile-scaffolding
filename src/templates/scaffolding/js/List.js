@@ -13,7 +13,7 @@ ${className}List.prototype.get = function(index) {
 
 serverUrl = 'http://localhost:8080/${project}';
 
-//serverUrl = 'http://The${className}.cloudfoundry.com'	
+//serverUrl = 'http://${project}.cloudfoundry.com'	
 
 \$('#section-${classNameLowerCase}s').live('pageinit', function(e) {
 	get${className}s();

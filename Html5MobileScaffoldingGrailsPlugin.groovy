@@ -4,7 +4,7 @@ class Html5MobileScaffoldingGrailsPlugin {
 
     def version = '0.1-SNAPSHOT'
     def grailsVersion = '2.0 > *'
-    def dependsOn = [:]
+    def dependsOn = [:] //TODO to be added once published ['jsonp': "* > 2.0"]
     def pluginExcludes = []
 
     def title = 'Html5 Mobile Scaffolding Plugin'
