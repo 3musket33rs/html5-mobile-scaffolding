@@ -83,14 +83,12 @@ function create${className}() {
 	\$('input[name="${p.name}"]:first').prop('checked', true);
 	\$('input[name="${p.name}"]:first').checkboxradio('refresh');
     <%  }  }%>	
-    
     <% if (longitude && latitude) { %>
-    navigator.geolocation.getCurrentPosition(foundLocation);
+    navigator.geolocation.getCurrentPosition(foundLocationCreate);
     <% } %>
     <% geoProps.each { %>
     navigator.geolocation.getCurrentPosition(foundLocationForMongoDB);
     <% } %>
-    
 	\$("#delete-${classNameLowerCase}").hide();
 }
 
@@ -101,7 +99,13 @@ function foundLocationForMongoDB(position) {
 <% } %>
 
 <% if (longitude && latitude) { %>
-function foundLocation(position) {
+function foundLocationCreate(position) {
+	 \$("#input-${classNameLowerCase}-latitude").val(position.coords.latitude);
+	 \$("#input-${classNameLowerCase}-longitude").val(position.coords.longitude);
+	 showMap(position.coords.latitude, position.coords.longitude);
+}
+
+function foundLocationUpdate(position) {
 	 \$("#input-${classNameLowerCase}-latitude").val(position.coords.latitude);
 	 \$("#input-${classNameLowerCase}-longitude").val(position.coords.longitude);
 }
@@ -123,7 +127,7 @@ function showMap(lat,lng) {
 
 function show${className}(id) {
 	resetForm("form-update-${classNameLowerCase}");
-	var ${classNameLowerCase} = \$("#section-${classNameLowerCase}s").data("${className}_" + id);
+	var ${classNameLowerCase} = \$("#section-list-${classNameLowerCase}s").data("${className}_" + id);
     <% props.eachWithIndex { p, i ->
     if (p.type == Boolean || p.type == boolean) { %>
 	\$('#input-${classNameLowerCase}-${p.name}').prop('checked', ${classNameLowerCase}.${p.name});
@@ -141,8 +145,8 @@ function show${className}(id) {
 	\$('#input-${classNameLowerCase}-version').val(${classNameLowerCase}.version);
 	\$('#input-${classNameLowerCase}-class').val(${classNameLowerCase}.class);
 	<% if (longitude && latitude) { %>
-    navigator.geolocation.getCurrentPosition(foundLocation);
-    showMap(${classNameLowerCase}.latitude, ${classNameLowerCase}.longitude)
+    showMap(${classNameLowerCase}.latitude, ${classNameLowerCase}.longitude);
+    navigator.geolocation.getCurrentPosition(foundLocationUpdate);
 	<% } %>	
 	\$("#delete-${classNameLowerCase}").show();
 }
@@ -228,8 +232,11 @@ function serializeObject(inputs) {
 			if (action == "save") {
 				add${className}OnSection(data);
 				\$('#list-${classNameLowerCase}s').listview('refresh');
+				<% if (longitude && latitude) { %>
+				refreshCenterZoomMap();
+				<% } %>
 			} else {
-				var ${classNameLowerCase} = \$("#section-${classNameLowerCase}s").data('${className}_' + data.id);
+				var ${classNameLowerCase} = \$("#section-list-${classNameLowerCase}s").data('${className}_' + data.id);
 				\$(${classNameLowerCase}).trigger("refresh-${classNameLowerCase}"+ data.id + "-list", data);
 			}
 		},
