@@ -24,7 +24,7 @@ class ${className}Controller {
       def jsonObject = JSON.parse(params.${classNameLowerCase})
       ${className} ${classNameLowerCase}Instance = new ${className}(jsonObject)
       if (!${classNameLowerCase}Instance.save(flush: true)) {
-        ValidationErrors validationErrors = planeInstance.errors
+        ValidationErrors validationErrors = ${classNameLowerCase}Instance.errors
         render validationErrors as JSON
       }
       render ${classNameLowerCase}Instance as JSON
@@ -32,7 +32,7 @@ class ${className}Controller {
     
     def show() {
       def ${classNameLowerCase}Instance = ${className}.get(params.id)
-      if (!planeInstance) {
+      if (!${classNameLowerCase}Instance) {
         flash.message = message(code: 'default.not.found.message', args: [message(code: '${classNameLowerCase}.label', default: '${className}'), params.id])
         render flash as JSON
       }
@@ -64,7 +64,7 @@ class ${className}Controller {
         ${classNameLowerCase}Instance.properties = ${classNameLowerCase}Received.properties
 
         if (!${classNameLowerCase}Instance.save(flush: true)) {
-          ValidationErrors validationErrors = planeInstance.errors
+          ValidationErrors validationErrors = ${classNameLowerCase}Instance.errors
           render validationErrors as JSON
         }
 		    render ${classNameLowerCase}Instance as JSON
