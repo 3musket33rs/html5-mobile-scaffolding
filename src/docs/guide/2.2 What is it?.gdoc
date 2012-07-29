@@ -1,0 +1,7 @@
+Grails supports a feature known as static scaffolding which involves the generation of a CRUD (Create/Read/Update/Delete) interface for a given domain class. Once generated, the controller can be modified by you but they won't automatically update when you change the domain class.
+
+Generating HTML5 web mobile application is as easy as using standard Grails scaffolding. Html5-mobile-scaffolding is using static scaffolding. The idea is to give you the skeleton of the application for CRUD operation and then it's up to you to modify it. 
+
+As html5-mobile-scaffolding plugin targets mobile application, the challenge is to scaffold an application that can be fully installed as an hybrid application using phone-gap plugin (for example). The controller part is minimal and serves RESTfull services as JSON. 
+
+Providing service that will be installed on client device required JSONP plugin to allow JSON with padding (see jsonp plugin for more details). 

@@ -1,0 +1,13 @@
+Ideally, add the plugin dependency into @BuildConfig.groovy@. It is important that the plugin is scoped as @compile@, otherwise you may get some unexpected problems if you are letting the plugin manage your datasource config:
+
+{code}
+plugins {
+   compile ':html5-mobile-scaffolding:0.1'
+}
+{code}
+
+Alternately you can use the install-plugin command in grails:
+
+{code}
+grails install-plugin html5-mobile-scaffolding
+{code}
