@@ -52,15 +52,7 @@ function addJsClass(el) {
 A plugin that scaffolds HTML5 mobile application using JQuery mobile single page.
 </p>
         </div>
-        <header>
-      <div class="container">
-        <section id="downloads">
-          <a href="https://github.com/3musket33rs/html5-mobile-scaffolding/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/3musket33rs/html5-mobile-scaffolding/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/3musket33rs/html5-mobile-scaffolding" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
+
 
         <table id="colset" border="0" cellpadding="0" cellspacing="0">
             <tr>
@@ -78,11 +70,9 @@ A plugin that scaffolds HTML5 mobile application using JQuery mobile single page
 
 
       <div class="container">
-        <section id="downloads">
           <a href="https://github.com/3musket33rs/html5-mobile-scaffolding/zipball/master" class="btn">Download as .zip</a>
           <a href="https://github.com/3musket33rs/html5-mobile-scaffolding/tarball/master" class="btn">Download as .tar.gz</a>
           <a href="https://github.com/3musket33rs/html5-mobile-scaffolding" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
       </div>
                     
                         <div id="table-of-content">
