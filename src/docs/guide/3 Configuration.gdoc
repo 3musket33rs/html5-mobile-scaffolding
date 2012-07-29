@@ -1,6 +1,0 @@
-There are a few configuration options for the plugin. All are specified in Config.groovy, some of the configuration could be also done by command line optional argument. Command line argument configuration takes precedence from Config file.
-
-{table}
-*Property* | *Default* | *Meaning*
-grails.scaffolding.html.mobile.index | none, must be specified | By convention the html file scaffolded is name domainClass-index.htlm where domainClass does not contain package name.
-{table}
