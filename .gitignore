@@ -17,3 +17,5 @@ target-eclipse
 .project
 .classpath
 .settings
+
+.DS_Store

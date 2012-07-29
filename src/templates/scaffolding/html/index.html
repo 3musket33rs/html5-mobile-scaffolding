@@ -12,19 +12,39 @@
 <script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
 <script src="http://dev.jtsage.com/cdn/datebox/1.1.0/jqm-datebox-1.1.0.core.min.js"></script>
 <script src="http://dev.jtsage.com/cdn/datebox/1.1.0/jqm-datebox-1.1.0.mode.datebox.min.js"></script>
+<% if (longitude && latitude) { %>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<style type="text/css">
+.visible {display:inline;}
+.invisible {display:none;}
+</style>
+<% }%>
 </head>
 
 <body>
-
-	<section data-role="page" id="section-${classNameLowerCase}s">
-		<div data-role="header" data-position="fixed">
-			<h1>${className}</h1>
-		</div>
-		<div data-role="content">
+	<section data-role="page" id="section-list-${classNameLowerCase}s">
+	  <div data-role="header" data-position="fixed">
+	    <% if (longitude && latitude) { %>
+        <a data-transition="none" data-role="button" data-icon="grid" id="list-all-${classNameLowerCase}s">List</a>
+        <h1>${className}</h1>
+        <a data-transition="none" data-role="button" data-icon="star" id="map-all-${classNameLowerCase}s">Map</a>
+        <% } else {%>
+        <h1>${className}</h1>
+        <% } %>
+        </div>	
+        <% if (longitude && latitude) { %>	
+        <div data-role="content" class="invisible" id="list-${classNameLowerCase}s-parent">
+        <% } else { %>
+        <div data-role="content" id="list-${classNameLowerCase}s-parent">        
+        <% } %>
 			<ul data-role="listview" data-inset="true" data-filter="true" id="list-${classNameLowerCase}s">
 			</ul>
 		</div>
+        <% if (longitude && latitude) { %>	
+		<div data-role="content" class="visible"  id="map-${classNameLowerCase}s-parent">
+		  <div style="height: 70%;width: 100%;position: absolute;" id="map-canvas-all" ></div>
+		</div>
+        <% } %>
 		<div data-role="footer" data-position="fixed">
 			<div data-role="navbar">
 				<ul>
@@ -36,7 +56,7 @@
 	
 	<section data-role="page" id="section-show-${classNameLowerCase}">
 		<div data-role="header" id="show-${classNameLowerCase}" data-position="fixed">
-			<a href="#section-${classNameLowerCase}s" data-transition="slide" data-icon="arrow-l">Cancel</a>
+			<a href="#section-list-${classNameLowerCase}s" data-transition="slide" data-icon="arrow-l">Cancel</a>
 			<h1>${className}</h1>
 		</div>
      <div id="form-update-${classNameLowerCase}">
@@ -86,23 +106,24 @@
 		<input type="hidden" name="longitude" id="input-${classNameLowerCase}-longitude" /> 
 		<input type="hidden" name="latitude" id="input-${classNameLowerCase}-latitude" />
 		<% } %>
+		<% geoProps.each { %>
+		<input type="hidden" name="${it.key}" id="input-${classNameLowerCase}-${it.key}" /> 
+		<% } %>
         <input type="hidden" name="id" id="input-${classNameLowerCase}-id"/>
         <input type="hidden" name="version" id="input-${classNameLowerCase}-version"/>
         <input type="hidden" name="class" id="input-${classNameLowerCase}-class"/>
     </div>
     <% if (longitude && latitude) { %>
-    <div id="map_canvas" style="height: 30%;width: 30%;position: absolute;"/>
+    <div id="map_canvas" style="height: 70%;width: 100%;position: absolute;"></div>
     <% } %>
     <div data-role="footer" data-position="fixed">
       <div data-role="navbar">
         <ul>
-          <li><a href="#section-${classNameLowerCase}s" data-transition="slide" data-role="button" data-icon="delete" id="delete-${classNameLowerCase}">Delete</a></li> 
-          <li><a href="#section-${classNameLowerCase}s" data-transition="slide" data-icon="save" id="submit-${classNameLowerCase}">Save</a></li>
+          <li><a href="#section-list-${classNameLowerCase}s" data-transition="slide" data-role="button" data-icon="delete" id="delete-${classNameLowerCase}">Delete</a></li> 
+          <li><a href="#section-list-${classNameLowerCase}s" data-transition="slide" data-icon="save" id="submit-${classNameLowerCase}">Save</a></li>
         </ul>
       </div>
     </div>
 	</section>
-	
-
 </body>
 </html>
