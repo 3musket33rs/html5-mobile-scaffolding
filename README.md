@@ -7,5 +7,5 @@ Available Targets
 =================
 
 html-generate-views [domainClass] [optional viewName]
-html-generate-controller [domainClass]
+html-generate-controllers [domainClass]
 html-generate-all [domainClass] [optional viewName]
