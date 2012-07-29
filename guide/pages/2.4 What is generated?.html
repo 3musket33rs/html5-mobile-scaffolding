@@ -2,7 +2,7 @@
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-    <title>3 Configuration 0.1-SNAPSHOT</title>
+    <title>2.4 What is generated? 0.1-SNAPSHOT</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8"/>
     <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8"/>
@@ -20,17 +20,17 @@ function addJsClass() {
     <ul>
         <li>
             <div id="nav-summary" onmouseover="toggleNavSummary(false)" onmouseout="toggleNavSummary(true)">
-                <a href="../guide/index.html" class="button">Table of contents</a>
+                <a href="../../guide/index.html" class="button">Table of contents</a>
 
                 <div id="nav-summary-childs" style="display:none;">
                     
-                    <div class="toc-item" style="margin-left:0"><a href="../guide/1%20Introduction%20to%20HTML5%20mobile%20scaffolding%20Plugin.html"><strong>1</strong><span>Introduction to HTML5 mobile scaffolding Plugin</span></a>
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/1%20Introduction%20to%20HTML5%20mobile%20scaffolding%20Plugin.html"><strong>1</strong><span>Introduction to HTML5 mobile scaffolding Plugin</span></a>
                     </div>
                     
-                    <div class="toc-item" style="margin-left:0"><a href="../guide/2%20Getting%20Started.html"><strong>2</strong><span>Getting Started</span></a>
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/2%20Getting%20Started.html"><strong>2</strong><span>Getting Started</span></a>
                     </div>
                     
-                    <div class="toc-item" style="margin-left:0"><a href="../guide/3%20Configuration.html"><strong>3</strong><span>Configuration</span></a>
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/3%20Configuration.html"><strong>3</strong><span>Configuration</span></a>
                     </div>
                     
                 </div>
@@ -58,16 +58,18 @@ A plugin that scaffold HTML5 mobile application using JQuery mobile in one-page.
             <div id="main" class="corner-all">
 
                 
-                    <div class="toc-item prev-left"><a href="../guide/2%20Getting%20Started.html">&lt;&lt; <strong>2</strong><span>Getting Started</span></a></div>
+                    <div class="toc-item prev-left"><a href="../../guide/1%20Introduction%20to%20HTML5%20mobile%20scaffolding%20Plugin.html">&lt;&lt; <strong>1</strong><span>Introduction to HTML5 mobile scaffolding Plugin</span></a></div>
                 
 
                 <span id='toggle-col1' class="toggle">(<a href="#" onclick="localToggle(); return false;">Quick Reference</a>)</span>
 
                 
+                    <div class="toc-item next-right"><a href="../../guide/3%20Configuration.html"><strong>3</strong><span>Configuration</span> >></a></div>
+                
 
 
                 <div class="project">
-                    <h1>3 Configuration - Reference Documentation</h1>
+                    <h1>2.4 What is generated? - Reference Documentation</h1>
 
                     <p><strong>Authors:</strong> 3.musket33rs</p>
 
@@ -80,14 +82,25 @@ A plugin that scaffold HTML5 mobile application using JQuery mobile in one-page.
 
                 
 
-<h1 id="3 Configuration">3 Configuration</h1>
-There are a few configuration options for the plugin. All are specified in Config.groovy, some of the configuration could be also done by command line optional argument. Command line argument configuration takes precedence from Config file.<p class="paragraph"/><table class="wiki-table" cellpadding="0" cellspacing="0" border="0"><tr><th><strong class="bold">Property</strong></th><th><strong class="bold">Default</strong></th><th><strong class="bold">Meaning</strong></th></tr><tr class="table-odd"><td>grails.scaffolding.html.mobile.index</td><td>none, must be specified</td><td>By convention the html file scaffolded is name domainClass-index.htlm where domainClass does not contain package name.</td></tr></table>
-
+<h2 id="2.4 What is generated?">2.4 What is generated?</h2>
+<h5>Generated Controller</h5>
+From domain class controller class is generated. Controller renders as JSON.
+<div class="code"><pre>def list() &#123;
+      params.max = <span class="java&#45;object">Math</span>.min(params.max ? params.<span class="java&#45;object">int</span>('max') : 10, 100)
+     	render Book.list(params) as JSON
+    &#125;</pre></div><p class="paragraph"/><h5>Generated views</h5>
+Views are generated in web-app directory. for each domain class one html file will be generated. This file contains different sections for each CRUD operations. 2 associated JavaScript files are generated.<p class="paragraph"/><div class="code"><pre>&#45; web&#45;app
+  book&#45;index.html
+  &#45; js
+    book&#45;edit.js
+    book&#45;list.js</pre></div>
 
 
                 <div style="clear:both;margin-top:15px;"></div>
                 
-                    <div class="toc-item prev-left"><a href="../guide/2%20Getting%20Started.html">&lt;&lt; <strong>2</strong><span>Getting Started</span></a></div>
+                    <div class="toc-item prev-left"><a href="../../guide/1%20Introduction%20to%20HTML5%20mobile%20scaffolding%20Plugin.html">&lt;&lt; <strong>1</strong><span>Introduction to HTML5 mobile scaffolding Plugin</span></a></div>
+                
+                    <div class="toc-item next-right"><a href="../../guide/3%20Configuration.html"><strong>3</strong><span>Configuration</span> >></a></div>
                 
                 <div style="clear:both"></div>
             </div>
@@ -95,7 +108,7 @@ There are a few configuration options for the plugin. All are specified in Confi
         <td id="col2">
             <div class="local clearfix">
                 <div class="local-title">
-                    <a href="../guide/index.html" target="mainFrame">Quick Reference</a>
+                    <a href="../../guide/index.html" target="mainFrame">Quick Reference</a>
                     <span class="toggle">(<a href="#" onclick="localToggle(); return false;">hide</a>)</span>
                 </div>
                 <div class="menu">
@@ -103,13 +116,13 @@ There are a few configuration options for the plugin. All are specified in Confi
                     <div class="menu-block"><h1 class="menu-title" onclick="toggleRef(this.parentNode.childNodes[1])">Scripts</h1><div class="menu-sub">
                         
                             
-                            <div class="menu-item"><a href="../ref/Scripts/html-generate-all.html">html-generate-all</a>
+                            <div class="menu-item"><a href="../../ref/Scripts/html-generate-all.html">html-generate-all</a>
                             </div>
                             
-                            <div class="menu-item"><a href="../ref/Scripts/html-generate-controllers.html">html-generate-controllers</a>
+                            <div class="menu-item"><a href="../../ref/Scripts/html-generate-controllers.html">html-generate-controllers</a>
                             </div>
                             
-                            <div class="menu-item"><a href="../ref/Scripts/html-generate-views.html">html-generate-views</a>
+                            <div class="menu-item"><a href="../../ref/Scripts/html-generate-views.html">html-generate-views</a>
                             </div>
                             
                             </div>

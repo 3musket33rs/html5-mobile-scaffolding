@@ -60,16 +60,11 @@ A plugin that scaffold HTML5 mobile application using JQuery mobile in one-page.
 
                 <span id='toggle-col1' class="toggle">(<a href="#" onclick="localToggle(); return false;">Quick Reference</a>)</span>
 
-                <h1>html-generate-views</h1><p class="paragraph"/><h2>Purpose</h2><p class="paragraph"/>Generate controllers and views for static scaffolding with HTML5 and jQyery Mobile. Generated view is a single html file plus its associated JavaScript files.<p class="paragraph"/><h2>Exemples</h2><p class="paragraph"/><div class="code"><pre>grails html&#45;generate&#45;all org.bookstore.Book
-grails html&#45;generate&#45;all org.bookstore.Book index.html</pre></div><p class="paragraph"/>The first example will html view files. The html file will be called book-index.html with 2 javascript files: book-edit.js, book-list.js.<p class="paragraph"/>The second example will generate a html file names index.html with 2 javascript files: book-edit.js, book-list.js.<p class="paragraph"/><h2>Description</h2><p class="paragraph"/>Grails supports a feature known as static scaffolding which involves the generation of a CRUD (Create/Read/Update/Delete) interface for a given domain class. Once generated, the views can be modified by you but they won't automatically update when you change the domain class.<p class="paragraph"/>Usage:
-<div class="code"><pre>grails html&#45;generate&#45;all &#60;domainClassName&#62; &#91;htmlFileName.html&#93;</pre></div><p class="paragraph"/>Required arguments:
+                <h1>html-generate-controllers</h1><p class="paragraph"/><h2>Purpose</h2><p class="paragraph"/>Generate controller for static scaffolding for a given domain class. Generated controller provides JSON GETfull service. The controller renders as JSON.<p class="paragraph"/><h2>Examples</h2><p class="paragraph"/><div class="code"><pre>grails html&#45;generate&#45;controllers org.bookstore.Book</pre></div><p class="paragraph"/><h2>Description</h2><p class="paragraph"/>Grails supports a feature known as static scaffolding which involves the generation of a CRUD (Create/Read/Update/Delete) interface for a given domain class. Once generated, the controller can be modified by you but they won't automatically update when you change the domain class.<p class="paragraph"/>Usage:
+<div class="code"><pre>grails html&#45;generate&#45;controllers &#60;domainClassName&#62;</pre></div><p class="paragraph"/>Required arguments:
 <ul class="star">
-<li><code>domainClassName</code> - The name of the domain class you want to scaffold. Name is the full name of the domain class including package name.</li>
-</ul><p class="paragraph"/>Optional arguments:
-<ul class="star">
-<li><code>htmlFileName</code> - The name of the html file that is generated from domain class.</li>
+<li><code>domainClassName</code> - is the full name of the domain class including package name.</li>
 </ul><p class="paragraph"/>The command depends on install-templates command. It will copy the templates Grails uses for all code generation activities to the application's src/templates directory.<p class="paragraph"/>
-
             </div>
         </td>
         <td id="col2">

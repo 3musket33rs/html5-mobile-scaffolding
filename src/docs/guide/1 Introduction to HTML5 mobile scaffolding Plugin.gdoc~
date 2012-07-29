@@ -1,6 +1,0 @@
-The HTML5 mobile scaffolding plugin makes it easy to generate your first HTML5 mobile application. In a minute you can scaffold a skeleton for your mobile application that contains all you need for CRUD operations.
-
-{note}
-Use the [interactive|http://grails.org/doc/latest/ref/Command%20Line/interactive.html] script when you're running multiple html scaffolding scripts - it will significantly reduce the startup time for each command you run once the initial JVM has started.
-{note}
-

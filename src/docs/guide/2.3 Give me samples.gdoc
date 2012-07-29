@@ -1,0 +1,51 @@
+h4. Create a Grails project
+h5. using command line or you favoutrite IDE
+{code}
+grails create-app bookstore
+cd bookstore
+{code}
+h5. install HTML5 scaffolding plugins
+Our plugin is not yet publish in grails repository, in the meantime
+* fork or clone projects from github.com/3musket33rs/htm5-mobile-scaffolding
+* add @jsonp@ and @html5-mobile-scaffolding@ dependencies to BuildConfig.groovy file
+
+jsonp plugin is for cross domain application. If you want to package your application as an hybrid application, this dependency is required.
+
+h4. Create a domain class
+{code}
+grails create-domain-class bookstore.Book
+{code}
+
+h5. add content to it
+{code}
+class Book {
+    String name
+    String isbn
+    Double latitude
+    Double longitude
+    static constraints = {}
+}
+{code}
+
+h5. geolocalization
+to enable geolocalization add attributes @latitude@ and @longitude@ as Double. By convention, the plugin will understand those attributes as geolocalized information and will scaffold using a google map. 
+
+h4. Generate JSON Controller and HTML view
+
+You can generate both in one go:
+{code}
+grails create-domain-class bookstore.Book
+{code}
+
+h4. Launch the application
+{code}
+grails run-app
+{code}
+
+Whith geo-localization activated, book list can be rendered as map (default render) 
+
+!book-as-map-geolocation.png!
+
+You can switch to list rendering:
+
+!book-as-list-geolocation.png!

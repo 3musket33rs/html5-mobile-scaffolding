@@ -68,9 +68,15 @@ A plugin that scaffold HTML5 mobile application using JQuery mobile in one-page.
                             
                             <div class="toc-item" style="margin-left:0px"><a href="#1%20Introduction%20to%20HTML5%20mobile%20scaffolding%20Plugin"><strong>1</strong><span>Introduction to HTML5 mobile scaffolding Plugin</span></a></div>
                             
-                            <div class="toc-item" style="margin-left:10px"><a href="#1.1%20History"><strong>1.1</strong><span>History</span></a></div>
-                            
                             <div class="toc-item" style="margin-left:0px"><a href="#2%20Getting%20Started"><strong>2</strong><span>Getting Started</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:10px"><a href="#2.1%20How%20to%20install%20?"><strong>2.1</strong><span>How to install ?</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:10px"><a href="#2.2%20What%20is%20it?"><strong>2.2</strong><span>What is it?</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:10px"><a href="#2.3%20Give%20me%20samples"><strong>2.3</strong><span>Give me samples</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:10px"><a href="#2.4%20What%20is%20generated?"><strong>2.4</strong><span>What is generated?</span></a></div>
                             
                             <div class="toc-item" style="margin-left:0px"><a href="#3%20Configuration"><strong>3</strong><span>Configuration</span></a></div>
                             
@@ -80,29 +86,67 @@ A plugin that scaffold HTML5 mobile application using JQuery mobile in one-page.
                         
 
 <h1 id="1 Introduction to HTML5 mobile scaffolding Plugin">1 Introduction to HTML5 mobile scaffolding Plugin</h1>
-The HTML5 mobile scaffolding plugin makes it easy to generate your first HTML5 mobile application. In a minute you can scaffold a skeleton for your mobile application that contain all you need for CRUD oprations.<p class="paragraph"/><blockquote class="note">
-Use the <a href="http://grails.org/doc/latest/ref/Command%20Line/interactive.html" target="blank">interactive</a> script when you're running multiple Cloud Foundry scripts - it will significantly reduce the startup time for each command you run once the initial JVM has started.
-</blockquote><p class="paragraph"/>
+The HTML5 mobile scaffolding plugin makes it easy to generate your first HTML5 mobile application. In a minute you can scaffold a skeleton for your mobile application that contains all you need for CRUD operations.
 
-
-<h2 id="1.1 History">1.1 History</h2>
-<h4>History</h4>
-<ul class="star">
-<li>July 22, 2012</li>
-<ul class="star">
-<li>0.1 release</li>
-</ul></ul><p class="paragraph"/>
 
 
 <h1 id="2 Getting Started">2 Getting Started</h1>
-<h4>The first step is to install the plugin.</h4><p class="paragraph"/>Ideally, add the plugin dependency into <code>BuildConfig.groovy</code>. It is important that the plugin is scoped as <code>compile</code>, otherwise you may get some unexpected problems if you are letting the plugin manage your datasource config:<p class="paragraph"/><div class="code"><pre>plugins &#123;
-   compile ':html5&#45;mobile&#45;scaffolding:0.1'
-&#125;</pre></div><p class="paragraph"/>Alternately you can use the install-plugin command in grails:<p class="paragraph"/><div class="code"><pre>grails install&#45;plugin html5&#45;mobile&#45;scaffolding</pre></div><p class="paragraph"/><h4>Generate a sample application</h4><p class="paragraph"/>
+Let's start with installing the plugin, get a brief description of what it is.  
+Let's give it a trial. Follow the guide to build a geolocalized mobile application in a minute and have lots of fun.
 
+
+<h2 id="2.1 How to install ?">2.1 How to install ?</h2>
+Ideally, add the plugin dependency into <code>BuildConfig.groovy</code>. It is important that the plugin is scoped as <code>compile</code>, otherwise you may get some unexpected problems if you are letting the plugin manage your datasource config:<p class="paragraph"/><div class="code"><pre>plugins &#123;
+   compile ':html5&#45;mobile&#45;scaffolding:0.1'
+&#125;</pre></div><p class="paragraph"/>Alternately you can use the install-plugin command in grails:<p class="paragraph"/><div class="code"><pre>grails install&#45;plugin html5&#45;mobile&#45;scaffolding</pre></div>
+
+
+<h2 id="2.2 What is it?">2.2 What is it?</h2>
+Grails supports a feature known as static scaffolding which involves the generation of a CRUD (Create/Read/Update/Delete) interface for a given domain class. Once generated, the controller can be modified by you but they won't automatically update when you change the domain class.<p class="paragraph"/>Generating HTML5 web mobile application is as easy as using standard Grails scaffolding. Html5-mobile-scaffolding is using static scaffolding. The idea is to give you the skeleton of the application for CRUD operation and then it's up to you to modify it.<p class="paragraph"/>As html5-mobile-scaffolding plugin targets mobile application, the challenge is to scaffold an application that can be fully installed as an hybrid application using phone-gap plugin (for example). The controller part is minimal and serves RESTfull services as JSON.<p class="paragraph"/>Providing service that will be installed on client device required JSONP plugin to allow JSON with padding (see jsonp plugin for more details). 
+
+
+
+<h2 id="2.3 Give me samples">2.3 Give me samples</h2>
+<h4>Create a Grails project</h4>
+<h5>using command line or you favoutrite IDE</h5>
+<div class="code"><pre>grails create&#45;app bookstore
+cd bookstore</pre></div>
+<h5>install HTML5 scaffolding plugins</h5>
+Our plugin is not yet publish in grails repository, in the meantime
+<ul class="star">
+<li>fork or clone projects from github.com/3musket33rs/htm5-mobile-scaffolding</li>
+<li>add <code>jsonp</code> and <code>html5-mobile-scaffolding</code> dependencies to BuildConfig.groovy file</li>
+</ul><p class="paragraph"/>jsonp plugin is for cross domain application. If you want to package your application as an hybrid application, this dependency is required.<p class="paragraph"/><h4>Create a domain class</h4>
+<div class="code"><pre>grails create&#45;domain&#45;class bookstore.Book</pre></div><p class="paragraph"/><h5>add content to it</h5>
+<div class="code"><pre>class Book &#123;
+    <span class="java&#45;object">String</span> name
+    <span class="java&#45;object">String</span> isbn
+    <span class="java&#45;object">Double</span> latitude
+    <span class="java&#45;object">Double</span> longitude
+    <span class="java&#45;keyword">static</span> constraints = &#123;&#125;
+&#125;</pre></div><p class="paragraph"/><h5>geolocalization</h5>
+to enable geolocalization add attributes <code>latitude</code> and <code>longitude</code> as Double. By convention, the plugin will understand those attributes as geolocalized information and will scaffold using a google map.<p class="paragraph"/><h4>Generate JSON Controller and HTML view</h4><p class="paragraph"/>You can generate both in one go:
+<div class="code"><pre>grails create&#45;domain&#45;class bookstore.Book</pre></div><p class="paragraph"/><h4>Launch the application</h4>
+<div class="code"><pre>grails run&#45;app</pre></div><p class="paragraph"/>Whith geo-localization activated, book list can be rendered as map (default render)<p class="paragraph"/><img border="0" class="center" src="../img/book-as-map-geolocation.png"></img><p class="paragraph"/>You can switch to list rendering:<p class="paragraph"/><img border="0" class="center" src="../img/book-as-list-geolocation.png"></img>
+
+
+
+<h2 id="2.4 What is generated?">2.4 What is generated?</h2>
+<h5>Generated Controller</h5>
+From domain class controller class is generated. Controller renders as JSON.
+<div class="code"><pre>def list() &#123;
+      params.max = <span class="java&#45;object">Math</span>.min(params.max ? params.<span class="java&#45;object">int</span>('max') : 10, 100)
+     	render Book.list(params) as JSON
+    &#125;</pre></div><p class="paragraph"/><h5>Generated views</h5>
+Views are generated in web-app directory. for each domain class one html file will be generated. This file contains different sections for each CRUD operations. 2 associated JavaScript files are generated.<p class="paragraph"/><div class="code"><pre>&#45; web&#45;app
+  book&#45;index.html
+  &#45; js
+    book&#45;edit.js
+    book&#45;list.js</pre></div>
 
 
 <h1 id="3 Configuration">3 Configuration</h1>
-There are a few configuration options for the plugin. All are specified in Config.groovy, but you can put the values for <code>grails.plugin.cloudfoundry.username</code> and/or <code>grails.plugin.cloudfoundry.password</code> in <code>$HOME/.grails/settings.groovy</code> to avoid storing this information in source control.<p class="paragraph"/><table class="wiki-table" cellpadding="0" cellspacing="0" border="0"><tr><th><strong class="bold">Property</strong></th><th><strong class="bold">Default</strong></th><th><strong class="bold">Meaning</strong></th></tr><tr class="table-odd"><td>grails.plugin.cloudfoundry.username</td><td>none, must be specified</td><td>the username/email address for your account</td></tr><tr class="table-even"><td>grails.plugin.cloudfoundry.password</td><td>none, must be specified</td><td>the password for your account</td></tr><tr class="table-odd"><td>grails.plugin.cloudfoundry.target</td><td><code>'api.cloudfoundry.com'</code></td><td>the cloud API server, e.g. <code>'api.cloudfoundry.com'</code></td></tr><tr class="table-even"><td>grails.plugin.cloudfoundry.appname</td><td>application name</td><td>the application name for scripts; defaults to the current application name but can be specified in Config.groovy or overridden from the commandline with the <code>--appname</code> attribute</td></tr><tr class="table-odd"><td>grails.plugin.cloudfoundry.showStackTrace</td><td><code>false</code></td><td>if <code>true</code> show error stack traces in the console</td></tr><tr class="table-even"><td>grails.plugin.cloudfoundry.testStartWithGet</td><td><code>true</code></td><td>whether to test a start or restart with a GET request in addition to checking the reported status from the server to avoid false positives</td></tr><tr class="table-odd"><td>grails.plugin.cloudfoundry.testStartGetUrl</td><td>application url</td><td>the url to test if <code>grails.plugin.cloudfoundry.testStartWithGet</code> is <code>true</code></td></tr><tr class="table-even"><td>grails.plugin.cloudfoundry.datasource.disableTimeoutAutoconfiguration</td><td><code>false</code></td><td>disables auto-configuration of DataSource connection timeout checking if <code>true</code></td></tr></table>
+There are a few configuration options for the plugin. All are specified in Config.groovy, some of the configuration could be also done by command line optional argument. Command line argument configuration takes precedence from Config file.<p class="paragraph"/><table class="wiki-table" cellpadding="0" cellspacing="0" border="0"><tr><th><strong class="bold">Property</strong></th><th><strong class="bold">Default</strong></th><th><strong class="bold">Meaning</strong></th></tr><tr class="table-odd"><td>grails.scaffolding.html.mobile.index</td><td>none, must be specified</td><td>By convention the html file scaffolded is name domainClass-index.htlm where domainClass does not contain package name.</td></tr></table>
 
 
                     </div>
@@ -117,6 +161,12 @@ There are a few configuration options for the plugin. All are specified in Confi
                     
                     <div class="menu-block"><h1 class="menu-title" onclick="toggleRef(this.parentNode.childNodes[1])">Scripts</h1><div class="menu-sub">
                         
+                        
+                        <div class="menu-item"><a href="../ref/Scripts/html-generate-all.html">html-generate-all</a>
+                        </div>
+                        
+                        <div class="menu-item"><a href="../ref/Scripts/html-generate-controllers.html">html-generate-controllers</a>
+                        </div>
                         
                         <div class="menu-item"><a href="../ref/Scripts/html-generate-views.html">html-generate-views</a>
                         </div>
