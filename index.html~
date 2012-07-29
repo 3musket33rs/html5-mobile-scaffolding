@@ -9,10 +9,10 @@
         
 
 <style type="text/css">
-#download-zip span {
+.download-zip {
   background: transparent url(../images/zip-icon.png) 12px 50% no-repeat;
 }
-#download-tar-gz span {
+.download-tar-gz {
   background: transparent url(../images/tar-gz-icon.png) 12px 50% no-repeat;
 }
 #view-on-github span {
@@ -102,11 +102,11 @@ A plugin that scaffolds HTML5 mobile application using JQuery mobile single page
 
 
       <div class="container">
-        <section id="downloads">
-          <a href="https://github.com/3musket33rs/html5-mobile-scaffolding/zipball/master" class="btn"><span id="download-zip"></span>>Download as .zip</a>
+        <div class="downloads">
+          <a href="https://github.com/3musket33rs/html5-mobile-scaffolding/zipball/master" class="btn download-zip">Download as .zip</a>
           <a href="https://github.com/3musket33rs/html5-mobile-scaffolding/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/3musket33rs/html5-mobile-scaffolding" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>          
+          <a href="https://github.com/3musket33rs/html5-mobile-scaffolding" class="btn btn-github">View on GitHub</a>
+        </div>          
       </div>
                     
                         <div id="table-of-content">
