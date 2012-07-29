@@ -1,23 +1,23 @@
-h1. html-generate-views
+h1. html-generate-all
 
 h2. Purpose
 
-Generate controllers and views for static scaffolding with HTML5 and jQyery Mobile. Generated view is a single html file plus its associated JavaScript files.
+Generate controllers and views for static scaffolding with HTML5 and jQuery Mobile. Generated controller provides JSON GETfull service. The controller renders as JSON. Generated view is a single html file plus its associated JavaScript files. 
 
-h2. Exemples
+h2. Examples
 
 {code:java}
 grails html-generate-all org.bookstore.Book
 grails html-generate-all org.bookstore.Book index.html
 {code}
 
-The first example will html view files. The html file will be called book-index.html with 2 javascript files: book-edit.js, book-list.js.
+The first example will generate controller and html view files. The html file will be called book-index.html with 2 javascript files: book-edit.js, book-list.js.
 
 The second example will generate a html file names index.html with 2 javascript files: book-edit.js, book-list.js.
 
 h2. Description
 
-Grails supports a feature known as static scaffolding which involves the generation of a CRUD (Create/Read/Update/Delete) interface for a given domain class. Once generated, the views can be modified by you but they won't automatically update when you change the domain class.
+Grails supports a feature known as static scaffolding which involves the generation of a CRUD (Create/Read/Update/Delete) interface for a given domain class. Once generated, the controller and its views can be modified by you but they won't automatically update when you change the domain class.
 
 Usage:
 {code:java}
@@ -31,5 +31,4 @@ Optional arguments:
 * @htmlFileName@ - The name of the html file that is generated from domain class.
 
 The command depends on install-templates command. It will copy the templates Grails uses for all code generation activities to the application's src/templates directory. 
-
 

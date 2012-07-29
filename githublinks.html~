@@ -1,18 +1,18 @@
 <style type="text/css">
-#download-zip span {
+.download-zip {
   background: transparent url(../images/zip-icon.png) 12px 50% no-repeat;
 }
-#download-tar-gz span {
+.download-tar-gz {
   background: transparent url(../images/tar-gz-icon.png) 12px 50% no-repeat;
 }
-#view-on-github span {
+.view-on-github  {
   background: transparent url(../images/octocat-icon.png) 12px 50% no-repeat;
 }
-#view-on-github {
+.view-on-github {
   margin-right: 0;
 }
 
-#container {
+.container {
   background: transparent url(../images/highlight-bg.jpg) 50% 0 no-repeat;
   min-height: 595px;
 }
@@ -22,11 +22,11 @@
   margin: 0 auto;
 }
 
-#container .inner img {
+.container .inner img {
   max-width: 100%;
 }
 
-#downloads {
+.downloads {
   margin-bottom: 40px;
 }
 </style>
@@ -37,9 +37,9 @@
 
 
       <div class="container">
-        <section id="downloads">
-          <a href="https://github.com/3musket33rs/html5-mobile-scaffolding/zipball/master" class="btn"><span id="download-zip"></span>Download as .zip</a>
-          <a href="https://github.com/3musket33rs/html5-mobile-scaffolding/tarball/master" class="btn">Download as .tar.gz</a>
+        <div class="downloads">
+          <a href="https://github.com/3musket33rs/html5-mobile-scaffolding/zipball/master" class="download-zip">Download as .zip</a>
+          <a href="https://github.com/3musket33rs/html5-mobile-scaffolding/tarball/master" class="btn download-tar-gz">Download as .tar.gz</a>
           <a href="https://github.com/3musket33rs/html5-mobile-scaffolding" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>          
+        </div>          
       </div>

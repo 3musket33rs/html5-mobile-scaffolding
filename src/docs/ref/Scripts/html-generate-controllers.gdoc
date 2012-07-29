@@ -1,0 +1,27 @@
+h1. html-generate-controllers
+
+h2. Purpose
+
+Generate controller for static scaffolding for a given domain class. Generated controller provides JSON GETfull service. The controller renders as JSON.
+
+h2. Examples
+
+{code:java}
+grails html-generate-controllers org.bookstore.Book
+{code}
+
+h2. Description
+
+Grails supports a feature known as static scaffolding which involves the generation of a CRUD (Create/Read/Update/Delete) interface for a given domain class. Once generated, the controller can be modified by you but they won't automatically update when you change the domain class.
+
+Usage:
+{code:java}
+grails html-generate-controllers <domainClassName> 
+{code}
+
+Required arguments:
+Required arguments:
+* @domainClassName@ - is the full name of the domain class including package name.
+
+The command depends on install-templates command. It will copy the templates Grails uses for all code generation activities to the application's src/templates directory.
+
