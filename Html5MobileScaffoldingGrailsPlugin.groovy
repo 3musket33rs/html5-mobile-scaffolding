@@ -20,6 +20,7 @@
 * @since 0.1
 */
 
+//comment
 import org.grails.html.mobile.JavascriptDateRegistrar
 
 class Html5MobileScaffoldingGrailsPlugin {
