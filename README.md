@@ -12,9 +12,9 @@ To test it
 Available Targets
 =================
 
- html-generate-views [domainClass] [optional viewName]
- html-generate-controllers [domainClass]
- html-generate-all [domainClass] [optional viewName]
+	html-generate-views [domainClass] [optional viewName]
+	html-generate-controllers [domainClass]
+	html-generate-all [domainClass] [optional viewName]
 
 Refers to full documentation for details of what is generated. 
 
