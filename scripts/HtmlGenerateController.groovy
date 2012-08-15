@@ -21,9 +21,9 @@
 */
 
 includeTargets << new File("${html5MobileScaffoldingPluginDir}/scripts/_GenerateHtmlMobileArtefacts.groovy")
-includeTargets << new File("${html5MobileScaffoldingPluginDir}/scripts/_InstallHtmlMobileTemplates.groovy")
+includeTargets << new File("${html5MobileScaffoldingPluginDir}/scripts/_HtmlMobileCopyTemplates.groovy")
 
-target(default: 'Generates HTML5 Mobile views for a specified domain class') {
+target(default: 'Generates HTML5 Mobile controller for a specified domain class') {
 	depends checkVersion, parseArguments, packageApp, htmlMobileCopyTemplates
 
 	promptForName type: 'Domain Class'

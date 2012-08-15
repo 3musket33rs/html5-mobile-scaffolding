@@ -44,6 +44,8 @@ target(htmlMobileCopyTemplates: "generate HTML5 mobile view with different secti
     }
 
   }
+  event "StatusUpdate", ["html-mobile-templates installed successfully"]
 
 }
+
 

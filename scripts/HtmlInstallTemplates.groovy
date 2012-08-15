@@ -20,17 +20,13 @@
 * @since 0.1
 */
 
-includeTargets << new File("${html5MobileScaffoldingPluginDir}/scripts/_GenerateHtmlMobileArtefacts.groovy")
+includeTargets << grailsScript("_GrailsInit")
 includeTargets << new File("${html5MobileScaffoldingPluginDir}/scripts/_HtmlMobileCopyTemplates.groovy")
 
-target(default: 'Generates HTML5 Mobile templates, views and controller for a specified domain class') {
-	depends checkVersion, parseArguments, packageApp, htmlMobileCopyTemplates
+target(default: "install HTML5 mobile templates") {
+  depends checkVersion, parseArguments, htmlMobileCopyTemplates
 
-	promptForName type: 'Domain Class'
-	generateForName = argsMap.params[0]
-    htmlViewName = argsMap.params[1]
-    generateViews = true
-    generateController = true
-  
-	generateForOne()
+
 }
+
+
