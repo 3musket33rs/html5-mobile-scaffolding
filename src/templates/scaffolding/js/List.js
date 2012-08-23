@@ -71,7 +71,7 @@ function get${className}s() {
 		type : "GET",
 		async : false,
 		dataType : "jsonp",
-		url : serverUrl + '/${classNameLowerCase}/list',
+		url : serverUrl + '/${className}/list',
 		success : function(data) {
 			if (data) {
 				var ${classNameLowerCase}List = new ${className}List();

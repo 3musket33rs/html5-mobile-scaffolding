@@ -53,7 +53,7 @@ function get${referencedType}s() {
 		type : "GET",
 		async : false,
 		dataType : "jsonp",
-		url : serverUrl + '/${referencedTypeToLowerCase}/list',
+		url : serverUrl + '/${referencedType}/list',
 		success : function(data) {
 			if (data) {
 				var options = new Object();
@@ -218,7 +218,7 @@ function serializeObject(inputs) {
 		async : false,
 		data : txt,
 		dataType : "jsonp",
-		url : serverUrl + '/${classNameLowerCase}/' + action,
+		url : serverUrl + '/${className}/' + action,
 		success : function(data) {
 			if (data.message) {
 				alert(data.message)
@@ -257,7 +257,7 @@ function serializeObject(inputs) {
 		async : false,
 		data : txt,
 		dataType : "jsonp",
-		url : serverUrl + '/${classNameLowerCase}/delete',
+		url : serverUrl + '/${className}/delete',
 		success : function(data) {
 			if (data.message) {
 				alert(data.message)
