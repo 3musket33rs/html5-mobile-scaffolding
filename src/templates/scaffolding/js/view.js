@@ -22,8 +22,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     });
 
     that.model.updatedItem.attach(function (data) {
-        var textDisplay = getText(data.item);
-        \$('#${classNameLowerCase}' + data.item.id + '-in-list').text(textDisplay);
+         renderList();
     });
 
     that.model.deletedItem.attach(function (data) {
@@ -147,6 +146,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         mapServiceList = grails.mobile.map.googleMapService();
         mapServiceList.emptyMap("map-canvas-list");
         <% } %>
+        \$('#list-${classNameLowerCase}s').empty();
         var key, items = model.getItems();
         for (key in items) {
             renderElement(items[key]);
@@ -158,12 +158,16 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     };
 
     var renderElement = function (element) {
-        if (element.offlineStatus !== 'delete') {
+        if (element.offlineAction !== 'DELETED') {
             var a = \$('<a>').attr({ href: '#section-show-${classNameLowerCase}?id=' + element.id });
             a.attr({id : '${classNameLowerCase}' + element.id + '-in-list'});
             a.attr({'data-transition': 'fade' });
             a.text(getText(element));
-            \$("#list-${classNameLowerCase}s").append(\$('<li>').append(a));
+            if (element.offlineStatus === "NOT-SYNC") {
+                \$("#list-${classNameLowerCase}s").append(\$('<li data-theme="e">').append(a));
+            } else {
+                \$("#list-${classNameLowerCase}s").append(\$('<li>').append(a));
+            }
             <% if (geolocated) { %>
             mapServiceList.addMarkers(element);
             <% } %>
@@ -173,7 +177,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     var getText = function (data) {
         var textDisplay = '';
         \$.each(data, function (name, value) {
-            if (name !== 'class' && name !== 'id' && name !== 'offlineStatus' && name !== 'status' && name !== 'version') {
+            if (name !== 'class' && name !== 'id' && name !== 'offlineAction' && name !== 'offlineStatus' && name !== 'status' && name !== 'version') {
                 textDisplay += value + ";";
             }
         });
