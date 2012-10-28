@@ -27,6 +27,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import org.springframework.util.Assert
 import org.codehaus.groovy.grails.scaffolding.*
 import grails.persistence.Event
+import groovy.io.FileType
 
 includeTargets << grailsScript("_GrailsCreateArtifacts")
 includeTargets << grailsScript("_GrailsGenerate")
@@ -87,7 +88,10 @@ def generateForDomainClass(domainClass, viewName) {
   
   if (generateViews) {
     event 'StatusUpdate', ["Generating views for domain class ${domainClass.fullName}"]
-    templateGenerator.generateViews(domainClass, basedir)
+
+
+
+      templateGenerator.generateViews(domainClass, basedir)
     event 'GenerateViewsEnd', [domainClass.fullName]
   }
 
@@ -118,6 +122,16 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
    }
  }
 
+ void copyGrailsMobileFrameworkIfNotPresent(String base) {
+    def source = "$base/src/templates/scaffolding/grails"
+    def destination = "$base/web-app/js/grails"
+    if (!new File(destination).exists()) {
+      new AntBuilder().copy( todir:destination ) {
+        fileset( dir: source )
+      }
+    }
+ }
+
  @Override
  void generateView(GrailsDomainClass domainClass, String templateViewName, Writer out) {
    def templateText = getTemplateText(templateViewName)
@@ -127,7 +141,7 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
      def multiPart = domainClass.properties.find {it.type == ([] as Byte[]).class || it.type == ([] as byte[]).class}
 
      boolean hasHibernate = pluginManager?.hasGrailsPlugin('hibernate')
-     def packageName = domainClass.packageName ? "<%@ page import=\"${domainClass.fullName}\" %>" : ""
+     def packageName = domainClass.packageName
      def project = this.grailsApplication.metadata['app.name']
      
      def excludedProps = Event.allEvents.toList() << 'id' << 'version' << 'longitude' << 'latitude'
@@ -141,6 +155,8 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
      def latitude = domainClass.properties.find { it.name == "latitude" }
      def longitude = domainClass.properties.find { it.name == "longitude" }
      
+     boolean geolocated = latitude && longitude
+    
      Closure resourceClosure = domainClass.getStaticPropertyValue('mapping', Closure)
      def geoProps = [:]
      if (resourceClosure) {
@@ -156,8 +172,7 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
        domainClass: domainClass,
        props: props,
        oneToOneProps: oneToOneProps,
-       latitude: latitude,
-       longitude: longitude,
+       geolocated: geolocated,
        geoProps:geoProps,
        className: domainClass.shortName]
 
@@ -167,6 +182,7 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
 
  @Override
  void generateView(GrailsDomainClass domainClass, String templateViewName, String destDir) {
+     println "------------- generate view start " + templateViewName + domainClass.packageName
    def suffix = templateViewName.find(/\.\w+$/)
 
    def viewsDir
@@ -174,9 +190,16 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
    if (suffix == '.html') {
      viewsDir = new File("$destDir/web-app")
    } else if (suffix == '.js') {
-     viewsDir = new File("$destDir/web-app/js")
+       if (templateViewName.startsWith("view")) {
+         viewsDir = new File("$destDir/web-app/js/" + domainClass.packageName + "/view")
+       } else {
+           viewsDir = new File("$destDir/web-app/js/" + domainClass.packageName)
+       }
+       copyGrailsMobileFrameworkIfNotPresent(destDir)
    }
-   if (!viewsDir.exists()) viewsDir.mkdirs()
+     println "------------- views dir " + viewsDir.path
+
+     if (!viewsDir.exists()) viewsDir.mkdirs()
   
    if (suffix == '.html') { // for html files
      if (viewName) { // either 2nd paramater of hGV command
@@ -189,9 +212,11 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
    } else { // for js
      destFile = new File(viewsDir, "${domainClass.propertyName.toLowerCase()}-${templateViewName.toLowerCase()}")
    }
+
    destFile.withWriter { Writer writer ->
      generateView domainClass, templateViewName, writer
    }
+     println "------------- generate view finish"
  }
 
  @Override

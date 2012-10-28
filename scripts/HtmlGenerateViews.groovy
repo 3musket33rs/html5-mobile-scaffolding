@@ -24,13 +24,13 @@ includeTargets << new File("${html5MobileScaffoldingPluginDir}/scripts/_Generate
 includeTargets << new File("${html5MobileScaffoldingPluginDir}/scripts/_HtmlMobileCopyTemplates.groovy")
 
 target(default: 'Generates HTML5 Mobile views for a specified domain class') {
-	depends checkVersion, parseArguments, packageApp, htmlMobileCopyTemplates
+    depends checkVersion, parseArguments, packageApp, htmlMobileCopyTemplates
 
-	promptForName type: 'Domain Class'
-	generateForName = argsMap.params[0]
-  htmlViewName = argsMap.params[1]
-  generateViews = true
-  generateController = false
-  
-	generateForOne()
+    promptForName type: 'Domain Class'
+    generateForName = argsMap.params[0]
+    htmlViewName = argsMap.params[1]
+    generateViews = true
+    generateController = false
+
+    generateForOne()
 }
