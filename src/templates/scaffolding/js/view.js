@@ -19,6 +19,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     that.model.createdItem.attach(function (data) {
         renderElement(data.item);
         \$('#list-${classNameLowerCase}s').listview('refresh');
+        mapServiceList.refreshCenterZoomMap();
     });
 
     that.model.updatedItem.attach(function (data) {
@@ -27,6 +28,8 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
 
     that.model.deletedItem.attach(function (data) {
         \$('#${classNameLowerCase}' + data.item.id + '-in-list').parents('li').remove();
+        mapServiceList.removeMarker(data.item.id);
+        mapServiceList.refreshCenterZoomMap();
     });
 
     // user interface actions
@@ -94,9 +97,11 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         resetForm("form-update-${classNameLowerCase}");
         <% if (geolocated) { %>
         navigator.geolocation.getCurrentPosition(function (position) {
-            \$("#input-${classNameLowerCase}-latitude").val(position.coords.latitude);
-            \$("#input-${classNameLowerCase}-longitude").val(position.coords.longitude);
-            mapServiceForm.showMap("map-canvas-form", position.coords.latitude, position.coords.longitude, true);
+            var coord = {
+                latitude : $("#input-place-latitude"),
+                longitude :$("#input-place-longitude")
+            };
+            mapServiceForm.showMap("map-canvas-form", position.coords.latitude, position.coords.longitude, coord);
         });
         <% } %>
         \$("#delete-${classNameLowerCase}").hide();
@@ -109,7 +114,11 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
             \$('#input-${classNameLowerCase}-' + name).val(value);
         });
         <% if (geolocated) { %>
-        mapServiceForm.showMap("map-canvas-form", element.latitude, element.longitude, true);
+        var coord = {
+            latitude : $("#input-place-latitude"),
+            longitude :$("#input-place-longitude")
+        };
+        mapServiceForm.showMap("map-canvas-form", element.latitude, element.longitude, coord);
         <% } %>
         \$("#delete-${classNameLowerCase}").show();
     };
@@ -143,7 +152,6 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
 
     var renderList = function () {
         <% if (geolocated) { %>
-        mapServiceList = grails.mobile.map.googleMapService();
         mapServiceList.emptyMap("map-canvas-list");
         <% } %>
         \$('#list-${classNameLowerCase}s').empty();
@@ -169,7 +177,10 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
                 \$("#list-${classNameLowerCase}s").append(\$('<li>').append(a));
             }
             <% if (geolocated) { %>
-            mapServiceList.addMarkers(element);
+            var id = element.id;
+            mapServiceList.addMarker(element, getText(element), function () {
+                $("#${classNameLowerCase}" + id + "-in-list").click();
+            });
             <% } %>
         }
     };
