@@ -98,8 +98,8 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         <% if (geolocated) { %>
         navigator.geolocation.getCurrentPosition(function (position) {
             var coord = {
-                latitude : $("#input-place-latitude"),
-                longitude :$("#input-place-longitude")
+                latitude : \$("#input-place-latitude"),
+                longitude :\$("#input-place-longitude")
             };
             mapServiceForm.showMap("map-canvas-form", position.coords.latitude, position.coords.longitude, coord);
         });
@@ -115,8 +115,8 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         });
         <% if (geolocated) { %>
         var coord = {
-            latitude : $("#input-place-latitude"),
-            longitude :$("#input-place-longitude")
+            latitude : \$("#input-place-latitude"),
+            longitude :\$("#input-place-longitude")
         };
         mapServiceForm.showMap("map-canvas-form", element.latitude, element.longitude, coord);
         <% } %>
@@ -179,7 +179,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
             <% if (geolocated) { %>
             var id = element.id;
             mapServiceList.addMarker(element, getText(element), function () {
-                $("#${classNameLowerCase}" + id + "-in-list").click();
+                \$("#${classNameLowerCase}" + id + "-in-list").click();
             });
             <% } %>
         }
