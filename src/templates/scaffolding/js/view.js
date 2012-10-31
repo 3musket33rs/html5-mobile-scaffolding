@@ -98,8 +98,8 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         <% if (geolocated) { %>
         navigator.geolocation.getCurrentPosition(function (position) {
             var coord = {
-                latitude : \$("#input-place-latitude"),
-                longitude :\$("#input-place-longitude")
+                latitude : \$("#input-${classNameLowerCase}-latitude"),
+                longitude :\$("#input-${classNameLowerCase}-longitude")
             };
             mapServiceForm.showMap("map-canvas-form", position.coords.latitude, position.coords.longitude, coord);
         });
@@ -115,8 +115,8 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         });
         <% if (geolocated) { %>
         var coord = {
-            latitude : \$("#input-place-latitude"),
-            longitude :\$("#input-place-longitude")
+            latitude : \$("#input-${classNameLowerCase}-latitude"),
+            longitude :\$("#input-${classNameLowerCase}-longitude")
         };
         mapServiceForm.showMap("map-canvas-form", element.latitude, element.longitude, coord);
         <% } %>
