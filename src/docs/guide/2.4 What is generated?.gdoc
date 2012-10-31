@@ -14,6 +14,8 @@ Views are generated in web-app directory. for each domain class one html file wi
 - web-app
   book-index.html
   - js
-    book-edit.js
-    book-list.js
+    book-bootstrap.js
+      - view
+        book-view.js
+    - Grails Mobile Framework
 {code}
