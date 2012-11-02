@@ -19,9 +19,9 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     that.model.createdItem.attach(function (data) {
         renderElement(data.item);
         \$('#list-${classNameLowerCase}s').listview('refresh');
-    			<% if (geolocated) { %>        
+    	<% if (geolocated) { %>        
         mapServiceList.refreshCenterZoomMap();
-			   <% } %>
+		<% } %>
     });
 
     that.model.updatedItem.attach(function (data) {
