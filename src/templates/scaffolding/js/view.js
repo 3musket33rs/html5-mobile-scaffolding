@@ -19,7 +19,9 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     that.model.createdItem.attach(function (data) {
         renderElement(data.item);
         \$('#list-${classNameLowerCase}s').listview('refresh');
+    			<% if (geolocated) { %>        
         mapServiceList.refreshCenterZoomMap();
+			   <% } %>
     });
 
     that.model.updatedItem.attach(function (data) {
@@ -28,8 +30,10 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
 
     that.model.deletedItem.attach(function (data) {
         \$('#${classNameLowerCase}' + data.item.id + '-in-list').parents('li').remove();
+        <% if (geolocated) { %>
         mapServiceList.removeMarker(data.item.id);
         mapServiceList.refreshCenterZoomMap();
+        <% } %>
     });
 
     // user interface actions
