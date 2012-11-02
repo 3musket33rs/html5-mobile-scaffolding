@@ -135,7 +135,7 @@ Our plugin is not yet publish in grails repository, in the meantime
     <span class="java&#45;keyword">static</span> constraints = &#123;&#125;
 &#125;</pre></div><p class="paragraph"/><h5>geolocalization</h5>
 to enable geolocalization add attributes <code>latitude</code> and <code>longitude</code> as Double. By convention, the plugin will understand those attributes as geolocalized information and will scaffold using a google map.<p class="paragraph"/><h4>Generate JSON Controller and HTML view</h4><p class="paragraph"/>You can generate both in one go:
-<div class="code"><pre>grails create&#45;domain&#45;class bookstore.Book</pre></div><p class="paragraph"/><h4>Launch the application</h4>
+<div class="code"><pre>grails html&#45;generate&#45;all bookstore.Book</pre></div><p class="paragraph"/><h4>Launch the application</h4>
 <div class="code"><pre>grails run&#45;app</pre></div><p class="paragraph"/>Whith geo-localization activated, book list can be rendered as map (default render)<p class="paragraph"/><img border="0" class="center" src="../img/book-as-map-geolocation.png"></img><p class="paragraph"/>You can switch to list rendering:<p class="paragraph"/><img border="0" class="center" src="../img/book-as-list-geolocation.png"></img>
 
 

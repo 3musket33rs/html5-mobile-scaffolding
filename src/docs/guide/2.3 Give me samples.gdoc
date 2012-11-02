@@ -34,7 +34,7 @@ h4. Generate JSON Controller and HTML view
 
 You can generate both in one go:
 {code}
-grails create-domain-class bookstore.Book
+grails html-generate-all bookstore.Book
 {code}
 
 h4. Launch the application
