@@ -192,6 +192,9 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
    } else if (suffix == '.js') {
        if (templateViewName.startsWith("view")) {
          viewsDir = new File("$destDir/web-app/js/" + domainClass.packageName + "/view")
+       } else if (templateViewName != "configuration-bootstrap.js" && templateViewName != "manager-bootstrap.js"){
+           println "bootstrap $templateViewName"
+           viewsDir = new File("$destDir/web-app/js/" + domainClass.packageName + "/bootstrap")
        } else {
            viewsDir = new File("$destDir/web-app/js/" + domainClass.packageName)
        }
@@ -210,12 +213,17 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
        destFile = new File(viewsDir, "${domainClass.propertyName.toLowerCase()}-${templateViewName.toLowerCase()}")
      }
    } else { // for js
-     destFile = new File(viewsDir, "${domainClass.propertyName.toLowerCase()}-${templateViewName.toLowerCase()}")
+       if (templateViewName != "configuration-bootstrap.js" && templateViewName != "manager-bootstrap.js") {
+           destFile = new File(viewsDir, "${domainClass.propertyName.toLowerCase()}-${templateViewName.toLowerCase()}")
+       } else {
+           destFile = new File(viewsDir, templateViewName)
+       }
    }
 
-   destFile.withWriter { Writer writer ->
-     generateView domainClass, templateViewName, writer
-   }
+
+     destFile.withWriter { Writer writer ->
+       generateView domainClass, templateViewName, writer
+     }
      println "------------- generate view finish"
  }
 

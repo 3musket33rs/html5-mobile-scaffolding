@@ -62,7 +62,7 @@ grails.mobile.helper.toObject = function (inputs) {
             }
         }
         if (add) {
-            if ($(this).data('data-gorm-relation') === "many-to-one") {
+            if ($(this).attr('data-gorm-relation') === "many-to-one") {
                 objectData[this.name + '.id'] = value;
             } else {
                 objectData[this.name] = value;

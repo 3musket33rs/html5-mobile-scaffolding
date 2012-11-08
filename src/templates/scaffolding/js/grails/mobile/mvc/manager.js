@@ -27,20 +27,28 @@ grails.mobile.mvc.manager = function (configuration) {
     var baseURL = configuration.baseURL;
     var namespace = configuration.namespace;
     var controllers = {};
-    var resolveNamespace = function (functionName) {
-        var that = {};
-        var namespaces = functionName.split(".");
-        var func = namespaces.pop();
-        var ns = namespaces.join('.');
-        if (ns === '') {
-            ns = 'window';
+
+    var resolveNamespace = function (functionPath) {
+        var namespaces = functionPath.split(".");
+        var funcName = namespaces.pop();
+        var parent = window;
+        namespaces.forEach(function (name) {
+            if (typeof parent != 'undefined') {
+                parent = parent[name];
+            }
+        });
+        if (typeof parent === 'undefined') {
+            throw new TypeError("'" + functionPath + "' does not exist");
         }
-        that.namespace = eval(ns);
-        that.function = func;
-        return that;
+        var func = parent[funcName];
+        if (typeof func !== 'function') {
+            throw new TypeError("'" + functionPath + "' is not a function");
+        }
+        return func.bind(parent);
     };
 
-    controllers = $.each(configuration.domain, function () {
+    var domainsObjects = {};
+    $.each(configuration.domain, function () {
         var domainName = this.name;
 
         // create model for domain object
@@ -52,7 +60,7 @@ grails.mobile.mvc.manager = function (configuration) {
         // create view for domain object
         var viewName = namespace + '.view.' + this.name + 'view';
         var funcToApply = resolveNamespace(viewName);
-        var view = funcToApply.namespace[funcToApply.function].call(funcToApply.namespace, model, this.view);
+        var view = funcToApply(model, this.view);
 
         // Create Feed
         var feed = grails.mobile.feed.feed(baseURL + this.name + '/', store);
@@ -60,9 +68,26 @@ grails.mobile.mvc.manager = function (configuration) {
         // create controller for domain object
         var controller = grails.mobile.mvc.controller(feed, model, view);
 
-        grails.mobile.sync.syncmanager(baseURL + this.name + '/', domainName, controller, store, model);
+        var sync = grails.mobile.sync.syncmanager(baseURL + this.name + '/', domainName, controller, store, model);
 
+        domainsObjects[domainName] = {
+            model:model,
+            view:view,
+            controller:controller,
+            sync:sync
+        };
     });
+
+    $.each(configuration.domain, function () {
+        if (this.hasOneRelations) {
+            domainsObjects[this.name].controller.hasOneRelations = {};
+            for (var i = 0; i < this.hasOneRelations.length; i++) {
+                var relationName = this.hasOneRelations[i].type + '_' + this.hasOneRelations[i].name;
+                domainsObjects[this.name].controller.hasOneRelations[relationName] = domainsObjects[this.hasOneRelations[i].type].controller;
+            }
+        }
+    });
+
 
     return that;
 };

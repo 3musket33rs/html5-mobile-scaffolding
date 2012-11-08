@@ -32,8 +32,32 @@
     <script src="js/grails/mobile/helper/toObject.js"></script>
     <script src="js/grails/mobile/sync/syncmanager.js"></script>
     <script src="js/grails/mobile/mvc/manager.js"></script>
+    <% if(oneToOneProps) {
+    oneToOneProps.each {
+    def referencedType = it.type.name
+    if (referencedType.lastIndexOf('.') > 0) {
+    referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
+    }
+    def referencedTypeToLowerCase = referencedType.toLowerCase()
+    %>
+    <script src="js/${packageName}/view/${referencedTypeToLowerCase}-view.js"></script>
+    <% } } %>
     <script src="js/${packageName}/view/${classNameLowerCase}-view.js"></script>
-    <script src="js/${packageName}/${classNameLowerCase}-bootstrap.js"></script>
+    <script src="js/${packageName}/configuration-bootstrap.js"></script>
+    <script src="js/${packageName}/bootstrap/${classNameLowerCase}-bootstrap.js"></script>
+
+    <% if(oneToOneProps) {
+    oneToOneProps.each {
+    def referencedType = it.type.name
+    if (referencedType.lastIndexOf('.') > 0) {
+    referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
+    }
+    def referencedTypeToLowerCase = referencedType.toLowerCase()
+    %>
+    <script src="js/${packageName}/bootstrap/${referencedTypeToLowerCase}-bootstrap.js"></script>
+    <% } } %>
+
+    <script src="js/${packageName}/manager-bootstrap.js"></script>
     <script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
     <script src="http://dev.jtsage.com/cdn/datebox/1.1.0/jqm-datebox-1.1.0.core.min.js"></script>
     <script src="http://dev.jtsage.com/cdn/datebox/1.1.0/jqm-datebox-1.1.0.mode.datebox.min.js"></script>

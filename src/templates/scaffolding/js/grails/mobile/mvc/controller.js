@@ -39,7 +39,11 @@ grails.mobile.mvc.controller = function (feed, model, view) {
     });
 
     view.listButtonClicked.attach(function (item) {
-        listItem();
+        that.listItem();
+    });
+
+    view.editButtonClicked.attach(function () {
+        listDependent();
     });
 
     view.createButtonClicked.attach(function (item) {
@@ -54,8 +58,26 @@ grails.mobile.mvc.controller = function (feed, model, view) {
         deleteItem(itemId);
     });
 
-    var listItem = function () {
-        var list = feed.listItems(listed);
+    var listDependent = function () {
+        if (that.hasOneRelations) {
+            $.each(that.hasOneRelations, function(key, controller) {
+                controller.listItem();
+                var qualifyAttributes = key.split('_');
+                var dependent = qualifyAttributes[0];
+                var dependentName = qualifyAttributes[1];
+                listedDependent(dependent, dependentName, controller.model.getItems());
+            });
+        }
+    };
+
+    var listedDependent = function (dependent, dependentName, data) {
+        that.model.listDependent(dependent, dependentName, data);
+    };
+
+    that.listItem = function () {
+        if ($.isEmptyObject(that.model.getItems())) {
+            var list = feed.listItems(listed);
+        }
     };
 
     var listed = function (data) {

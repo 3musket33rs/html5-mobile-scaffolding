@@ -12,6 +12,12 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     var mapServiceForm = grails.mobile.map.googleMapService();
     <% } %>
     // Register events
+
+    <% if(oneToOneProps) { %>
+    that.model.listedDependentItems.attach(function (data) {
+        renderDependentList(data.dependentName, data.items);
+    });
+    <% } %>
     that.model.listedItems.attach(function (data) {
         renderList();
     });
@@ -90,6 +96,8 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         var url = \$(e.target).attr("data-url");
         var matches = url.match(/\\?id=(.*)/);
 
+        that.editButtonClicked.notify();
+
         if (matches) {
             showElement(matches[1]);
         } else {
@@ -114,6 +122,18 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     var showElement = function (id) {
         resetForm("form-update-${classNameLowerCase}");
         var element = that.model.items[id];
+ <% if(oneToOneProps) {
+    oneToOneProps.each {
+         def referencedType = it.type.name
+         if (referencedType.lastIndexOf('.') > 0) {
+    referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
+    }
+def referencedTypeToLowerCase = referencedType.toLowerCase()
+%>
+        \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').val(element.${it.name}.id);
+        \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').selectmenu('refresh');
+ <% }
+  } %>
         \$.each(element, function (name, value) {
             \$('#input-${classNameLowerCase}-' + name).val(value);
         });
@@ -169,6 +189,39 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         <% } %>
     };
 
+
+   <% if(oneToOneProps) { %>
+    var refreshSelectDropDown = function (select, newOptions) {
+        var options = null;
+        if(select.prop) {
+            options = select.prop('options');
+        }
+        else {
+            options = select.attr('options');
+        }
+        \$('option', select).remove();
+
+        \$.each(newOptions, function(val, text) {
+            options[options.length] = new Option(text, val);
+        });
+        select.val(options[0]);
+        select.selectmenu('refresh');
+    }
+
+     var renderDependentList = function (dependentName, items) {
+
+        var manyToOneSelectForDependent = \$('select[data-gorm-relation="many-to-one"][name=' + dependentName + ']');
+        var options = {};
+        \$.each(items, function() {
+            var key = this.id;
+            var value = this[Object.keys(this)[2]];;
+            options[key] = value;
+            });
+
+        refreshSelectDropDown(manyToOneSelectForDependent, options);
+    };
+    <% } %>
+
     var renderElement = function (element) {
         if (element.offlineAction !== 'DELETED') {
             var a = \$('<a>').attr({ href: '#section-show-${classNameLowerCase}?id=' + element.id });
@@ -193,10 +246,12 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         var textDisplay = '';
         \$.each(data, function (name, value) {
             if (name !== 'class' && name !== 'id' && name !== 'offlineAction' && name !== 'offlineStatus' && name !== 'status' && name !== 'version') {
-                textDisplay += value + ";";
+                if (typeof value !== 'object') {   // do not display relation in list view
+                    textDisplay += value + " - ";
+                }
             }
         });
-        return textDisplay.substring(0, textDisplay.length - 1);
+        return textDisplay.substring(0, textDisplay.length - 2);
     };
 
     return that;

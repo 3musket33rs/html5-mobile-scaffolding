@@ -3,12 +3,9 @@
 
 var ${packageName} = ${packageName} || {};
 
-${packageName}.load = (function () {
+${packageName}.load${classNameLowerCase} = (function () {
 
-    var configuration = {
-        baseURL: "http://localhost:8080/${project}/",
-        namespace: "${packageName}",
-        domain:[
+    ${packageName}.configuration.domain.push(
             {
                 name: "${classNameLowerCase}",
                 view: {
@@ -17,10 +14,20 @@ ${packageName}.load = (function () {
                     'add': \$('#section-show-${classNameLowerCase}'),
                     'remove': \$("#delete-${classNameLowerCase}")
                 }
-            }
-        ]
-    };
-    var managerObject = grails.mobile.mvc.manager(configuration);
-
+                <% if(oneToOneProps) { %>
+                , hasOneRelations: [
+                <%      oneToOneProps.each {
+                        def referencedType = it.type.name
+                        if (referencedType.lastIndexOf('.') > 0) {
+                            referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
+                        }
+                        def referencedTypeToLowerCase = referencedType.toLowerCase()
+                %>
+                {type: "${referencedTypeToLowerCase}", name: "${it.name}"}
+                <% if(it!=oneToOneProps.last()) { %>
+                ,
+                <% } %>
+                <% } %> ] <% } %>
+            });
 }());
 
