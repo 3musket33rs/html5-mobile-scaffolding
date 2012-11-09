@@ -13,9 +13,14 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     <% } %>
     // Register events
 
-    <% if(oneToOneProps) { %>
+    <% if(oneToOneProps || oneToManyProps) { %>
     that.model.listedDependentItems.attach(function (data) {
-        renderDependentList(data.dependentName, data.items);
+        if (data.relationType === 'many-to-one') {
+            renderDependentList(data.dependentName, data.items);
+        }
+        if (data.relationType === 'one-to-many') {
+            renderMultiChoiceDependentList(data.dependentName, data.items);
+        }
     });
     <% } %>
     that.model.listedItems.attach(function (data) {
@@ -134,6 +139,16 @@ def referencedTypeToLowerCase = referencedType.toLowerCase()
         \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').selectmenu('refresh');
  <% }
   } %>
+ <% if(oneToManyProps) {
+    oneToManyProps.each {
+        def attributeName = it.name.toLowerCase(); %>
+        var ${attributeName}Selected = element.${attributeName};
+        \$.each(${attributeName}Selected, function (key, value) {
+            var selector = '#checkbox-${attributeName}-' + value.id
+            \$(selector).attr('checked','checked');
+        })
+  <% }
+  } %>
         \$.each(element, function (name, value) {
             \$('#input-${classNameLowerCase}-' + name).val(value);
         });
@@ -150,7 +165,7 @@ def referencedTypeToLowerCase = referencedType.toLowerCase()
     var resetForm = function (form) {
         var div = \$("#" + form);
         div.find('input:text, input:hidden, input[type="number"], input:file, input:password').val('');
-        div.find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected').checkboxradio('refresh');
+        div.find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');//.checkboxradio('refresh');
     };
     <% if (geolocated) { %>
     var hideListDisplay = function () {
@@ -190,7 +205,7 @@ def referencedTypeToLowerCase = referencedType.toLowerCase()
     };
 
 
-   <% if(oneToOneProps) { %>
+    <% if(oneToOneProps || oneToManyProps) { %>
     var refreshSelectDropDown = function (select, newOptions) {
         var options = null;
         if(select.prop) {
@@ -220,7 +235,27 @@ def referencedTypeToLowerCase = referencedType.toLowerCase()
 
         refreshSelectDropDown(manyToOneSelectForDependent, options);
     };
-    <% } %>
+
+
+    var refreshMultiChoices = function (oneToMany, dependentName, newOptions) {
+        oneToMany.empty();
+        \$.each(newOptions, function(key, val) {
+            oneToMany.append(\$('<input type="checkbox" data-gorm-relation="one-to-many" name="'+ dependentName +'" id="checkbox-'+ dependentName +'-' + key + '"/><label for="checkbox-'+ dependentName +'-'+key+'">'+val+'</label>'));
+        });
+    }
+
+    var renderMultiChoiceDependentList = function (dependentName, items) {
+        var oneToMany = \$('#multichoice-' + dependentName);
+        var options = {};
+        \$.each(items, function() {
+            var key = this.id;
+            var value = this[Object.keys(this)[2]];
+            options[key] = value;
+        });
+
+        refreshMultiChoices(oneToMany, dependentName, options);
+    };
+<% } %>
 
     var renderElement = function (element) {
         if (element.offlineAction !== 'DELETED') {

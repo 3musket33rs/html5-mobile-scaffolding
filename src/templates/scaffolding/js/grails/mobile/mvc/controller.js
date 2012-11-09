@@ -65,13 +65,22 @@ grails.mobile.mvc.controller = function (feed, model, view) {
                 var qualifyAttributes = key.split('_');
                 var dependent = qualifyAttributes[0];
                 var dependentName = qualifyAttributes[1];
-                listedDependent(dependent, dependentName, controller.model.getItems());
+                listedDependent(dependent, dependentName, "many-to-one", controller.model.getItems());
+            });
+        }
+        if (that.oneToManyRelations) {
+            $.each(that.oneToManyRelations, function(key, controller) {
+                controller.listItem();
+                var qualifyAttributes = key.split('_');
+                var dependent = qualifyAttributes[0];
+                var dependentName = qualifyAttributes[1];
+                listedDependent(dependent, dependentName, "one-to-many",controller.model.getItems());
             });
         }
     };
 
-    var listedDependent = function (dependent, dependentName, data) {
-        that.model.listDependent(dependent, dependentName, data);
+    var listedDependent = function (dependent, dependentName, relationType, data) {
+        that.model.listDependent(dependent, dependentName, relationType, data);
     };
 
     that.listItem = function () {

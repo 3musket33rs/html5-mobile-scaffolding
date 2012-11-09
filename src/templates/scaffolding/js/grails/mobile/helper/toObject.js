@@ -50,6 +50,14 @@ grails.mobile.helper.toObject = function (inputs) {
             } else {
                 add = false;
             }
+        } else if($(this).attr("data-gorm-relation") === "one-to-many") {
+            if (this.checked) {
+                value = $(this).attr('id');
+                var values = value.split('-');
+                value = values[2];
+            } else {
+                add = false;
+            }
         } else if (this.type === 'checkbox') {
             value = this.checked;
         } else {
@@ -64,6 +72,11 @@ grails.mobile.helper.toObject = function (inputs) {
         if (add) {
             if ($(this).attr('data-gorm-relation') === "many-to-one") {
                 objectData[this.name + '.id'] = value;
+            } else if ($(this).attr('data-gorm-relation') === "one-to-many") {
+                if (!objectData[this.name]) {
+                    objectData[this.name] = [];
+                }
+                objectData[this.name].push({id:value});
             } else {
                 objectData[this.name] = value;
             }

@@ -86,6 +86,13 @@ grails.mobile.mvc.manager = function (configuration) {
                 domainsObjects[this.name].controller.hasOneRelations[relationName] = domainsObjects[this.hasOneRelations[i].type].controller;
             }
         }
+        if (this.oneToManyRelations) {
+            domainsObjects[this.name].controller.oneToManyRelations = {};
+            for (var i = 0; i < this.oneToManyRelations.length; i++) {
+                var relationName = this.oneToManyRelations[i].type + '_' + this.oneToManyRelations[i].name;
+                domainsObjects[this.name].controller.oneToManyRelations[relationName] = domainsObjects[this.oneToManyRelations[i].type].controller;
+            }
+        }
     });
 
 

@@ -1,14 +1,15 @@
 <% import org.codehaus.groovy.grails.commons.GrailsDomainClass %>
-<% classNameLowerCase = className.toLowerCase() %>
+    <% classNameLowerCase = className.toLowerCase() %>
 
-var ${packageName} = ${packageName} || {};
+    var ${packageName} = ${packageName} || {};
 
-${packageName}.load${classNameLowerCase} = (function () {
+    ${packageName}.load${classNameLowerCase} = (function () {
 
-    ${packageName}.configuration.domain.push(
+        ${packageName}.configuration.domain.push(
             {
                 name: "${classNameLowerCase}",
-                view: {
+                view:
+                {
                     'list': \$('#section-list-${classNameLowerCase}s'),
                     'save': \$("#submit-${classNameLowerCase}"),
                     'add': \$('#section-show-${classNameLowerCase}'),
@@ -28,6 +29,9 @@ ${packageName}.load${classNameLowerCase} = (function () {
                 ,
                 <% } %>
                 <% } %> ] <% } %>
+
+                <% if(oneToManyProps) { %>
+                , oneToManyRelations: [<% oneToManyProps.each { %> {type: "${it.getReferencedDomainClass().getName().toLowerCase()}", name: "${it.name}"}<% if(it!=oneToManyProps.last()) { %>
+                ,<% } } %> ] <% } %>
             });
 }());
-

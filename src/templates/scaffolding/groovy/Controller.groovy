@@ -22,7 +22,26 @@ class ${className}Controller {
 
     def save() {
       def jsonObject = JSON.parse(params.${classNameLowerCase})
+      <% if(oneToManyProps) {
+            oneToManyProps.each {
+                referencedType = it.getReferencedDomainClass().getName()
+                referencedTypeToLowerCase = referencedType.toLowerCase()
+      %>
+      def ${it.name} = []
+      jsonObject.${it.name}.each() {
+         String id = it.id
+         ${referencedType} ${referencedTypeToLowerCase} = ${referencedType}.get(id)
+         ${it.name}.add(${referencedTypeToLowerCase})
+      }
+      jsonObject.${it.name} = null
+      <% } } %>
       ${className} ${classNameLowerCase}Instance = new ${className}(jsonObject)
+
+      <% if(oneToManyProps) {
+            oneToManyProps.each {
+      %>
+      ${classNameLowerCase}Instance.${it.name} = ${it.name}
+      <% } } %>
       if (!${classNameLowerCase}Instance.save(flush: true)) {
         ValidationErrors validationErrors = ${classNameLowerCase}Instance.errors
         render validationErrors as JSON
@@ -41,8 +60,25 @@ class ${className}Controller {
 
     def update() {
       def jsonObject = JSON.parse(params.${classNameLowerCase})
-      ${className} ${classNameLowerCase}Received = new ${className}(jsonObject)
-
+        <% if(oneToManyProps) {
+            oneToManyProps.each {
+                referencedType = it.getReferencedDomainClass().getName()
+                referencedTypeToLowerCase = referencedType.toLowerCase()
+        %>
+        def ${it.name} = []
+                jsonObject.${it.name}.each() {
+                    String id = it.id
+                    ${referencedType} ${referencedTypeToLowerCase} = ${referencedType}.get(id)
+                    ${it.name}.add(${referencedTypeToLowerCase})
+                }
+                jsonObject.${it.name} = null
+        <% } } %>
+        ${className} ${classNameLowerCase}Received = new ${className}(jsonObject)
+        <% if(oneToManyProps) {
+            oneToManyProps.each {
+        %>
+        ${classNameLowerCase}Received.${it.name} = ${it.name}
+        <% } } %>
         def ${classNameLowerCase}Instance = ${className}.get(jsonObject.id)
         if (!${classNameLowerCase}Instance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: '${classNameLowerCase}.label', default: '${className}'), params.id])
@@ -67,7 +103,7 @@ class ${className}Controller {
           ValidationErrors validationErrors = ${classNameLowerCase}Instance.errors
           render validationErrors as JSON
         }
-		    render ${classNameLowerCase}Instance as JSON
+		render ${classNameLowerCase}Instance as JSON
     }
 
     def delete() {

@@ -39,13 +39,17 @@
     referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
     }
     def referencedTypeToLowerCase = referencedType.toLowerCase()
+    %><script src="js/${packageName}/view/${referencedTypeToLowerCase}-view.js"></script><% }
+    }
     %>
-    <script src="js/${packageName}/view/${referencedTypeToLowerCase}-view.js"></script>
-    <% } } %>
+    <% if(oneToManyProps) {
+    oneToManyProps.each {
+    %><script src="js/${packageName}/view/${it.getReferencedDomainClass().getName().toLowerCase()}-view.js"></script><% }
+    }
+    %>
     <script src="js/${packageName}/view/${classNameLowerCase}-view.js"></script>
     <script src="js/${packageName}/configuration-bootstrap.js"></script>
     <script src="js/${packageName}/bootstrap/${classNameLowerCase}-bootstrap.js"></script>
-
     <% if(oneToOneProps) {
     oneToOneProps.each {
     def referencedType = it.type.name
@@ -53,11 +57,14 @@
     referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
     }
     def referencedTypeToLowerCase = referencedType.toLowerCase()
+    %><script src="js/${packageName}/bootstrap/${referencedTypeToLowerCase}-bootstrap.js"></script><% }
+    }
     %>
-    <script src="js/${packageName}/bootstrap/${referencedTypeToLowerCase}-bootstrap.js"></script>
-    <% } } %>
-
-    <script src="js/${packageName}/manager-bootstrap.js"></script>
+    <% if(oneToManyProps) {
+    oneToManyProps.each {
+    %><script src="js/${packageName}/bootstrap/${it.getReferencedDomainClass().getName().toLowerCase()}-bootstrap.js"></script><% }
+    }
+    %><script src="js/${packageName}/manager-bootstrap.js"></script>
     <script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
     <script src="http://dev.jtsage.com/cdn/datebox/1.1.0/jqm-datebox-1.1.0.core.min.js"></script>
     <script src="http://dev.jtsage.com/cdn/datebox/1.1.0/jqm-datebox-1.1.0.mode.datebox.min.js"></script>
@@ -148,7 +155,15 @@
                         <option value="0"></option>
                     </select>
                 </div>
+
                 <% } %>
+            </li>
+            <% } %>
+
+            <% oneToManyProps.eachWithIndex { p, i -> %>
+            <li>
+            <fieldset id="multichoice-${p.getName().toLowerCase()}" name="${p.getName().toLowerCase()}" data-gorm-relation="one-to-many" data-role="controlgroup">
+            </fieldset>
             </li>
             <% } %>
         </ul>

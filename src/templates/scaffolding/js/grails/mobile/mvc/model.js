@@ -36,14 +36,14 @@ grails.mobile.mvc.model = function (items) {
         return that.items;
     };
 
-    that.listDependent = function (dependent, dependentName, items) {
+    that.listDependent = function (dependent, dependentName, relationType, items) {
         var keyItem;
         var list = {}
         for (keyItem in items) {
             list[items[keyItem].id] = items[keyItem];
         }
         that.dependentItems[dependent] = list;
-        that.listedDependentItems.notify({'items': that.dependentItems[dependent], dependentName: dependentName});
+        that.listedDependentItems.notify({'items': that.dependentItems[dependent], relationType: relationType, dependentName: dependentName});
     };
 
     that.listItems = function (json) {

@@ -112,6 +112,26 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
    this.viewName = viewName
  }
 
+@Override
+void generateController(GrailsDomainClass domainClass, Writer out) {
+        def templateText = getTemplateText("Controller.groovy")
+
+        boolean hasHibernate =pluginManager?.hasGrailsPlugin('hibernate')
+
+        def oneToManyProps = domainClass.properties.findAll { it.isOneToMany() }
+
+        def binding = [pluginManager: pluginManager,
+                packageName: domainClass.packageName,
+                domainClass: domainClass,
+                className: domainClass.shortName,
+                oneToManyProps: oneToManyProps,
+                propertyName: getPropertyName(domainClass),
+                comparator: hasHibernate ? DomainClassPropertyComparator : SimpleDomainClassPropertyComparator]
+
+        def t = engine.createTemplate(templateText)
+        t.make(binding).writeTo(out)
+}
+
  @Override
  void generateViews(GrailsDomainClass domainClass, String destdir) {
    Assert.hasText destdir, 'Argument [destdir] not specified'
@@ -151,7 +171,12 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
      def listProps = domainClass.properties.findAll {Collection.isAssignableFrom(it.type)}
      
      def oneToOneProps = props.findAll { it.isOneToOne() }
-     
+
+     def oneToManyProps = domainClass.properties.findAll { it.isOneToMany() }
+     println "------------- oneToMany: " + oneToManyProps
+     println "------------- oneToMany: " + oneToManyProps*.getReferencedDomainClass().get(0).getName()
+     //def oneToManyProps2 = []
+     //oneToManyProps2 << oneToManyProps*.getReferencedDomainClass().get(0).getName()
      def latitude = domainClass.properties.find { it.name == "latitude" }
      def longitude = domainClass.properties.find { it.name == "longitude" }
      
@@ -172,6 +197,7 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
        domainClass: domainClass,
        props: props,
        oneToOneProps: oneToOneProps,
+       oneToManyProps: oneToManyProps,
        geolocated: geolocated,
        geoProps:geoProps,
        className: domainClass.shortName]
