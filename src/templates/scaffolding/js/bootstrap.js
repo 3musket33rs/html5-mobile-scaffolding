@@ -1,26 +1,37 @@
 <% import org.codehaus.groovy.grails.commons.GrailsDomainClass %>
-<% classNameLowerCase = className.toLowerCase() %>
+    <% classNameLowerCase = className.toLowerCase() %>
 
-var ${packageName} = ${packageName} || {};
+    var ${packageName} = ${packageName} || {};
 
-${packageName}.load = (function () {
+    ${packageName}.load${classNameLowerCase} = (function () {
 
-    var configuration = {
-        baseURL: "http://localhost:8080/${project}/",
-        namespace: "${packageName}",
-        domain:[
+        ${packageName}.configuration.domain.push(
             {
                 name: "${classNameLowerCase}",
-                view: {
+                view:
+                {
                     'list': \$('#section-list-${classNameLowerCase}s'),
                     'save': \$("#submit-${classNameLowerCase}"),
                     'add': \$('#section-show-${classNameLowerCase}'),
                     'remove': \$("#delete-${classNameLowerCase}")
                 }
-            }
-        ]
-    };
-    var managerObject = grails.mobile.mvc.manager(configuration);
+                <% if(oneToOneProps) { %>
+                , hasOneRelations: [
+                <%      oneToOneProps.each {
+                        def referencedType = it.type.name
+                        if (referencedType.lastIndexOf('.') > 0) {
+                            referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
+                        }
+                        def referencedTypeToLowerCase = referencedType.toLowerCase()
+                %>
+                {type: "${referencedTypeToLowerCase}", name: "${it.name}"}
+                <% if(it!=oneToOneProps.last()) { %>
+                ,
+                <% } %>
+                <% } %> ] <% } %>
 
+                <% if(oneToManyProps) { %>
+                , oneToManyRelations: [<% oneToManyProps.each { %> {type: "${it.getReferencedDomainClass().getName().toLowerCase()}", name: "${it.name}"}<% if(it!=oneToManyProps.last()) { %>
+                ,<% } } %> ] <% } %>
+            });
 }());
-

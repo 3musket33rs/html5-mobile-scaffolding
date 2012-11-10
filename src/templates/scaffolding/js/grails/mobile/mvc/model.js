@@ -23,15 +23,27 @@ grails.mobile.mvc = grails.mobile.mvc || {};
 grails.mobile.mvc.model = function (items) {
     var that = {};
     that.items = {};
+    that.dependentItems = {};
 
     // register events
     that.listedItems = grails.mobile.event(that);
+    that.listedDependentItems = grails.mobile.event(that);
     that.createdItem = grails.mobile.event(that);
     that.updatedItem = grails.mobile.event(that);
     that.deletedItem = grails.mobile.event(that);
 
     that.getItems = function () {
         return that.items;
+    };
+
+    that.listDependent = function (dependent, dependentName, relationType, items) {
+        var keyItem;
+        var list = {}
+        for (keyItem in items) {
+            list[items[keyItem].id] = items[keyItem];
+        }
+        that.dependentItems[dependent] = list;
+        that.listedDependentItems.notify({'items': that.dependentItems[dependent], relationType: relationType, dependentName: dependentName});
     };
 
     that.listItems = function (json) {
@@ -56,8 +68,6 @@ grails.mobile.mvc.model = function (items) {
         delete that.items[item.id];
         that.deletedItem.notify({item:item});
     };
-
-
 
     return that;
 };
