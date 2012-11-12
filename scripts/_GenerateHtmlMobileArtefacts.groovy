@@ -27,7 +27,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import org.springframework.util.Assert
 import org.codehaus.groovy.grails.scaffolding.*
 import grails.persistence.Event
-import groovy.io.FileType
+import org.codehaus.groovy.grails.validation.ConstrainedProperty
 
 includeTargets << grailsScript("_GrailsCreateArtifacts")
 includeTargets << grailsScript("_GrailsGenerate")
@@ -143,13 +143,15 @@ void generateController(GrailsDomainClass domainClass, Writer out) {
  }
 
  void copyGrailsMobileFrameworkIfNotPresent(String base) {
-    def source = "$base/src/templates/scaffolding/grails"
-    def destination = "$base/web-app/js/grails"
-    if (!new File(destination).exists()) {
-      new AntBuilder().copy( todir:destination ) {
-        fileset( dir: source )
-      }
-    }
+     def source = "$base/src/templates/scaffolding/"
+     def destination = "$base/web-app/"
+     def ant = new AntBuilder();
+     ant.copy( todir:destination + "js/" ) {
+         fileset( dir: source + "js/")
+     }
+     ant.copy( todir:destination + "css/" ) {
+         fileset( dir: source + "css/" )
+     }
  }
 
  @Override
@@ -171,10 +173,10 @@ void generateController(GrailsDomainClass domainClass, Writer out) {
      def listProps = domainClass.properties.findAll {Collection.isAssignableFrom(it.type)}
      
      def oneToOneProps = props.findAll { it.isOneToOne() }
+     String validation = getValidation(domainClass.constrainedProperties);
 
      def oneToManyProps = domainClass.properties.findAll { it.isOneToMany() }
-     println "------------- oneToMany: " + oneToManyProps
-     println "------------- oneToMany: " + oneToManyProps*.getReferencedDomainClass().get(0).getName()
+     //println "------------- oneToMany: " + oneToManyProps*.getReferencedDomainClass().get(0).getName()
      //def oneToManyProps2 = []
      //oneToManyProps2 << oneToManyProps*.getReferencedDomainClass().get(0).getName()
      def latitude = domainClass.properties.find { it.name == "latitude" }
@@ -200,13 +202,77 @@ void generateController(GrailsDomainClass domainClass, Writer out) {
        oneToManyProps: oneToManyProps,
        geolocated: geolocated,
        geoProps:geoProps,
+       validation: validation,
        className: domainClass.shortName]
 
      t.make(binding).writeTo(out)
    }
  }
 
- @Override
+
+    String getValidation(Map map) {
+        String validation = "validate["
+
+        map.each{ k,v ->
+            ConstrainedProperty cp = (ConstrainedProperty)v
+
+            if (!cp.blank || !cp.nullable) {
+                validation += "required,"
+            } else if (!cp.isNotValidStringType() && cp.creditCard) {
+                validation += "creditCard,"
+            } else if (!cp.isNotValidStringType() && cp.email) {
+                validation += "custom[email],"
+            } else if (cp.inList != null) {
+            } else if (!cp.isNotValidStringType() && cp.matches) {
+            } else if (cp.max) {
+            } else if (cp.maxSize) {
+            } else if (cp.min) {
+            } else if (cp.minSize) {
+            } else if (cp.notEqual) {
+            } else if (cp.range) {
+            } else if (cp.scale) {
+            } else if (cp.size) {
+            } else if (!cp.isNotValidStringType() && cp.url) {
+                validation += "custom[url],"
+            }
+        }
+        if (validation.endsWith(",")) {
+            validation = validation.substring(0, validation.length()-1)
+            validation += "]"
+        } else {
+            return ""
+        }
+        return validation
+
+//        if (key=="blank") {
+//            value.key
+//        } else if (key == "creditCard") {
+//        } else if (key == "email") {
+//        } else if (key == "inList") {
+//        } else if (key == "matches") {
+//        } else if (key == "max") {
+//        } else if (key == "maxSize") {
+//        } else if (key == "min") {
+//        } else if (key == "minSize") {
+//        } else if (key == "notEqual") {
+//        } else if (key == "nullable") {
+//        } else if (key == "range") {
+//            value.range
+//        } else if (key == "scale") {
+//        } else if (key == "size") {
+//        } else if (key == "unique") {
+//        } else if (key == "url") {
+//        } else if (key == "validator") {
+//        }
+
+//        display
+//        editable
+//        format
+//        password
+//        widget
+    }
+
+    @Override
  void generateView(GrailsDomainClass domainClass, String templateViewName, String destDir) {
      println "------------- generate view start " + templateViewName + domainClass.packageName
    def suffix = templateViewName.find(/\.\w+$/)
@@ -226,7 +292,6 @@ void generateController(GrailsDomainClass domainClass, Writer out) {
        }
        copyGrailsMobileFrameworkIfNotPresent(destDir)
    }
-     println "------------- views dir " + viewsDir.path
 
      if (!viewsDir.exists()) viewsDir.mkdirs()
   
@@ -250,7 +315,6 @@ void generateController(GrailsDomainClass domainClass, Writer out) {
      destFile.withWriter { Writer writer ->
        generateView domainClass, templateViewName, writer
      }
-     println "------------- generate view finish"
  }
 
  @Override

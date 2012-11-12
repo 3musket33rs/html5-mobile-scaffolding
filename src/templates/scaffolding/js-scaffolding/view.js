@@ -27,25 +27,56 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         renderList();
     });
 
-    that.model.createdItem.attach(function (data) {
-        renderElement(data.item);
-        \$('#list-${classNameLowerCase}s').listview('refresh');
-    	<% if (geolocated) { %>        
-        mapServiceList.refreshCenterZoomMap();
-		<% } %>
+    that.model.createdItem.attach(function (data, event) {
+        if (data.item.errors) {
+            \$.each(data.item.errors, function(index, error) {
+            \$('#input-${classNameLowerCase}-' + error.field).validationEngine('showPrompt',error.message, 'fail');
+            });
+            event.stopPropagation();
+            event.preventDefault();
+        } else if (data.item.message) {
+            showGeneralMessage(data, event);
+        } else {
+            renderElement(data.item);
+            \$('#list-${classNameLowerCase}s').listview('refresh');
+    	    <% if (geolocated) { %>
+            mapServiceList.refreshCenterZoomMap();
+		    <% } %>
+		}
     });
 
-    that.model.updatedItem.attach(function (data) {
-         renderList();
+    that.model.updatedItem.attach(function (data, event) {
+        if (data.item.errors) {
+            \$.each(data.item.errors, function(index, error) {
+                \$('#input-${classNameLowerCase}-' + error.field).validationEngine('showPrompt',error.message, 'fail');
+            });
+            event.stopPropagation();
+            event.preventDefault();
+        } else if (data.item.message) {
+            showGeneralMessage(data, event);
+        } else {
+            renderList();
+        }
     });
 
-    that.model.deletedItem.attach(function (data) {
-        \$('#${classNameLowerCase}' + data.item.id + '-in-list').parents('li').remove();
-        <% if (geolocated) { %>
-        mapServiceList.removeMarker(data.item.id);
-        mapServiceList.refreshCenterZoomMap();
-        <% } %>
+    that.model.deletedItem.attach(function (data, event) {
+        if (data.item.message) {
+            showGeneralMessage(data, event);
+        } else {
+            \$('#${classNameLowerCase}' + data.item.id + '-in-list').parents('li').remove();
+            <% if (geolocated) { %>
+            mapServiceList.removeMarker(data.item.id);
+            mapServiceList.refreshCenterZoomMap();
+            <% } %>
+        }
     });
+
+    var showGeneralMessage = function(data, event) {
+        \$.mobile.showPageLoadingMsg( \$.mobile.pageLoadErrorMessageTheme, data.item.message, true );
+        setTimeout( \$.mobile.hidePageLoadingMsg, 3000 );
+        event.stopPropagation();
+        event.preventDefault();
+    };
 
     // user interface actions
     <% if (geolocated) { %>
@@ -63,48 +94,39 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         that.listButtonClicked.notify();
     });
 
-    that.elements.save.live("click tap", function () {
-        var obj = grails.mobile.helper.toObject(\$("#form-update-${classNameLowerCase}").find("input, select"));
-        var newElement = {
-            ${classNameLowerCase}: JSON.stringify(obj)
-        };
-        if (obj.id === "") {
-            that.createButtonClicked.notify(newElement);
+    that.elements.save.live("click tap", function (event) {
+        \$("#form-update-${classNameLowerCase}").validationEngine('hide');
+        if(\$("#form-update-${classNameLowerCase}").validationEngine('validate')) {
+            var obj = grails.mobile.helper.toObject(\$("#form-update-${classNameLowerCase}").find("input, select"));
+            var newElement = {
+                ${classNameLowerCase}: JSON.stringify(obj)
+            };
+            if (obj.id === "") {
+                that.createButtonClicked.notify(newElement, event);
+            } else {
+                that.updateButtonClicked.notify(newElement, event);
+            }
         } else {
-            that.updateButtonClicked.notify(newElement);
+            event.stopPropagation();
+            event.preventDefault();
         }
     });
 
-    that.elements.remove.live("click tap", function () {
-        that.deleteButtonClicked.notify({ id: \$('#input-${classNameLowerCase}-id').val() });
-    });
-
-    // Detect online/offline from browser
-    addEventListener('offline', function(e) {
-        that.offlineEvent.notify();
-    });
-
-    addEventListener('online', function(e) {
-        that.onlineEvent.notify();
-    });
-
-    // Detect online/offline from application
-    \$("#offline").live("click tap", function () {
-        that.offlineEvent.notify();
-    });
-
-    \$("#online").live("click tap", function () {
-        that.onlineEvent.notify();
+    that.elements.remove.live("click tap", function (event) {
+        that.deleteButtonClicked.notify({ id: \$('#input-${classNameLowerCase}-id').val() }, event);
     });
 
     that.elements.add.live('pageshow', function (e) {
-        var url = \$(e.target).attr("data-url");
-        var matches = url.match(/\\?id=(.*)/);
+        \$('#form-update-${classNameLowerCase}').validationEngine('hide');
+        \$("#form-update-${classNameLowerCase}").validationEngine();
 
         that.editButtonClicked.notify();
 
-        if (matches) {
-            showElement(matches[1]);
+        var id = sessionStorage.getItem("show${classNameLowerCase}Id");
+
+        if (id) {
+            sessionStorage.removeItem("show${classNameLowerCase}Id");
+            showElement(id);
         } else {
             createElement();
         }
@@ -150,7 +172,12 @@ def referencedTypeToLowerCase = referencedType.toLowerCase()
   <% }
   } %>
         \$.each(element, function (name, value) {
-            \$('#input-${classNameLowerCase}-' + name).val(value);
+            var input = \$('#input-${classNameLowerCase}-' + name);
+            if (input.attr('type') == 'date') {
+                input.scroller('setDate', (value === "") ? "" : new Date(value), true);
+            } else {
+                input.val(value);
+            }
         });
         <% if (geolocated) { %>
         var coord = {
@@ -163,6 +190,16 @@ def referencedTypeToLowerCase = referencedType.toLowerCase()
     };
 
     var resetForm = function (form) {
+        \$('input[type="date"]').each(function() {
+            \$(this).scroller('destroy');
+            \$(this).scroller({
+                preset: 'date',
+                theme: 'default',
+                display: 'modal',
+                mode: 'scroller',
+                dateOrder: 'mmD ddyy'
+            });
+        });
         var div = \$("#" + form);
         div.find('input:text, input:hidden, input[type="number"], input:file, input:password').val('');
         div.find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');//.checkboxradio('refresh');
@@ -259,8 +296,9 @@ def referencedTypeToLowerCase = referencedType.toLowerCase()
 
     var renderElement = function (element) {
         if (element.offlineAction !== 'DELETED') {
-            var a = \$('<a>').attr({ href: '#section-show-${classNameLowerCase}?id=' + element.id });
+            var a = \$('<a>').attr({ href: '#section-show-${classNameLowerCase}'});
             a.attr({id : '${classNameLowerCase}' + element.id + '-in-list'});
+            a.attr({onClick : 'sessionStorage.show${classNameLowerCase}Id=' + element.id});
             a.attr({'data-transition': 'fade' });
             a.text(getText(element));
             if (element.offlineStatus === "NOT-SYNC") {

@@ -4,9 +4,12 @@
     <title>My Page</title>
     <% classNameLowerCase = className.toLowerCase() %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css"/>
-    <link rel="stylesheet" href="http://dev.jtsage.com/cdn/datebox/1.1.0/jqm-datebox-1.1.0.min.css"/>
-    <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <link rel="stylesheet" href="css/jquery/jquery.mobile-1.2.0.min.css"/>
+    <link rel="stylesheet" href="css/jquery/validationEngine.jquery.css" type="text/css"/>
+    <link rel="stylesheet" href="css/jquery/mobiscroll-2.1.custom.min.css" type="text/css"/>
+    <script src="js/jquery/jquery-1.8.2.min.js"></script>
+    <script src="js/jquery/jquery.validationEngine.js"></script>
+    <script src="js/jquery/jquery.validationEngine-en.js"></script>
     <% if (geolocated) { %>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <style type="text/css">
@@ -65,9 +68,8 @@
     %><script src="js/${packageName}/bootstrap/${it.getReferencedDomainClass().getName().toLowerCase()}-bootstrap.js"></script><% }
     }
     %><script src="js/${packageName}/manager-bootstrap.js"></script>
-    <script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
-    <script src="http://dev.jtsage.com/cdn/datebox/1.1.0/jqm-datebox-1.1.0.core.min.js"></script>
-    <script src="http://dev.jtsage.com/cdn/datebox/1.1.0/jqm-datebox-1.1.0.mode.datebox.min.js"></script>
+    <script src="js/jquery/jquery.mobile-1.2.0.min.js"></script>
+    <script src="js/jquery/mobiscroll-2.1.custom.min.js"></script>
 </head>
 
 <body>
@@ -111,27 +113,26 @@
 
         <h1>${className}</h1>
     </div>
-    <div id="form-update-${classNameLowerCase}">
+    <form id="form-update-${classNameLowerCase}" name="form-update-${classNameLowerCase}">
         <ul data-role="listview" data-inset="true">
             <% props.eachWithIndex { p, i -> %>
             <li data-role="fieldcontain">
                 <% if (p.type == String) { %>
                 <label for="input-${classNameLowerCase}-${p.name}">${p.naturalName}</label>
-                <input type="text" name="${p.name}" id="input-${classNameLowerCase}-${p.name}" value=""/>
+                <input type="text" class="${validation}" name="${p.name}" id="input-${classNameLowerCase}-${p.name}" value=""/>
                 <% } else if (p.type == Boolean || p.type == boolean) { %>
                 <label for="input-${classNameLowerCase}-${p.name}">${p.naturalName}</label>
-                <input type="checkbox" name="${p.name}" id="input-${classNameLowerCase}-${p.name}" value=""/>
+                <input type="checkbox" class="${validation}" name="${p.name}" id="input-${classNameLowerCase}-${p.name}" value=""/>
                 <% } else if (p.type == Date || p.type == java.sql.Date || p.type == java.sql.Time || p.type ==
                 Calendar) { %>
                 <label for="input-${classNameLowerCase}-${p.name}">${p.naturalName}</label>
-                <input type="text" name="${p.name}" id="input-${classNameLowerCase}-${p.name}" value=""
-                       data-role="datebox" data-options='{"mode":"datebox", "useNewStyle":true}'/>
+                <input type="date" class="${validation}" name="${p.name}" id="input-${classNameLowerCase}-${p.name}" value=""/>
                 <% } else if (Number.isAssignableFrom(p.type) || (p.type.isPrimitive() && p.type != boolean)) { %>
                 <label for="input-${classNameLowerCase}-${p.name}">${p.naturalName}</label>
-                <input type="number" name="${p.name}" id="input-${classNameLowerCase}-${p.name}" value=""/>
+                <input type="number" class="${validation}" name="${p.name}" id="input-${classNameLowerCase}-${p.name}" value=""/>
                 <% } else if (p.type==([] as Byte[]).class || p.type==([] as byte[]).class) { %>
                 <label for="input-${classNameLowerCase}-${p.name}">${p.naturalName}</label>
-                <input type="file" name="${p.name}" id="input-${classNameLowerCase}-${p.name}"/>
+                <input type="file" class="${validation}" name="${p.name}" id="input-${classNameLowerCase}-${p.name}"/>
                 <% } else if(p.isEnum()) {%>
                 <fieldset data-role="controlgroup">
                     <legend>Choose a ${p.name}</legend>
@@ -177,7 +178,7 @@
         <input type="hidden" name="id" id="input-${classNameLowerCase}-id"/>
         <input type="hidden" name="version" id="input-${classNameLowerCase}-version"/>
         <input type="hidden" name="class" id="input-${classNameLowerCase}-class"/>
-    </div>
+    </form>
     <% if (geolocated) { %>
     <div id="map-canvas-form" style="height: 70%;width: 100%;position: absolute;"></div>
     <% } %>

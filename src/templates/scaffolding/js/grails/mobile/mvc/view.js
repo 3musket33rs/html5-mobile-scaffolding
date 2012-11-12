@@ -37,6 +37,16 @@ grails.mobile.mvc.view = function (model, elements) {
     that.onlineEvent = grails.mobile.event();
     that.offlineEvent = grails.mobile.event();
 
+
+    // Detect online/offline from browser
+    addEventListener('offline', function(e) {
+        that.offlineEvent.notify();
+    });
+
+    addEventListener('online', function(e) {
+        that.onlineEvent.notify();
+    });
+
     return that;
 };
 

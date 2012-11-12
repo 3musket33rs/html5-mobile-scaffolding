@@ -112,7 +112,7 @@ grails.mobile.sync.syncmanager = function (url, domainName, controller, store, m
             type: type,
             async: false,
             data: dataToSend,
-            dataType: "jsonp",
+            dataType: "json",
             url: url + action,
             success: function (data) {
                 successCallback(data, action, dataToSend);

@@ -46,16 +46,16 @@ grails.mobile.mvc.controller = function (feed, model, view) {
         listDependent();
     });
 
-    view.createButtonClicked.attach(function (item) {
-        createItem(item);
+    view.createButtonClicked.attach(function (item, context) {
+        createItem(item, context);
     });
 
-    view.updateButtonClicked.attach(function (item) {
-        updateItem(item);
+    view.updateButtonClicked.attach(function (item, context) {
+        updateItem(item, context);
     });
 
-    view.deleteButtonClicked.attach(function (itemId) {
-        deleteItem(itemId);
+    view.deleteButtonClicked.attach(function (itemId, context) {
+        deleteItem(itemId, context);
     });
 
     var listDependent = function () {
@@ -93,55 +93,26 @@ grails.mobile.mvc.controller = function (feed, model, view) {
         that.model.listItems(data);
     };
 
-    var createItem = function (data) {
+    var createItem = function (data, context) {
+        var created = function (data) {
+            return that.model.createItem(data, context);
+        };
         feed.createItem(data, created);
     };
 
-    var created = function (data) {
-        if (data.message) {
-            alert(data.message);
-            return;
-        }
-        if (data.errors) {
-            // Here I need to add to field mapping for errors
-            alert("validation issue" + data.errors);
-            return;
-        }
-        that.model.createItem(data);
-    };
+    var updateItem = function (data, context) {
+        var updated = function (data) {
+            return that.model.updateItem(data, context);
+        };
 
-    var updateItem = function (data) {
         feed.updateItem(data, updated);
     };
 
-    var updated = function (data, action) {
-        if (data.message) {
-            alert(data.message);
-            return;
-        }
-        if (data.errors) {
-            // Here I need to add to field mapping for errors
-            alert("validation issue" + data.errors);
-            return;
-        }
-        that.model.updateItem(data);
-    };
-
-    var deleteItem = function (data) {
+    var deleteItem = function (data, context) {
+        var deleted = function (data) {
+            that.model.deleteItem(data, context);
+        };
         feed.deleteItem(data, deleted);
-    };
-
-    var deleted = function (data, action) {
-        if (data.message) {
-            alert(data.message);
-            return;
-        }
-        if (data.errors) {
-            // Here I need to add to field mapping for errors
-            alert("validation issue" + data.errors);
-            return;
-        }
-        that.model.deleteItem(data);
     };
 
     return that;

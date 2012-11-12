@@ -54,19 +54,31 @@ grails.mobile.mvc.model = function (items) {
         that.listedItems.notify({'items': that.items});
     };
 
-    that.createItem = function (item) {
+    that.createItem = function (item, context) {
+        that.createdItem.notify({item: item}, context);
+        if (item.errors || item.message) {
+            return false;
+        }
         that.items[item.id] = item;
-        that.createdItem.notify({item: item});
+        return true;
     };
 
-    that.updateItem = function (item) {
+    that.updateItem = function (item, context) {
+        that.updatedItem.notify({item: item}, context);
+        if (item.errors || item.message) {
+            return false;
+        }
         that.items[item.id] = item;
-        that.updatedItem.notify({item: item});
+        return true;
     };
 
-    that.deleteItem = function (item) {
+    that.deleteItem = function (item, context) {
+        that.deletedItem.notify({item:item}, context);
+        if (item.errors || item.message) {
+            return false;
+        }
         delete that.items[item.id];
-        that.deletedItem.notify({item:item});
+        return true;
     };
 
     return that;

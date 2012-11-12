@@ -28,11 +28,11 @@ grails.mobile.event = function () {
         that.listeners.push(listener);
     };
 
-    that.notify = function (args) {
+    that.notify = function (data, event) {
         var index;
 
         for (index = 0; index < that.listeners.length; index += 1) {
-            that.listeners[index](args);
+            that.listeners[index](data, event);
         }
     };
     return that;
