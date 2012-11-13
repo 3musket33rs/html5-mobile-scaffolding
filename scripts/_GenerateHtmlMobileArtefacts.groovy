@@ -176,6 +176,8 @@ void generateController(GrailsDomainClass domainClass, Writer out) {
      String validation = getValidation(domainClass.constrainedProperties);
 
      def oneToManyProps = domainClass.properties.findAll { it.isOneToMany() }
+
+     //println "-------- " + oneToManyProps + " --------"
      //println "------------- oneToMany: " + oneToManyProps*.getReferencedDomainClass().get(0).getName()
      //def oneToManyProps2 = []
      //oneToManyProps2 << oneToManyProps*.getReferencedDomainClass().get(0).getName()

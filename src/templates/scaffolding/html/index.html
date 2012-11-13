@@ -45,7 +45,7 @@
     %><script src="js/${packageName}/view/${referencedTypeToLowerCase}-view.js"></script><% }
     }
     %>
-    <% if(oneToManyProps) {
+    <% if(oneToManyProps && !oneToManyProps.isEmpty()) {
     oneToManyProps.each {
     %><script src="js/${packageName}/view/${it.getReferencedDomainClass().getName().toLowerCase()}-view.js"></script><% }
     }
@@ -160,13 +160,13 @@
                 <% } %>
             </li>
             <% } %>
-
-            <% oneToManyProps.eachWithIndex { p, i -> %>
+            <% if(oneToManyProps) {
+                   oneToManyProps.eachWithIndex { p, i -> %>
             <li>
             <fieldset id="multichoice-${p.getName().toLowerCase()}" name="${p.getName().toLowerCase()}" data-gorm-relation="one-to-many" data-role="controlgroup">
             </fieldset>
             </li>
-            <% } %>
+            <% }  } %>
         </ul>
         <% if (geolocated) { %>
         <input type="hidden" name="longitude" id="input-${classNameLowerCase}-longitude"/>
