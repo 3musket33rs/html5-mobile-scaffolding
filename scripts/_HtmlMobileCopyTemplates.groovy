@@ -48,6 +48,7 @@ target(htmlMobileCopyTemplates: "generate HTML5 mobile view with different secti
     def source = "$html5MobileScaffoldingPluginDir/src/templates/scaffolding/"
     def destination = "$basedir/src/templates/scaffolding/"
 
+    ant.mkdir dir: destination + "js-scaffolding"
     ant.copy( todir:destination , overwrite: overwrite) {
         fileset( dir: source + "js-scaffolding/")
     }
