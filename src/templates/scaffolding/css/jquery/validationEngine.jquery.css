@@ -1,4 +1,10 @@
+.visible {
+    display: inline;
+}
 
+.invisible {
+    display: none;
+}
 
 
 

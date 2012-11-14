@@ -173,11 +173,14 @@ void generateController(GrailsDomainClass domainClass, Writer out) {
      def listProps = domainClass.properties.findAll {Collection.isAssignableFrom(it.type)}
      
      def oneToOneProps = props.findAll { it.isOneToOne() }
+
+     println "-------- " + oneToOneProps + " --------"
+
      String validation = getValidation(domainClass.constrainedProperties);
 
      def oneToManyProps = domainClass.properties.findAll { it.isOneToMany() }
 
-     //println "-------- " + oneToManyProps + " --------"
+     println "-------- " + oneToManyProps + " --------"
      //println "------------- oneToMany: " + oneToManyProps*.getReferencedDomainClass().get(0).getName()
      //def oneToManyProps2 = []
      //oneToManyProps2 << oneToManyProps*.getReferencedDomainClass().get(0).getName()

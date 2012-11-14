@@ -110,8 +110,10 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
 
     that.elements.add.live('pageshow', function (e) {
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
-        \$('#form-update-${classNameLowerCase}').validationEngine();
+        \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});
+        <% if(oneToOneProps || oneToManyProps) { %>
         that.editButtonClicked.notify();
+        <%}%>
         var id = sessionStorage.getItem('show${classNameLowerCase}Id');
         if (id) {
             sessionStorage.removeItem('show${classNameLowerCase}Id');

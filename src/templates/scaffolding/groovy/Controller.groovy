@@ -107,8 +107,16 @@ class ${className}Controller {
     }
 
     def delete() {
-      def ${classNameLowerCase}Id = params.id
       def ${classNameLowerCase}Instance = ${className}.get(params.id)
+      <% if(oneToManyProps) {
+            oneToManyProps.each {
+                referencedType = it.getReferencedDomainClass().getName()
+                referencedTypeToLowerCase = referencedType.toLowerCase()
+      %>
+      ${classNameLowerCase}Instance.${it.name}.each() {
+            ${referencedType}.get(it.getId());
+      }
+      <% } } %>
       if (!${classNameLowerCase}Instance) {
         flash.message = message(code: 'default.not.found.message', args: [message(code: '${classNameLowerCase}.label', default: '${className}'), params.id])
         render flash as JSON
