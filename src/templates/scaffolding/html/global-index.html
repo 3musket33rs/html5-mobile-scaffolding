@@ -21,9 +21,10 @@
                     grailsApp.getArtefacts("Domain").each {
                         def domainClassName = it.name
                         def domainClassNameLowerCase = it.name.toLowerCase()
+                        if (domainClassName != 'App') {
                     %>
-                    <li><a href="${domainClassNameLowerCase}-index.html" data-transition="slide" >${domainClassName}</a></li>
-                <%}%>
+                    <li><a href="${domainClassNameLowerCase}-index.html" rel="external" data-transition="slide" >${domainClassName}</a></li>
+                <%}}%>
                 </ul>
             </div>
         </div>
