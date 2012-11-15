@@ -10,7 +10,7 @@ Install it
 Add a dependency to BuildConfig.groovy:
 
     plugins {
-        compile ":html-:0.3"
+        compile ":html-:0.4.3"
         ...
     }
 
@@ -37,14 +37,15 @@ Or even better give it a trial.
 TO DO
 =====
 
-Because it is a a version 0.3, this plugin is under active development, here is the list of TO DO
+Because it is a a version 0.4.3, this plugin is under active development, here is the list of TO DO
 
-* one-to-many relationship. one-to-one/many-to-one relationship.
 * scaffold different UI component depending on contraints defined at domain level. numerical range=>slider
-* make jsonp plugin dependency optional for non hybrid app. but required for hybrid mobile app 
-* error handling for validation issue
+* finish error handling for validation issue
 * implement ByteArray type(for use case of images storage)
 * i18n
 * add script allowing: like html-generate-all *
 * write demo application with spock tests with all types, relationships etc... to demo full scaffolding
 * generate unit tests scaffolding: groovy/jasmine to promote best pratices
+* template generation
+* gsp tag like
+* introduce a MVC from market or make our own dynamic and extendable
