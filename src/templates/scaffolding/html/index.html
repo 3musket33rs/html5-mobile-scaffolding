@@ -65,8 +65,10 @@
         <a href="index.html" data-transition="slide" data-icon="arrow-l">Back</a>
         <h1>${className}</h1>
         <% if (geolocated) { %>
-        <a data-transition="none" data-role="button" data-icon="grid" id="list-all-${classNameLowerCase}s">List</a>
-        <a data-transition="none" data-role="button" data-icon="star" id="map-all-${classNameLowerCase}s">Map</a>
+        <div class="ui-btn-right" data-role="controlgroup" data-type="horizontal">
+            <a data-transition="none" data-role="button" data-icon="grid" id="list-all-${classNameLowerCase}s">List</a>
+            <a data-transition="none" data-role="button" data-icon="star" id="map-all-${classNameLowerCase}s">Map</a>
+        </div>
         <% } %>
     </div>
     <% if (geolocated) { %>
