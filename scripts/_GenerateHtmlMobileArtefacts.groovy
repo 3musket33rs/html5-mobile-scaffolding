@@ -29,6 +29,7 @@ import org.codehaus.groovy.grails.scaffolding.*
 import grails.persistence.Event
 import org.codehaus.groovy.grails.validation.ConstrainedProperty
 
+
 includeTargets << grailsScript("_GrailsCreateArtifacts")
 includeTargets << grailsScript("_GrailsGenerate")
 includeTargets << grailsScript("_GrailsBootstrap")
@@ -42,7 +43,7 @@ generateController = true
 
 target(generateForOne: 'Generates controllers and views for only one domain class.') {
   depends compile, loadApp
-  
+
   //println "BEFORE"
   //def myClass = classLoader.loadClass('org.grails.html.mobile.HtmlMobileTemplateGenerator')
   //println "AFTER" + myClass
@@ -53,8 +54,8 @@ target(generateForOne: 'Generates controllers and views for only one domain clas
 
   name = name.indexOf('.') > 0 ? name : GrailsNameUtils.getClassNameRepresentation(name)
 
+
   def domainClass = grailsApp.getDomainClass(name)
-  //grailsConsole.updateStatus "domain $domainClass "
 
   if (!domainClass) {
     grailsConsole.updateStatus 'Domain class not found in grails-app/domain, trying hibernate mapped classes...'
@@ -209,7 +210,8 @@ void generateController(GrailsDomainClass domainClass, Writer out) {
        geolocated: geolocated,
        geoProps:geoProps,
        validation: validation,
-       className: domainClass.shortName]
+       className: domainClass.shortName,
+       grailsApp : grailsApplication]
 
      t.make(binding).writeTo(out)
    }
@@ -305,12 +307,17 @@ void generateController(GrailsDomainClass domainClass, Writer out) {
      if (!viewsDir.exists()) viewsDir.mkdirs()
   
    if (suffix == '.html') { // for html files
-     if (viewName) { // either 2nd paramater of hGV command
-       destFile = new File(viewsDir, viewName)
-     } else if (domainClass.name == grailsApplication.config?.grails?.scaffolding?.html?.mobile?.index) { // or configured in Config 
-       destFile = new File(viewsDir, "${templateViewName.toLowerCase()}")
-     } else { //by default by convention className-index.html
-       destFile = new File(viewsDir, "${domainClass.propertyName.toLowerCase()}-${templateViewName.toLowerCase()}")
+
+     if (templateViewName == "global-index.html") {
+         destFile = new File(viewsDir, "index.html")
+     } else {
+         if (viewName) { // either 2nd paramater of hGV command
+           destFile = new File(viewsDir, viewName)
+         } else if (domainClass.name == grailsApplication.config?.grails?.scaffolding?.html?.mobile?.index) { // or configured in Config
+           destFile = new File(viewsDir, "${templateViewName.toLowerCase()}")
+         } else { //by default by convention className-index.html
+           destFile = new File(viewsDir, "${domainClass.propertyName.toLowerCase()}-${templateViewName.toLowerCase()}")
+         }
      }
    } else if(suffix == '.xml') {
        destFile = new File(viewsDir, "${templateViewName.toLowerCase()}")
