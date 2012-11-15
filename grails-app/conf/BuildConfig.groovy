@@ -23,7 +23,7 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        runtime ":jquery:1.7.1", ":cors:1.0.3"
+        runtime ":jquery:1.8.2", ":cors:1.0.3"
         build ":tomcat:$grailsVersion"
     }
 }
