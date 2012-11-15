@@ -138,6 +138,7 @@ void generateController(GrailsDomainClass domainClass, Writer out) {
 
    for (t in getTemplateNames()) {
      //event 'StatusUpdate', ["Generating $t for domain class ${domainClass.fullName}"]
+     println ":::::::::::TemplateNAme ${t}"
      generateView domainClass, t, new File(destdir).absolutePath
    }
  }
@@ -296,6 +297,9 @@ void generateController(GrailsDomainClass domainClass, Writer out) {
            viewsDir = new File("$destDir/web-app/js/" + domainClass.packageName)
        }
        copyGrailsMobileFrameworkIfNotPresent(destDir)
+   } else if (suffix == '.xml') {
+       println ":::::::::::::::::::::::::: config.xml"
+       viewsDir = new File("$destDir/web-app")
    }
 
      if (!viewsDir.exists()) viewsDir.mkdirs()
@@ -308,7 +312,9 @@ void generateController(GrailsDomainClass domainClass, Writer out) {
      } else { //by default by convention className-index.html
        destFile = new File(viewsDir, "${domainClass.propertyName.toLowerCase()}-${templateViewName.toLowerCase()}")
      }
-   } else { // for js
+   } else if(suffix == '.xml') {
+       destFile = new File(viewsDir, "${templateViewName.toLowerCase()}")
+   }else { // for js
        if (templateViewName != "configuration-bootstrap.js" && templateViewName != "manager-bootstrap.js") {
            destFile = new File(viewsDir, "${domainClass.propertyName.toLowerCase()}-${templateViewName.toLowerCase()}")
        } else {
@@ -332,6 +338,7 @@ void generateController(GrailsDomainClass domainClass, Writer out) {
      try {
        resources.addAll(resolver.getResources("file:$templatesDirPath/*.html").filename)
        resources.addAll(resolver.getResources("file:$templatesDirPath/*.js").filename)
+       resources.addAll(resolver.getResources("file:$templatesDirPath/*.xml").filename)
      } catch (e) {
        event 'StatusError', ['Error while loading views from grails-app scaffolding folder', e]
      }

@@ -44,7 +44,7 @@ grails.mobile.mvc.manager = function (configuration) {
         if (typeof func !== 'function') {
             throw new TypeError("'" + functionPath + "' is not a function");
         }
-        return func.bind(parent);
+        return func;
     };
 
     var domainsObjects = {};
@@ -60,7 +60,7 @@ grails.mobile.mvc.manager = function (configuration) {
         // create view for domain object
         var viewName = namespace + '.view.' + this.name + 'view';
         var funcToApply = resolveNamespace(viewName);
-        var view = funcToApply(model, this.view);
+        var view = funcToApply.call(this, model, this.view);
 
         // Create Feed
         var feed = grails.mobile.feed.feed(baseURL + this.name + '/', store);

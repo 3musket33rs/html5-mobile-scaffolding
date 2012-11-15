@@ -25,7 +25,7 @@ includeTargets << grailsScript("_GrailsInit")
 target(htmlMobileCopyTemplates: "generate HTML5 mobile view with different section for CRUD") {
   depends checkVersion, parseArguments
 
-    def targetPaths = [html: "$basedir/src/templates/scaffolding", groovy: "$basedir/src/templates/scaffolding"]
+    def targetPaths = [html: "$basedir/src/templates/scaffolding", groovy: "$basedir/src/templates/scaffolding", xml:"$basedir/src/templates/scaffolding"]
 
     def overwrite = false
   
@@ -47,6 +47,8 @@ target(htmlMobileCopyTemplates: "generate HTML5 mobile view with different secti
 
     def source = "$html5MobileScaffoldingPluginDir/src/templates/scaffolding/"
     def destination = "$basedir/src/templates/scaffolding/"
+
+
 
     ant.mkdir dir: destination + "js-scaffolding"
     ant.copy( todir:destination , overwrite: overwrite) {
