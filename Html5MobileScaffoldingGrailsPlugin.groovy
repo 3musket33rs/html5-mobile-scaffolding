@@ -25,7 +25,7 @@ import org.grails.html.mobile.JavascriptDateRegistrar
 
 class Html5MobileScaffoldingGrailsPlugin {
 
-  def version = '0.4.3'
+  def version = '0.4.4'
   def grailsVersion = '2.0 > *'
   def dependsOn = [:]
   def pluginExcludes = []
