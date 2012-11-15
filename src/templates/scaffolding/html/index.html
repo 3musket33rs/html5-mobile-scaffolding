@@ -62,9 +62,9 @@
 <body>
 <section data-role="page" id="section-list-${classNameLowerCase}s">
     <div data-role="header" data-position="fixed">
+        <a href="index.html" data-transition="slide" data-icon="arrow-l">Back</a>
         <% if (geolocated) { %>
         <a data-transition="none" data-role="button" data-icon="grid" id="list-all-${classNameLowerCase}s">List</a>
-
         <h1>${className}</h1>
         <a data-transition="none" data-role="button" data-icon="star" id="map-all-${classNameLowerCase}s">Map</a>
         <% } else {%>
