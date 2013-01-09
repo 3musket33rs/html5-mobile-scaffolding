@@ -34,7 +34,8 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
             showGeneralMessage(data, event);
         } else {
             renderElement(data.item);
-            \$('#list-${classNameLowerCase}s').listview('refresh');<% if (geolocated) { %>
+            \$('#list-${classNameLowerCase}').listview('refresh');
+            \$.mobile.changePage(\$('#section-list-${classNameLowerCase}'));<% if (geolocated) { %>
             mapServiceList.refreshCenterZoomMap();<% } %>
 		}
     });
@@ -50,7 +51,8 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
             showGeneralMessage(data, event);
         } else {
             updateElement(data.item);
-            \$('#list-${classNameLowerCase}s').listview('refresh');
+            \$('#list-${classNameLowerCase}').listview('refresh');
+            \$.mobile.changePage(\$('#section-list-${classNameLowerCase}'));
         }
     });
 
@@ -58,10 +60,11 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         if (data.item.message) {
             showGeneralMessage(data, event);
         } else {
-            \$('#${classNameLowerCase}' + data.item.id + '-in-list').parents('li').remove();<% if (geolocated) { %>
+            \$('#${classNameLowerCase}-list-' + data.item.id).parents('li').remove();<% if (geolocated) { %>
             mapServiceList.removeMarker(data.item.id);
             mapServiceList.refreshCenterZoomMap();<% } %>
-            \$('#list-${classNameLowerCase}s').listview('refresh');
+            \$('#list-${classNameLowerCase}').listview('refresh');
+            \$.mobile.changePage(\$('#section-list-${classNameLowerCase}'));
         }
     });
 
@@ -73,12 +76,12 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     };
 
     // user interface actions<% if (geolocated) { %>
-    \$('#list-all-${classNameLowerCase}s').live('click tap', function (e, ui) {
+    \$('#list-all-${classNameLowerCase}').live('click tap', function (e, ui) {
         hideMapDisplay();
         showListDisplay();
     });
 
-    \$('#map-all-${classNameLowerCase}s').live('click tap', function (e, ui) {
+    \$('#map-all-${classNameLowerCase}').live('click tap', function (e, ui) {
         hideListDisplay();
         showMapDisplay();
     });<% } %>
@@ -87,6 +90,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     });
 
     that.elements.save.live('click tap', function (event) {
+        event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
         if(\$('#form-update-${classNameLowerCase}').validationEngine('validate')) {
             var obj = grails.mobile.helper.toObject(\$('#form-update-${classNameLowerCase}').find('input, select'));
@@ -99,28 +103,33 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
                 that.updateButtonClicked.notify(newElement, event);
             }
         } else {
-            event.stopPropagation();
             event.preventDefault();
         }
     });
 
     that.elements.remove.live('click tap', function (event) {
+        event.stopPropagation();
         that.deleteButtonClicked.notify({ id: \$('#input-${classNameLowerCase}-id').val() }, event);
     });
 
-    that.elements.add.live('pageshow', function (e) {
+    that.elements.add.live('click tap', function (event) {
+        event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
         \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});
         <% if(oneToOneProps || oneToManyProps) { %>
         that.editButtonClicked.notify();
         <%}%>
-        var id = sessionStorage.getItem('show${classNameLowerCase}Id');
-        if (id) {
-            sessionStorage.removeItem('show${classNameLowerCase}Id');
-            showElement(id);
-        } else {
-            createElement();
-        }
+        createElement();
+    });
+
+    that.elements.show.live('click tap', function (event) {
+        event.stopPropagation();
+        \$('#form-update-${classNameLowerCase}').validationEngine('hide');
+        \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});
+        <% if(oneToOneProps || oneToManyProps) { %>
+        that.editButtonClicked.notify();
+        <%}%>
+        showElement(\$(event.currentTarget).attr("data-id"));
     });
 
     var createElement = function () {
@@ -133,6 +142,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
             mapServiceForm.showMap('map-canvas-form', position.coords.latitude, position.coords.longitude, coord);
         });<% } %>
         \$('#delete-${classNameLowerCase}').hide();
+        \$.mobile.changePage(\$('#section-show-${classNameLowerCase}'));
     };
 
     var showElement = function (id) {
@@ -186,33 +196,33 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     };
     <% if (geolocated) { %>
     var hideListDisplay = function () {
-        \$('#list-${classNameLowerCase}s-parent').removeClass('visible');
-        \$('#list-${classNameLowerCase}s-parent').addClass('invisible');
+        \$('#list-${classNameLowerCase}-parent').removeClass('visible');
+        \$('#list-${classNameLowerCase}-parent').addClass('invisible');
     };
 
     var showMapDisplay = function () {
-        \$('#map-${classNameLowerCase}s-parent').removeClass('invisible');
-        \$('#map-${classNameLowerCase}s-parent').addClass('visible');
+        \$('#map-${classNameLowerCase}-parent').removeClass('invisible');
+        \$('#map-${classNameLowerCase}-parent').addClass('visible');
     };
 
     var  showListDisplay = function () {
-        \$('#list-${classNameLowerCase}s-parent').removeClass('invisible');
-        \$('#list-${classNameLowerCase}s-parent').addClass('visible');
+        \$('#list-${classNameLowerCase}-parent').removeClass('invisible');
+        \$('#list-${classNameLowerCase}-parent').addClass('visible');
     };
 
     var hideMapDisplay = function () {
-        \$('#map-${classNameLowerCase}s-parent').removeClass('visible');
-        \$('#map-${classNameLowerCase}s-parent').addClass('invisible');
+        \$('#map-${classNameLowerCase}-parent').removeClass('visible');
+        \$('#map-${classNameLowerCase}-parent').addClass('invisible');
     };
     <% } %>
     var renderList = function () {<% if (geolocated) { %>
         mapServiceList.emptyMap('map-canvas-list');<% } %>
-        \$('#list-${classNameLowerCase}s').empty();
+        \$('#list-${classNameLowerCase}').empty();
         var key, items = model.getItems();
         \$.each(items, function(key, value) {
             renderElement(value);
         });
-        \$('#list-${classNameLowerCase}s').listview('refresh');<% if (geolocated) { %>
+        \$('#list-${classNameLowerCase}').listview('refresh');<% if (geolocated) { %>
         mapServiceList.refreshCenterZoomMap();<% } %>
     };<% if(oneToOneProps || oneToManyProps) { %>
 
@@ -268,8 +278,8 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         var li, a = \$('<a>');
         a.attr({
             href: '#section-show-${classNameLowerCase}',
-            id : '${classNameLowerCase}' + element.id + '-in-list',
-            onClick : 'sessionStorage.show${classNameLowerCase}Id="' + element.id + '"',
+            id : '${classNameLowerCase}-list-' + element.id,
+            'data-id' : element.id,
             'data-transition': 'fade'
         });
         a.text(getText(element));
@@ -281,19 +291,19 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         }<% if (geolocated) { %>
         var id = element.id;
         mapServiceList.addMarker(element, getText(element), function () {
-            \$('#${classNameLowerCase}' + id + '-in-list').click();
+            \$('#${classNameLowerCase}-list-' + id).click();
         });<% } %>
         return li;
     };
 
     var renderElement = function (element) {
         if (element.offlineAction !== 'DELETED') {
-            \$('#list-${classNameLowerCase}s').append(createListItem(element));
+            \$('#list-${classNameLowerCase}').append(createListItem(element));
         }
     };
 
     var updateElement = function (element) {
-        \$('#${classNameLowerCase}' + element.id + '-in-list').parents('li').replaceWith(createListItem(element));
+        \$('#${classNameLowerCase}-list-' + element.id).parents('li').replaceWith(createListItem(element));
     };
 
     var getText = function (data) {

@@ -11,6 +11,8 @@
     <script src="js/jquery/jquery.validationEngine.js"></script>
     <script src="js/jquery/jquery.validationEngine-en.js"></script>
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="js/grails/grailsEvents.js"></script>
+    <script src="js/jquery/jquery.atmosphere.js" type="text/javascript" ></script>
     <script src="js/grails/mobile/map/googleMapService.js"></script>
     <script src="js/grails/mobile/event.js"></script>
     <script src="js/grails/mobile/mvc/model.js"></script>
@@ -22,6 +24,7 @@
     <script src="js/grails/mobile/feed/feed.js"></script>
     <script src="js/grails/mobile/helper/toObject.js"></script>
     <script src="js/grails/mobile/sync/syncmanager.js"></script>
+    <script src="js/grails/mobile/push/pushmanager.js"></script>
     <script src="js/grails/mobile/mvc/manager.js"></script><% if(oneToOneProps) {
     oneToOneProps.each {
     def referencedType = it.type.name
@@ -60,35 +63,35 @@
 </head>
 
 <body>
-<section data-role="page" id="section-list-${classNameLowerCase}s">
+<section data-role="page" id="section-list-${classNameLowerCase}">
     <div data-role="header" data-position="fixed">
         <a href="index.html" data-transition="slide" data-icon="arrow-l">Back</a>
         <h1>${className}</h1>
         <% if (geolocated) { %>
         <div class="ui-btn-right" data-role="controlgroup" data-type="horizontal">
-            <a data-transition="none" data-role="button" data-icon="grid" id="list-all-${classNameLowerCase}s">List</a>
-            <a data-transition="none" data-role="button" data-icon="star" id="map-all-${classNameLowerCase}s">Map</a>
+            <a data-transition="none" data-role="button" data-icon="grid" id="list-all-${classNameLowerCase}">List</a>
+            <a data-transition="none" data-role="button" data-icon="star" id="map-all-${classNameLowerCase}">Map</a>
         </div>
         <% } %>
     </div>
     <% if (geolocated) { %>
-    <div data-role="content" class="invisible" id="list-${classNameLowerCase}s-parent">
+    <div data-role="content" class="invisible" id="list-${classNameLowerCase}-parent">
         <% } else { %>
-        <div data-role="content" id="list-${classNameLowerCase}s-parent">
+        <div data-role="content" id="list-${classNameLowerCase}-parent">
             <% } %>
-            <ul data-role="listview" data-inset="true" data-filter="true" id="list-${classNameLowerCase}s">
-            </ul>
+            <ul data-role="listview" data-inset="true" data-filter="true" id="list-${classNameLowerCase}"/>
         </div>
         <% if (geolocated) { %>
-        <div data-role="content" class="visible" id="map-${classNameLowerCase}s-parent">
+        <div data-role="content" class="visible" id="map-${classNameLowerCase}-parent">
             <div style="height: 70%;width: 100%;position: absolute;" id="map-canvas-list"></div>
         </div>
         <% } %>
         <div data-role="footer" data-position="fixed">
             <div data-role="navbar">
                 <ul>
-                    <li><a href="#section-show-${classNameLowerCase}" data-transition="slide" data-role="button"
-                           data-icon="plus">Add</a></li>
+                    <li>
+                        <a data-transition="slide" data-role="button" data-icon="plus" id="add-${classNameLowerCase}">Add</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -96,8 +99,7 @@
 
 <section data-role="page" id="section-show-${classNameLowerCase}">
     <div data-role="header" id="show-${classNameLowerCase}" data-position="fixed">
-        <a href="#section-list-${classNameLowerCase}s" data-transition="slide" data-icon="arrow-l">Cancel</a>
-
+        <a href="#section-list-${classNameLowerCase}" data-transition="slide" data-icon="arrow-l">Cancel</a>
         <h1>${className}</h1>
     </div>
     <form id="form-update-${classNameLowerCase}" name="form-update-${classNameLowerCase}">
@@ -172,10 +174,12 @@
     <div data-role="footer" data-position="fixed">
         <div data-role="navbar">
             <ul>
-                <li><a href="#section-list-${classNameLowerCase}s" data-transition="slide" data-role="button"
-                       data-icon="delete" id="delete-${classNameLowerCase}">Delete</a></li>
-                <li><a href="#section-list-${classNameLowerCase}s" data-transition="slide" data-icon="save"
-                       id="submit-${classNameLowerCase}">Save</a></li>
+                <li>
+                    <a data-transition="slide" data-role="button" data-icon="delete" id="delete-${classNameLowerCase}">Delete</a>
+                </li>
+                <li>
+                    <a data-transition="slide" data-role="button" data-icon="save" id="submit-${classNameLowerCase}">Save</a>
+                </li>
             </ul>
         </div>
     </div>

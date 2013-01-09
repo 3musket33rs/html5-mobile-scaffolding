@@ -27,7 +27,10 @@ class Html5MobileScaffoldingGrailsPlugin {
 
   def version = '0.4.4'
   def grailsVersion = '2.0 > *'
-  def dependsOn = [:]
+
+  def loadBefore = ['converters']
+  def dependsOn = ['events-si':'1.0.M3 > *',
+                   'events-push':'1.0.M3 > *' ]
   def pluginExcludes = []
 
   def title = 'Html5 Mobile Scaffolding Plugin'
@@ -49,5 +52,16 @@ A plugin that scaffold HTML5 mobile application using JQuery mobile in one-page.
   def issueManagement = [system: 'GitHub', url: 'https://github.com/3musket33rs/html5-mobile-scaffolding/issues']
   def scm = [url: 'https://github.com/3musket33rs/html5-mobile-scaffolding']
 
-  def doWithSpring = { customPropertyEditorRegistrar(JavascriptDateRegistrar) }
+  def doWithSpring = {
+    customPropertyEditorRegistrar(JavascriptDateRegistrar)
+    mergeConfig(application)
+  }
+
+  protected mergeConfig(application) {
+    application.config.merge(loadConfig(application))
+  }
+
+  protected loadConfig(application) {
+    new ConfigSlurper().parse(application.classLoader.loadClass("Html5MobileDefaultConfig"))
+  }
 }

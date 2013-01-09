@@ -46,6 +46,9 @@ class ${className}Controller {
         ValidationErrors validationErrors = ${classNameLowerCase}Instance.errors
         render validationErrors as JSON
       }
+
+      event topic:"save-${classNameLowerCase}", data: ${classNameLowerCase}Instance
+
       render ${classNameLowerCase}Instance as JSON
     }
     
@@ -103,7 +106,10 @@ class ${className}Controller {
           ValidationErrors validationErrors = ${classNameLowerCase}Instance.errors
           render validationErrors as JSON
         }
-		render ${classNameLowerCase}Instance as JSON
+
+        event topic:"update-${classNameLowerCase}", data: ${classNameLowerCase}Instance
+
+        render ${classNameLowerCase}Instance as JSON
     }
 
     def delete() {
@@ -128,6 +134,9 @@ class ${className}Controller {
         flash.message = message(code: 'default.not.deleted.message', args: [message(code: '${classNameLowerCase}.label', default: '${className}'), params.id])
         render flash as JSON
       }
+
+      event topic:"delete-${classNameLowerCase}", data: ${classNameLowerCase}Instance
+
       render ${classNameLowerCase}Instance as JSON
     }
 }

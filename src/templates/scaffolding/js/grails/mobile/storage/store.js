@@ -73,6 +73,7 @@ grails.mobile.storage.store = function (model, domainName) {
                     return list[k];
                 }
             }
+            return null;
         }
         return list;
     };

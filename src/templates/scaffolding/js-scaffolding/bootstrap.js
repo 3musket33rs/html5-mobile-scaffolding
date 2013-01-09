@@ -10,9 +10,10 @@
                 name: "${classNameLowerCase}",
                 view:
                 {
-                    'list': \$('#section-list-${classNameLowerCase}s'),
+                    'list': \$('#section-list-${classNameLowerCase}'),
                     'save': \$("#submit-${classNameLowerCase}"),
-                    'add': \$('#section-show-${classNameLowerCase}'),
+                    'add': \$('#add-${classNameLowerCase}'),
+                    'show': \$('a[id^="${classNameLowerCase}-list-"]'),
                     'remove': \$("#delete-${classNameLowerCase}")
                 }
                 <% if(oneToOneProps) { %>
