@@ -89,8 +89,7 @@ def generateForDomainClass(domainClass, viewName) {
     def templateGenerator = initHtmlMobileTemplate viewName
 
     grailsApp.controllerClasses.each { controllerArtefact ->
-        DefaultGrailsControllerClass controllerClass = controllerArtefact.getClass()
-        println "$controllerArtefact, $controllerClass"
+        DefaultGrailsControllerClass controllerClass = controllerArtefact
     }
 
     if (generateController) {
