@@ -45,7 +45,7 @@ grails.mobile.push.pushmanager = function (grailsEvents, domainName, store, mode
         });
 
         grailsEvents.on('delete-' + domainName , function (data) {
-            if (!model.getItems()[data.id]) {
+            if (model.getItems()[data.id]) {
                 if (options.offline) {
                     store.remove(data);
                 }
