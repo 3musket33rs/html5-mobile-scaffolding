@@ -21,16 +21,26 @@ grails.mobile.feed = grails.mobile.feed || {};
 grails.mobile.feed.feed = function (baseUrl, store) {
     var that = {};
     var onlineFeed = grails.mobile.feed.online(baseUrl, store);
-    var offlineFeed = grails.mobile.feed.offline(store);
-    var currentFeed = navigator.onLine ? onlineFeed : offlineFeed;
+    if (store) {
+        var offlineFeed = grails.mobile.feed.offline(store);
+        var currentFeed = navigator.onLine ? onlineFeed : offlineFeed;
 
-    that.setOffline = function () {
-        currentFeed = offlineFeed;
-    };
+        that.setOffline = function () {
+            currentFeed = offlineFeed;
+        };
 
-    that.setOnline = function () {
-        currentFeed = onlineFeed;
-    };
+        that.setOnline = function () {
+            currentFeed = onlineFeed;
+        };
+    } else {
+        var currentFeed = onlineFeed;
+
+        that.setOffline = function () {
+        };
+
+        that.setOnline = function () {
+        };
+    }
 
     that.listItems = function (listed) {
         currentFeed.listItems(listed);

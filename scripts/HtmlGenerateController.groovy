@@ -28,8 +28,7 @@ target(default: 'Generates HTML5 Mobile controller for a specified domain class'
 
 	promptForName type: 'Domain Class'
 	generateForName = argsMap.params[0]
-  generateViews = false
-  generateController = true
-  
+    generateViews = false
+    generateController = true
 	generateForOne()
 }

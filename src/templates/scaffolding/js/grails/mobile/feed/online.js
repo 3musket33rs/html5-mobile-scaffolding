@@ -25,14 +25,18 @@ grails.mobile.feed.online = function (url, store) {
     that.listItems = function (listed) {
         send(null, "list", "GET", function (data) {
             listed(data);
-            store.storeList(data);
+            if (store) {
+                store.storeList(data);
+            }
         });
     };
 
     that.createItem = function (data, created) {
         send(data, "save", "POST", function (response) {
             if (created(response)) {
-                store.store(response);
+                if (store) {
+                    store.store(response);
+                }
             }
         });
     };
@@ -40,7 +44,9 @@ grails.mobile.feed.online = function (url, store) {
     that.updateItem = function (data, updated) {
         send(data, "update", "POST", function (response) {
             if(updated(response)) {
-                store.store(response);
+                if (store) {
+                    store.store(response);
+                }
             }
         });
     };
@@ -48,7 +54,9 @@ grails.mobile.feed.online = function (url, store) {
     that.deleteItem = function (data, deleted) {
         send(data, "delete", "POST", function (response) {
             deleted(response);
-            store.remove(response);
+            if (store) {
+                store.remove(response);
+            }
         });
     };
 

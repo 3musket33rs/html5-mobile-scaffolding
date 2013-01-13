@@ -2,6 +2,10 @@
 <html>
 <head>
     <title>${project}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="images/apple-touch-icon.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-retina.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/jquery/jquery.mobile-1.2.0.min.css"/>
     <script src="js/jquery/jquery-1.8.2.min.js"></script>
@@ -11,30 +15,37 @@
 <body>
     <section data-role="page" id="section-list-controllers">
         <div data-role="header" data-position="fixed">
+            <a href="http://grails.org"><img width="30%" src="images/apple-touch-icon.png" alt="Grails"/></a>
             <h1>Controller</h1>
         </div>
 
         <div data-role="content">
             <div class="content-primary">
                 <ul data-role="listview">
-                <%
-                    grailsApp.getArtefacts("Domain").each {
-                        def domainClassName = it.name
-                        def domainClassNameLowerCase = it.name.toLowerCase()
-                        if (domainClassName != 'App') {
-                    %>
-                    <li><a href="${domainClassNameLowerCase}-index.html" rel="external" data-transition="slide" >${domainClassName}</a></li>
-                <%}}%>
+
+                    <%
+                    grailsApp.controllerClasses.each {
+                        def controllerClassName = it.name
+                        def controllerClassNameLowerCase = it.name.toLowerCase()
+                        if (controllerClassNameLowerCase != 'platformtools') {
+                    %><li><a href="${controllerClassNameLowerCase}-index.html" rel="external" data-transition="slide" >${controllerClassName}</a></li>
+                    <%}}%>
                 </ul>
             </div>
         </div>
 
         <div data-role="footer" data-position="fixed">
-            <div data-role="navbar">
-                <ul>
-                    <h1>${project}</h1>
-                </ul>
-            </div>
+            <a class="ui-btn-left" rel="external" href="https://github.com/3musket33rs">
+                <img src="images/github-icon.png" />
+            </a>
+            <h1>
+                Powered by us (
+                <a href="mailto:th33musk3t33rs@gmail.com">th33musk3t33rs@gmail.com</a>
+                )
+            </h1>
+            <a class="ui-btn-right" rel="external" href="http://3musket33rs.github.com/html5-mobile-scaffolding/">
+                <img src="images/help.png" />
+            </a>
         </div>
     </section>
 </body>

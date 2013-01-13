@@ -51,13 +51,23 @@ grails.mobile.mvc.manager = function (configuration) {
 
     var domainsObjects = {};
     $.each(configuration.domain, function () {
+
+        if (this.options === undefined) {
+            this.options = {
+                offline: true,
+                eventPush: true
+            }
+        }
+
         var domainName = this.name;
 
         // create model for domain object
         var model = grails.mobile.mvc.model();
 
         // create local storage for domain object
-        var store = grails.mobile.storage.store(model, domainName);
+        if (this.options.offline) {
+            var store = grails.mobile.storage.store(model, domainName);
+        }
 
         // create view for domain object
         var viewName = namespace + '.view.' + this.name + 'view';
@@ -70,9 +80,9 @@ grails.mobile.mvc.manager = function (configuration) {
         // create controller for domain object
         var controller = grails.mobile.mvc.controller(feed, model, view);
 
-        var sync = grails.mobile.sync.syncmanager(baseURL + this.name + '/', domainName, controller, store, model);
+        var sync = grails.mobile.sync.syncmanager(baseURL + this.name + '/', domainName, controller, store, model, this.options);
 
-        var push = grails.mobile.push.pushmanager(grailsEvents, domainName, store, model);
+        var push = grails.mobile.push.pushmanager(grailsEvents, domainName, store, model, this.options);
 
         domainsObjects[domainName] = {
             model:model,

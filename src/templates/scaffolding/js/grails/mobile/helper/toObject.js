@@ -44,7 +44,7 @@ grails.mobile.helper.toObject = function (inputs) {
         var add = true;
         if (this.type === 'select-one') {
             value = $(this).val();
-        } else if (this.type === 'date') {
+        } else if (this.type === 'text' && $(this).attr('data-type') === 'date') {
             value = $(this).scroller('getDate', true);
         } else if (this.type === 'radio') {
             if ($(this).is(':checked')) {

@@ -1,7 +1,7 @@
-<% import org.codehaus.groovy.grails.commons.GrailsDomainClass %>
-<% classNameLowerCase = className.toLowerCase() %>
-
-var ${packageName} = ${packageName} || {};
+<%
+    import org.codehaus.groovy.grails.commons.GrailsDomainClass
+    classNameLowerCase = className.toLowerCase()
+%>var ${packageName} = ${packageName} || {};
 ${packageName}.view = ${packageName}.view || {};
 
 ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
@@ -10,26 +10,24 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     var mapServiceList = grails.mobile.map.googleMapService();
     var mapServiceForm = grails.mobile.map.googleMapService();<% } %>
 
-    // Register events<% if(oneToOneProps || oneToManyProps) { %>
-    that.model.listedDependentItems.attach(function (data) {
-        if (data.relationType === 'many-to-one') {
-            renderDependentList(data.dependentName, data.items);
-        }
-        if (data.relationType === 'one-to-many') {
-            renderMultiChoiceDependentList(data.dependentName, data.items);
-        }
-    });<% } %>
-    that.model.listedItems.attach(function (data) {
-        renderList();
+    // Register events
+    that.model.listedItems.attach(function (data) {<% if (geolocated) { %>
+        mapServiceList.emptyMap('map-canvas-list');<% } %>
+        \$('#list-${classNameLowerCase}').empty();
+        var key, items = model.getItems();
+        \$.each(items, function(key, value) {
+            renderElement(value);
+        });
+        \$('#list-${classNameLowerCase}').listview('refresh');<% if (geolocated) { %>
+        mapServiceList.refreshCenterZoomMap();<% } %>
     });
 
     that.model.createdItem.attach(function (data, event) {
         if (data.item.errors) {
             \$.each(data.item.errors, function(index, error) {
-            \$('#input-${classNameLowerCase}-' + error.field).validationEngine('showPrompt',error.message, 'fail');
+                \$('#input-${classNameLowerCase}-' + error.field).validationEngine('showPrompt',error.message, 'fail');
             });
             event.stopPropagation();
-            event.preventDefault();
         } else if (data.item.message) {
             showGeneralMessage(data, event);
         } else {
@@ -46,7 +44,6 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
                 \$('#input-${classNameLowerCase}-' + error.field).validationEngine('showPrompt',error.message, 'fail');
             });
             event.stopPropagation();
-            event.preventDefault();
         } else if (data.item.message) {
             showGeneralMessage(data, event);
         } else {
@@ -66,14 +63,17 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
             \$('#list-${classNameLowerCase}').listview('refresh');
             \$.mobile.changePage(\$('#section-list-${classNameLowerCase}'));
         }
-    });
-
-    var showGeneralMessage = function(data, event) {
-        \$.mobile.showPageLoadingMsg( \$.mobile.pageLoadErrorMessageTheme, data.item.message, true );
-        setTimeout( \$.mobile.hidePageLoadingMsg, 3000 );
-        event.stopPropagation();
-        event.preventDefault();
-    };
+    });<%
+    if(oneToOneProps || oneToManyProps) {
+    %>
+    that.model.listedDependentItems.attach(function (data) {
+        if (data.relationType === 'many-to-one') {
+            renderDependentList(data.dependentName, data.items);
+        }
+        if (data.relationType === 'one-to-many') {
+            renderMultiChoiceDependentList(data.dependentName, data.items);
+        }
+    });<% } %>
 
     // user interface actions<% if (geolocated) { %>
     \$('#list-all-${classNameLowerCase}').live('click tap', function (e, ui) {
@@ -102,8 +102,6 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
             } else {
                 that.updateButtonClicked.notify(newElement, event);
             }
-        } else {
-            event.preventDefault();
         }
     });
 
@@ -115,20 +113,16 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     that.elements.add.live('click tap', function (event) {
         event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
-        \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});
-        <% if(oneToOneProps || oneToManyProps) { %>
-        that.editButtonClicked.notify();
-        <%}%>
+        \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});<% if(oneToOneProps || oneToManyProps) { %>
+        that.editButtonClicked.notify();<%}%>
         createElement();
     });
 
     that.elements.show.live('click tap', function (event) {
         event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
-        \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});
-        <% if(oneToOneProps || oneToManyProps) { %>
-        that.editButtonClicked.notify();
-        <%}%>
+        \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});<% if(oneToOneProps || oneToManyProps) { %>
+        that.editButtonClicked.notify();<%}%>
         showElement(\$(event.currentTarget).attr("data-id"));
     });
 
@@ -154,35 +148,36 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
                    referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
                }
                def referencedTypeToLowerCase = referencedType.toLowerCase()
-        %>\$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').val(element.${it.name}.id);
-        \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').selectmenu('refresh');<% } } %><% if(oneToManyProps) {
+        %>
+        \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').val(element.${it.name}.id);
+        <% } } %><% if(oneToManyProps) {
     oneToManyProps.each {
         def attributeName = it.name.toLowerCase(); %>
         var ${attributeName}Selected = element.${attributeName};
         \$.each(${attributeName}Selected, function (key, value) {
             var selector = '#checkbox-${attributeName}-' + value.id
-            \$(selector).attr('checked','checked');
+            \$(selector).attr('checked','checked').checkboxradio('refresh');
         });<% } } %>
         \$.each(element, function (name, value) {
             var input = \$('#input-${classNameLowerCase}-' + name);
-            if (input.attr('type') == 'date') {
+            input.val(value);
+            if (input.attr('data-type') == 'date') {
                 input.scroller('setDate', (value === '') ? '' : new Date(value), true);
-            } else {
-                input.val(value);
             }
-        });
-        <% if (geolocated) { %>var coord = {
+        });<% if (geolocated) { %>
+        var coord = {
             latitude : \$('#input-${classNameLowerCase}-latitude'),
             longitude :\$('#input-${classNameLowerCase}-longitude')
         };
         mapServiceForm.showMap('map-canvas-form', element.latitude, element.longitude, coord);<% } %>
         \$('#delete-${classNameLowerCase}').show();
+        \$('#delete-${classNameLowerCase}').parent().show();
+        \$.mobile.changePage(\$('#section-show-${classNameLowerCase}'));
     };
 
     var resetForm = function (form) {
-        \$('input[type="date"]').each(function() {
-            \$(this).scroller('destroy');
-            \$(this).scroller({
+        \$('input[data-type="date"]').each(function() {
+            \$(this).scroller('destroy').scroller({
                 preset: 'date',
                 theme: 'default',
                 display: 'modal',
@@ -214,33 +209,21 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         \$('#map-${classNameLowerCase}-parent').removeClass('visible');
         \$('#map-${classNameLowerCase}-parent').addClass('invisible');
     };
-    <% } %>
-    var renderList = function () {<% if (geolocated) { %>
-        mapServiceList.emptyMap('map-canvas-list');<% } %>
-        \$('#list-${classNameLowerCase}').empty();
-        var key, items = model.getItems();
-        \$.each(items, function(key, value) {
-            renderElement(value);
-        });
-        \$('#list-${classNameLowerCase}').listview('refresh');<% if (geolocated) { %>
-        mapServiceList.refreshCenterZoomMap();<% } %>
-    };<% if(oneToOneProps || oneToManyProps) { %>
+    <% }
+    if(oneToOneProps || oneToManyProps) { %>
 
     var refreshSelectDropDown = function (select, newOptions) {
         var options = null;
         if(select.prop) {
             options = select.prop('options');
-        }
-        else {
+        } else {
             options = select.attr('options');
         }
         \$('option', select).remove();
-
         \$.each(newOptions, function(val, text) {
             options[options.length] = new Option(text, val);
         });
         select.val(options[0]);
-        select.selectmenu('refresh');
     };
 
     var renderDependentList = function (dependentName, items) {
@@ -248,18 +231,19 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         var options = {};
         \$.each(items, function() {
             var key = this.id;
-            var value = this[Object.keys(this)[2]];;
+            //id, version, first attribute
+            var value = this[Object.keys(this)[3]];
             options[key] = value;
-            });
+        });
         refreshSelectDropDown(manyToOneSelectForDependent, options);
     };
-
 
     var refreshMultiChoices = function (oneToMany, dependentName, newOptions) {
         oneToMany.empty();
         \$.each(newOptions, function(key, val) {
-            oneToMany.append(\$('<input type="checkbox" data-gorm-relation="one-to-many" name="'+ dependentName +'" id="checkbox-'+ dependentName +'-' + key + '"/><label for="checkbox-'+ dependentName +'-'+key+'">'+val+'</label>'));
+            oneToMany.append('<input type="checkbox" data-gorm-relation="one-to-many" name="'+ dependentName +'" id="checkbox-'+ dependentName +'-' + key + '"/><label for="checkbox-'+ dependentName +'-'+key+'">'+val+'</label>');
         });
+        oneToMany.parent().trigger('create');
     };
 
     var renderMultiChoiceDependentList = function (dependentName, items) {
@@ -267,17 +251,15 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         var options = {};
         \$.each(items, function() {
             var key = this.id;
-            var value = this[Object.keys(this)[2]];
+            var value = this[Object.keys(this)[3]];
             options[key] = value;
         });
-
         refreshMultiChoices(oneToMany, dependentName, options);
-    };<% } %>
-
+    };
+    <% } %>
     var createListItem = function (element) {
         var li, a = \$('<a>');
         a.attr({
-            href: '#section-show-${classNameLowerCase}',
             id : '${classNameLowerCase}-list-' + element.id,
             'data-id' : element.id,
             'data-transition': 'fade'
@@ -303,7 +285,8 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     };
 
     var updateElement = function (element) {
-        \$('#${classNameLowerCase}-list-' + element.id).parents('li').replaceWith(createListItem(element));
+        <% if (geolocated) { %>mapServiceList.removeMarker(element.id);
+        <% } %>\$('#${classNameLowerCase}-list-' + element.id).parents('li').replaceWith(createListItem(element));
     };
 
     var getText = function (data) {
@@ -316,6 +299,12 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
             }
         });
         return textDisplay.substring(0, textDisplay.length - 2);
+    };
+
+    var showGeneralMessage = function(data, event) {
+        \$.mobile.showPageLoadingMsg( \$.mobile.pageLoadErrorMessageTheme, data.item.message, true );
+        setTimeout( \$.mobile.hidePageLoadingMsg, 3000 );
+        event.stopPropagation();
     };
 
     return that;

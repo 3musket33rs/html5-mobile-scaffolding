@@ -25,7 +25,10 @@ includeTargets << grailsScript("_GrailsInit")
 target(htmlMobileCopyTemplates: "generate HTML5 mobile view with different section for CRUD") {
   depends checkVersion, parseArguments
 
-    def targetPaths = [html: "$basedir/src/templates/scaffolding", groovy: "$basedir/src/templates/scaffolding", xml:"$basedir/src/templates/scaffolding"]
+    def targetPaths = [html: "$basedir/src/templates/scaffolding",
+                       groovy: "$basedir/src/templates/scaffolding",
+                       xml: "$basedir/src/templates/scaffolding",
+                       images: "$basedir/src/templates/scaffolding"]
 
     def overwrite = false
   
@@ -37,18 +40,14 @@ target(htmlMobileCopyTemplates: "generate HTML5 mobile view with different secti
 
     targetPaths.each { sourcePath, targetDir ->
     def sourceDir = "$html5MobileScaffoldingPluginDir/src/templates/scaffolding/$sourcePath"
-
       ant.mkdir dir: targetDir
       ant.copy(todir: targetDir, overwrite: overwrite) {
         fileset dir: sourceDir
       }
-
     }
 
     def source = "$html5MobileScaffoldingPluginDir/src/templates/scaffolding/"
     def destination = "$basedir/src/templates/scaffolding/"
-
-
 
     ant.mkdir dir: destination + "js-scaffolding"
     ant.copy( todir:destination , overwrite: overwrite) {
@@ -63,6 +62,11 @@ target(htmlMobileCopyTemplates: "generate HTML5 mobile view with different secti
     ant.mkdir dir: destination + "css"
     ant.copy( todir:destination + "css/" , overwrite: overwrite) {
         fileset( dir: source + "css/" )
+    }
+
+    ant.mkdir dir: destination + "images"
+    ant.copy( todir:destination + "images/" , overwrite: overwrite) {
+        fileset( dir: source + "images/" )
     }
 
     event "StatusUpdate", ["html-mobile-templates installed successfully"]

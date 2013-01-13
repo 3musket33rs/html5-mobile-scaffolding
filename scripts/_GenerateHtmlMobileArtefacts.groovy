@@ -45,16 +45,10 @@ generateController = true
 target(generateForOne: 'Generates controllers and views for only one domain class.') {
     depends compile, loadApp
 
-    //println "BEFORE"
-    //def myClass = classLoader.loadClass('org.grails.html.mobile.HtmlMobileTemplateGenerator')
-    //println "AFTER" + myClass
-
     def name = generateForName
     def viewName = htmlViewName
 
-
     name = name.indexOf('.') > 0 ? name : GrailsNameUtils.getClassNameRepresentation(name)
-
 
     def domainClass = grailsApp.getDomainClass(name)
 
@@ -63,8 +57,6 @@ target(generateForOne: 'Generates controllers and views for only one domain clas
         bootstrap()
         domainClass = grailsApp.getDomainClass(name)
     }
-
-    //grailsConsole.updateStatus "Generating HTML view ${viewName} for ${name}"
 
     if (domainClass) {
         generateForDomainClass(domainClass, viewName)
@@ -77,6 +69,7 @@ target(generateForOne: 'Generates controllers and views for only one domain clas
         exit 1
     }
 }
+
 HtmlMobileTemplateGenerator initHtmlMobileTemplate(viewName) {
     def templateGenerator = new HtmlMobileTemplateGenerator(classLoader, viewName)
     templateGenerator.grailsApplication = grailsApp
@@ -88,14 +81,13 @@ HtmlMobileTemplateGenerator initHtmlMobileTemplate(viewName) {
 def generateForDomainClass(domainClass, viewName) {
     def templateGenerator = initHtmlMobileTemplate viewName
 
-    grailsApp.controllerClasses.each { controllerArtefact ->
-        DefaultGrailsControllerClass controllerClass = controllerArtefact
-    }
+    updateConfig()
 
     if (generateController) {
         event 'StatusUpdate', ["Generating controller for domain class ${domainClass.fullName}"]
         templateGenerator.generateController(domainClass, basedir)
         templateGenerator.generateEvents(domainClass, basedir)
+        templateGenerator.generateIndex(basedir)
         event 'GenerateControllerEnd', [domainClass.fullName]
     }
 
@@ -104,7 +96,20 @@ def generateForDomainClass(domainClass, viewName) {
         templateGenerator.generateViews(domainClass, basedir)
         event 'GenerateViewsEnd', [domainClass.fullName]
     }
+}
 
+def updateConfig() {
+    def appDir = "$basedir/grails-app"
+    def configFile = new File(appDir, 'conf/Config.groovy')
+    if (configFile.exists()) {
+        String content = configFile.text
+        if (!content.contains('grails.converters.json.domain.include.version=true')) {
+            configFile.withWriterAppend {
+                it.writeLine '\n// Added by the Html5 Mobile Scaffolding plugin:'
+                it.writeLine 'grails.converters.json.domain.include.version=true'
+            }
+        }
+    }
 }
 
 class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
@@ -145,6 +150,24 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
         t.make(binding).writeTo(out)
     }
 
+    void generateIndex(String destDir) {
+        Assert.hasText destDir, "Argument [destDir] not specified"
+        def destFile = new File("$destDir/web-app/index.html")
+        destFile.withWriter { w ->
+            generateIndex(w)
+        }
+        LOG.info("Events generated at ${destFile}")
+    }
+
+    void generateIndex(Writer out) {
+        def templateText = getTemplateText("global-index.html")
+        def project = this.grailsApplication.metadata['app.name']
+        def binding = [className: grailsApplication.controllerClasses,
+                       grailsApp : grailsApplication,
+                       project: project]
+        def t = engine.createTemplate(templateText)
+        t.make(binding).writeTo(out)
+    }
 
     @Override
     void generateController(GrailsDomainClass domainClass, Writer out) {
@@ -165,10 +188,7 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
     @Override
     void generateViews(GrailsDomainClass domainClass, String destdir) {
         Assert.hasText destdir, 'Argument [destdir] not specified'
-
         for (t in getTemplateNames()) {
-            //event 'StatusUpdate', ["Generating $t for domain class ${domainClass.fullName}"]
-            println ":::::::::::TemplateNAme ${t}"
             generateView domainClass, t, new File(destdir).absolutePath
         }
     }
@@ -177,11 +197,14 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
         def source = "$base/src/templates/scaffolding/"
         def destination = "$base/web-app/"
         def ant = new AntBuilder();
-        ant.copy( todir:destination + "js/" ) {
-            fileset( dir: source + "js/")
+        ant.copy(todir:destination + "js/" ) {
+            fileset(dir: source + "js/")
         }
-        ant.copy( todir:destination + "css/" ) {
-            fileset( dir: source + "css/" )
+        ant.copy(todir:destination + "css/" ) {
+            fileset(dir: source + "css/" )
+        }
+        ant.copy(todir:destination + "images/") {
+            fileset(dir: source + "images/")
         }
     }
 
@@ -189,7 +212,6 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
     void generateView(GrailsDomainClass domainClass, String templateViewName, Writer out) {
         def templateText = getTemplateText(templateViewName)
         if (templateText) {
-
             def t = engine.createTemplate(templateText)
             def packageName = domainClass.packageName
             def project = this.grailsApplication.metadata['app.name']
@@ -197,21 +219,13 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
             def excludedProps = Event.allEvents.toList() << 'id' << 'version' << 'longitude' << 'latitude'
             def allowedNames = domainClass.persistentProperties*.name << 'dateCreated' << 'lastUpdated'
             def props = domainClass.properties.findAll { allowedNames.contains(it.name) && !excludedProps.contains(it.name) && it.type != null && !Collection.isAssignableFrom(it.type) }
-
+            if (props.size() == domainClass.constrainedProperties.size()) {
+                props = modifyOrderBasedOnConstraints(props, domainClass.constrainedProperties)
+            }
             def listProps = domainClass.properties.findAll {Collection.isAssignableFrom(it.type)}
-
             def oneToOneProps = props.findAll { it.isOneToOne() }
-
-            println "-------- " + oneToOneProps + " --------"
-
-            String validation = getValidation(domainClass.constrainedProperties);
-
+            Map validationMap = getValidation(domainClass.constrainedProperties);
             def oneToManyProps = domainClass.properties.findAll { it.isOneToMany() }
-
-            println "-------- " + oneToManyProps + " --------"
-            //println "------------- oneToMany: " + oneToManyProps*.getReferencedDomainClass().get(0).getName()
-            //def oneToManyProps2 = []
-            //oneToManyProps2 << oneToManyProps*.getReferencedDomainClass().get(0).getName()
             def latitude = domainClass.properties.find { it.name == "latitude" }
             def longitude = domainClass.properties.find { it.name == "longitude" }
 
@@ -235,7 +249,7 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
                     oneToManyProps: oneToManyProps,
                     geolocated: geolocated,
                     geoProps:geoProps,
-                    validation: validation,
+                    validationMap: validationMap,
                     className: domainClass.shortName,
                     grailsApp : grailsApplication]
 
@@ -243,62 +257,53 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
         }
     }
 
-
-    String getValidation(Map map) {
-        String validation = "validate["
-
-        map.each{ k,v ->
-            ConstrainedProperty cp = (ConstrainedProperty)v
-
-            if (!cp.blank || !cp.nullable) {
+    Map getValidation(Map map) {
+        def validationMap = [:]
+        map.each{ key, value ->
+            String validation = "validate["
+            if (!value.blank || !value.nullable) {
                 validation += "required,"
-            } else if (!cp.isNotValidStringType() && cp.creditCard) {
+            }
+            if (!value.isNotValidStringType() && value.creditCard) {
                 validation += "creditCard,"
-            } else if (!cp.isNotValidStringType() && cp.email) {
+            }
+            if (!value.isNotValidStringType() && value.email) {
                 validation += "custom[email],"
-            } else if (cp.inList != null) {
-            } else if (!cp.isNotValidStringType() && cp.matches) {
-            } else if (cp.max) {
-            } else if (cp.maxSize) {
-            } else if (cp.min) {
-            } else if (cp.minSize) {
-            } else if (cp.notEqual) {
-            } else if (cp.range) {
-            } else if (cp.scale) {
-            } else if (cp.size) {
-            } else if (!cp.isNotValidStringType() && cp.url) {
+            }
+            if (value.inList != null) {
+            }
+            if (!value.isNotValidStringType() && value.matches) {
+            }
+            if (value.max) {
+                validation += "max,"
+            }
+            if (value.maxSize) {
+                validation += "maxSize,"
+            }
+            if (value.min) {
+                validation += "min,"
+            }
+            if (value.minSize) {
+                validation += "minSize,"
+            }
+            if (value.notEqual) {
+            }
+            if (value.range) {
+            }
+            if (value.scale) {
+            }
+            if (value.size) {
+            }
+            if (!value.isNotValidStringType() && value.url) {
                 validation += "custom[url],"
             }
+            if (validation.endsWith(",")) {
+                validation = validation.substring(0, validation.length()-1)
+                validation += "]"
+                validationMap[key] = validation
+            }
         }
-        if (validation.endsWith(",")) {
-            validation = validation.substring(0, validation.length()-1)
-            validation += "]"
-        } else {
-            return ""
-        }
-        return validation
-
-//        if (key=="blank") {
-//            value.key
-//        } else if (key == "creditCard") {
-//        } else if (key == "email") {
-//        } else if (key == "inList") {
-//        } else if (key == "matches") {
-//        } else if (key == "max") {
-//        } else if (key == "maxSize") {
-//        } else if (key == "min") {
-//        } else if (key == "minSize") {
-//        } else if (key == "notEqual") {
-//        } else if (key == "nullable") {
-//        } else if (key == "range") {
-//            value.range
-//        } else if (key == "scale") {
-//        } else if (key == "size") {
-//        } else if (key == "unique") {
-//        } else if (key == "url") {
-//        } else if (key == "validator") {
-//        }
-
+        return validationMap
 //        display
 //        editable
 //        format
@@ -306,9 +311,21 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
 //        widget
     }
 
+    List modifyOrderBasedOnConstraints(List props, Map constraints) {
+
+        def sorted = []
+        constraints.each { k, v ->
+           props.each {
+               if (it.name == k) {
+                   sorted << it
+               }
+           }
+        }
+        return sorted
+    }
+
     @Override
     void generateView(GrailsDomainClass domainClass, String templateViewName, String destDir) {
-        println "------------- generate view start " + templateViewName + domainClass.packageName
         def suffix = templateViewName.find(/\.\w+$/)
 
         def viewsDir
@@ -319,23 +336,20 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
             if (templateViewName.startsWith("view")) {
                 viewsDir = new File("$destDir/web-app/js/" + domainClass.packageName + "/view")
             } else if (templateViewName != "configuration-bootstrap.js" && templateViewName != "manager-bootstrap.js"){
-                println "bootstrap $templateViewName"
                 viewsDir = new File("$destDir/web-app/js/" + domainClass.packageName + "/bootstrap")
             } else {
                 viewsDir = new File("$destDir/web-app/js/" + domainClass.packageName)
             }
             copyGrailsMobileFrameworkIfNotPresent(destDir)
         } else if (suffix == '.xml') {
-            println ":::::::::::::::::::::::::: config.xml"
             viewsDir = new File("$destDir/web-app")
         }
 
         if (!viewsDir.exists()) viewsDir.mkdirs()
 
         if (suffix == '.html') { // for html files
-
             if (templateViewName == "global-index.html") {
-                destFile = new File(viewsDir, "index.html")
+                return
             } else {
                 if (viewName) { // either 2nd paramater of hGV command
                     destFile = new File(viewsDir, viewName)
@@ -354,8 +368,6 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
                 destFile = new File(viewsDir, templateViewName)
             }
         }
-
-
         destFile.withWriter { Writer writer ->
             generateView domainClass, templateViewName, writer
         }

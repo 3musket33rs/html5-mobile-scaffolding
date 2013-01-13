@@ -18,33 +18,40 @@ var grails = grails || {};
 grails.mobile = grails.mobile || {};
 grails.mobile.push = grails.mobile.push || {};
 
-grails.mobile.push.pushmanager = function (grailsEvents, domainName, store, model) {
+grails.mobile.push.pushmanager = function (grailsEvents, domainName, store, model, options) {
     var that = {};
     var store = store;
     var domainName = domainName;
     var model = model;
 
-    grailsEvents.on('save-' + domainName , function (data) {
-        if (!store.read(data.id)) {
-            store.store(data);
-            model.createItem(data);
-        }
-    });
+    if (options && options.eventPush) {
+        grailsEvents.on('save-' + domainName , function (data) {
+            if (!model.getItems()[data.id]) {
+                if (options.offline) {
+                    store.store(data);
+                }
+                model.createItem(data);
+            }
+        });
 
-    grailsEvents.on('update-' + domainName , function (data) {
-        var retrievedData = store.read(data.id);
-        if (retrievedData && retrievedData.version < data.version) {
-            store.store(data);
-            model.updateItem(data);
-        }
-    });
+        grailsEvents.on('update-' + domainName , function (data) {
+            var retrievedData = model.getItems()[data.id];
+            if (retrievedData && retrievedData.version < data.version) {
+                if (options.offline) {
+                    store.store(data);
+                }
+                model.updateItem(data);
+            }
+        });
 
-    grailsEvents.on('delete-' + domainName , function (data) {
-        if (store.read(data.id)) {
-            store.remove(data);
-            model.deleteItem(data);
-        }
-    });
-
+        grailsEvents.on('delete-' + domainName , function (data) {
+            if (!model.getItems()[data.id]) {
+                if (options.offline) {
+                    store.remove(data);
+                }
+                model.deleteItem(data);
+            }
+        });
+    }
     return that;
 };
