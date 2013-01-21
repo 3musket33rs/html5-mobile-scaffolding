@@ -12,14 +12,13 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
 
     // Register events
     that.model.listedItems.attach(function (data) {<% if (geolocated) { %>
-        mapServiceList.emptyMap('map-canvas-list');<% } %>
+        mapServiceList.emptyMap('map-canvas-list-${classNameLowerCase}');<% } %>
         \$('#list-${classNameLowerCase}').empty();
         var key, items = model.getItems();
         \$.each(items, function(key, value) {
             renderElement(value);
         });
-        \$('#list-${classNameLowerCase}').listview('refresh');<% if (geolocated) { %>
-        mapServiceList.refreshCenterZoomMap();<% } %>
+        \$('#list-${classNameLowerCase}').listview('refresh');
     });
 
     that.model.createdItem.attach(function (data, event) {
@@ -33,8 +32,9 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         } else {
             renderElement(data.item);
             \$('#list-${classNameLowerCase}').listview('refresh');
-            \$.mobile.changePage(\$('#section-list-${classNameLowerCase}'));<% if (geolocated) { %>
-            mapServiceList.refreshCenterZoomMap();<% } %>
+            if (!data.item.NOTIFIED) {
+                \$.mobile.changePage(\$('#section-list-${classNameLowerCase}'));
+            }
 		}
     });
 
@@ -49,7 +49,9 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         } else {
             updateElement(data.item);
             \$('#list-${classNameLowerCase}').listview('refresh');
-            \$.mobile.changePage(\$('#section-list-${classNameLowerCase}'));
+            if (!data.item.NOTIFIED) {
+                \$.mobile.changePage(\$('#section-list-${classNameLowerCase}'));
+            }
         }
     });
 
@@ -58,10 +60,11 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
             showGeneralMessage(data, event);
         } else {
             \$('#${classNameLowerCase}-list-' + data.item.id).parents('li').remove();<% if (geolocated) { %>
-            mapServiceList.removeMarker(data.item.id);
-            mapServiceList.refreshCenterZoomMap();<% } %>
+            mapServiceList.removeMarker(data.item.id);<% } %>
             \$('#list-${classNameLowerCase}').listview('refresh');
-            \$.mobile.changePage(\$('#section-list-${classNameLowerCase}'));
+            if (!data.item.NOTIFIED) {
+                \$.mobile.changePage(\$('#section-list-${classNameLowerCase}'));
+            }
         }
     });<%
     if(oneToOneProps || oneToManyProps) {
@@ -76,6 +79,14 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     });<% } %>
 
     // user interface actions<% if (geolocated) { %>
+    \$('#section-list-${classNameLowerCase}').live('pageshow', function() {
+        mapServiceList.refreshCenterZoomMap();
+    });
+
+    \$('#section-show-${classNameLowerCase}').live('pageshow', function() {
+        mapServiceForm.refreshCenterZoomMap();
+    });
+
     \$('#list-all-${classNameLowerCase}').live('click tap', function (e, ui) {
         hideMapDisplay();
         showListDisplay();
@@ -133,10 +144,10 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
                 latitude : \$('#input-${classNameLowerCase}-latitude'),
                 longitude :\$('#input-${classNameLowerCase}-longitude')
             };
-            mapServiceForm.showMap('map-canvas-form', position.coords.latitude, position.coords.longitude, coord);
+            mapServiceForm.showMap('map-canvas-form-${classNameLowerCase}', position.coords.latitude, position.coords.longitude, coord);
         });<% } %>
-        \$('#delete-${classNameLowerCase}').hide();
         \$.mobile.changePage(\$('#section-show-${classNameLowerCase}'));
+        \$('#delete-${classNameLowerCase}').hide();
     };
 
     var showElement = function (id) {
@@ -150,6 +161,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
                def referencedTypeToLowerCase = referencedType.toLowerCase()
         %>
         \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').val(element.${it.name}.id);
+        \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').trigger("change");
         <% } } %><% if(oneToManyProps) {
     oneToManyProps.each {
         def attributeName = it.name.toLowerCase(); %>
@@ -169,9 +181,8 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
             latitude : \$('#input-${classNameLowerCase}-latitude'),
             longitude :\$('#input-${classNameLowerCase}-longitude')
         };
-        mapServiceForm.showMap('map-canvas-form', element.latitude, element.longitude, coord);<% } %>
+        mapServiceForm.showMap('map-canvas-form-${classNameLowerCase}', element.latitude, element.longitude, coord);<% } %>
         \$('#delete-${classNameLowerCase}').show();
-        \$('#delete-${classNameLowerCase}').parent().show();
         \$.mobile.changePage(\$('#section-show-${classNameLowerCase}'));
     };
 
@@ -231,8 +242,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         var options = {};
         \$.each(items, function() {
             var key = this.id;
-            //id, version, first attribute
-            var value = this[Object.keys(this)[3]];
+            var value = getText(this);
             options[key] = value;
         });
         refreshSelectDropDown(manyToOneSelectForDependent, options);
@@ -251,7 +261,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         var options = {};
         \$.each(items, function() {
             var key = this.id;
-            var value = this[Object.keys(this)[3]];
+            var value = getText(this);
             options[key] = value;
         });
         refreshMultiChoices(oneToMany, dependentName, options);
@@ -292,7 +302,8 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     var getText = function (data) {
         var textDisplay = '';
         \$.each(data, function (name, value) {
-            if (name !== 'class' && name !== 'id' && name !== 'offlineAction' && name !== 'offlineStatus' && name !== 'status' && name !== 'version') {
+            if (name !== 'class' && name !== 'id' && name !== 'offlineAction' && name !== 'offlineStatus'
+                && name !== 'status' && name !== 'version' && name != 'longitude' && name != 'latitude') {
                 if (typeof value !== 'object') {   // do not display relation in list view
                     textDisplay += value + ' - ';
                 }

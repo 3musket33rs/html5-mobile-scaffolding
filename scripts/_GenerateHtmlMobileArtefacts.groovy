@@ -87,7 +87,7 @@ def generateForDomainClass(domainClass, viewName) {
         event 'StatusUpdate', ["Generating controller for domain class ${domainClass.fullName}"]
         templateGenerator.generateController(domainClass, basedir)
         templateGenerator.generateEvents(domainClass, basedir)
-        templateGenerator.generateIndex(basedir)
+        templateGenerator.generateIndex(basedir, domainClass)
         event 'GenerateControllerEnd', [domainClass.fullName]
     }
 
@@ -150,20 +150,26 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
         t.make(binding).writeTo(out)
     }
 
-    void generateIndex(String destDir) {
+    void generateIndex(String destDir, domainClass) {
         Assert.hasText destDir, "Argument [destDir] not specified"
         def destFile = new File("$destDir/web-app/index.html")
         destFile.withWriter { w ->
-            generateIndex(w)
+            generateIndex(w, domainClass)
         }
         LOG.info("Events generated at ${destFile}")
     }
 
-    void generateIndex(Writer out) {
+    void generateIndex(Writer out, domainClass) {
         def templateText = getTemplateText("global-index.html")
         def project = this.grailsApplication.metadata['app.name']
-        def binding = [className: grailsApplication.controllerClasses,
-                       grailsApp : grailsApplication,
+        def className = []
+        grailsApplication.controllerClasses.each{
+            className << it.name
+        }
+        if (!className.contains(domainClass.name)) {
+            className << domainClass.name
+        }
+        def binding = [className: className,
                        project: project]
         def t = engine.createTemplate(templateText)
         t.make(binding).writeTo(out)

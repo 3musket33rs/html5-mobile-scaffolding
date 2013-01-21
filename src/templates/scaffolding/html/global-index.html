@@ -24,11 +24,10 @@
                 <ul data-role="listview">
 
                     <%
-                    grailsApp.controllerClasses.each {
-                        def controllerClassName = it.name
-                        def controllerClassNameLowerCase = it.name.toLowerCase()
-                        if (controllerClassNameLowerCase != 'platformtools') {
-                    %><li><a href="${controllerClassNameLowerCase}-index.html" rel="external" data-transition="slide" >${controllerClassName}</a></li>
+                    className.each {
+                        def controllerClassNameLowerCase = it.toLowerCase()
+                        if (controllerClassNameLowerCase != 'platformtools' && controllerClassNameLowerCase != 'dbdoc') {
+                    %><li><a href="${controllerClassNameLowerCase}-index.html" rel="external" data-transition="slide" >${it}</a></li>
                     <%}}%>
                 </ul>
             </div>

@@ -52,13 +52,15 @@ grails.mobile.map.googleMapService = function () {
     };
 
     that.refreshCenterZoomMap = function () {
-        var bounds = new google.maps.LatLngBounds();
-        var previousZoom = map.getZoom();
-        $.each(markers, function (name, value) {
-            bounds.extend(value.getPosition());
-        });
-        map.setCenter(bounds.getCenter());
-        map.fitBounds(bounds);
+        if (map) {
+            var bounds = new google.maps.LatLngBounds();
+            var previousZoom = map.getZoom();
+            $.each(markers, function (name, value) {
+                bounds.extend(value.getPosition());
+            });
+            map.setCenter(bounds.getCenter());
+            map.fitBounds(bounds);
+        }
     };
 
     that.addMarker = function( geolocatedObject, text, callback) {

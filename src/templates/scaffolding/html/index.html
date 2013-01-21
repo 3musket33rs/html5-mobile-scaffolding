@@ -76,12 +76,14 @@
             <a data-transition="none" data-role="button" data-icon="star" id="map-all-${classNameLowerCase}">Map</a>
         </div><% } %>
     </div><% if (geolocated) { %>
-    <div data-role="content" class="invisible" id="list-${classNameLowerCase}-parent"><% } else { %>
+    <div data-role="content">
+        <div data-role="content" class="invisible" id="list-${classNameLowerCase}-parent"><% } else { %>
     <div data-role="content" id="list-${classNameLowerCase}-parent"><% } %>
         <ul data-role="listview" data-inset="true" data-filter="true" id="list-${classNameLowerCase}"/>
     </div><% if (geolocated) { %>
-    <div data-role="content" class="visible" id="map-${classNameLowerCase}-parent">
-        <div style="height: 70%;width: 100%;position: absolute;" id="map-canvas-list"></div>
+        <div data-role="content" class="visible" id="map-${classNameLowerCase}-parent">
+            <div style="height: 70%;width: 98%;position: absolute;" id="map-canvas-list-${classNameLowerCase}"></div>
+        </div>
     </div><% } %>
     <div data-role="footer" data-position="fixed">
         <div data-role="navbar">
@@ -152,7 +154,7 @@
         <input type="hidden" name="version" id="input-${classNameLowerCase}-version"/>
         <input type="hidden" name="class" id="input-${classNameLowerCase}-class"/>
     </form><% if (geolocated) { %>
-    <div id="map-canvas-form" style="height: 70%;width: 100%;position: absolute;"></div><% } %>
+    <div id="map-canvas-form-${classNameLowerCase}" style="height: 70%;width: 100%;position: absolute;"></div><% } %>
     <div data-role="footer" data-position="fixed">
         <div data-role="navbar">
             <ul>

@@ -5,5 +5,6 @@
 
 ${packageName}.load = (function () {
     var managerObject = grails.mobile.mvc.manager(${packageName}.configuration);
+
 }());
 

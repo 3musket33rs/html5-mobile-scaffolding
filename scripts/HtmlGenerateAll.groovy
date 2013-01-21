@@ -31,6 +31,6 @@ target(default: 'Generates HTML5 Mobile templates, views and controller for a sp
     htmlViewName = argsMap.params[1]
     generateViews = true
     generateController = true
-  
+
 	generateForOne()
 }

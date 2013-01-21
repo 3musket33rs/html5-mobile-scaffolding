@@ -23,6 +23,11 @@ ${packageName}.load${classNameLowerCase} = (function () {
         %> {type: '${referencedTypeToLowerCase}', name: '${it.name}'} <% if(it!=oneToOneProps.last()) { %>,<% } %><% } %>]<% }
         if(oneToManyProps) { %>,
         oneToManyRelations: [<% oneToManyProps.each { %> {type: '${it.getReferencedDomainClass().getName().toLowerCase()}', name: '${it.name}'}<%
-        if(it!=oneToManyProps.last()) { %>,<% } } %> ] <% } %>
+        if(it!=oneToManyProps.last()) { %>,<% } } %> ] <% } %>,
+        options: {
+            offline: true,
+            eventPush: true
+        }
+
     });
 }());

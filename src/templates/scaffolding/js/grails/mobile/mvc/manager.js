@@ -49,7 +49,7 @@ grails.mobile.mvc.manager = function (configuration) {
         return func;
     };
 
-    var domainsObjects = {};
+    that.domainsObjects = {};
     $.each(configuration.domain, function () {
 
         if (this.options === undefined) {
@@ -84,7 +84,7 @@ grails.mobile.mvc.manager = function (configuration) {
 
         var push = grails.mobile.push.pushmanager(grailsEvents, domainName, store, model, this.options);
 
-        domainsObjects[domainName] = {
+        that.domainsObjects[domainName] = {
             model:model,
             view:view,
             controller:controller,
@@ -95,17 +95,17 @@ grails.mobile.mvc.manager = function (configuration) {
 
     $.each(configuration.domain, function () {
         if (this.hasOneRelations) {
-            domainsObjects[this.name].controller.hasOneRelations = {};
+            that.domainsObjects[this.name].controller.hasOneRelations = {};
             for (var i = 0; i < this.hasOneRelations.length; i++) {
                 var relationName = this.hasOneRelations[i].type + '_' + this.hasOneRelations[i].name;
-                domainsObjects[this.name].controller.hasOneRelations[relationName] = domainsObjects[this.hasOneRelations[i].type].controller;
+                that.domainsObjects[this.name].controller.hasOneRelations[relationName] = that.domainsObjects[this.hasOneRelations[i].type].controller;
             }
         }
         if (this.oneToManyRelations) {
-            domainsObjects[this.name].controller.oneToManyRelations = {};
+            that.domainsObjects[this.name].controller.oneToManyRelations = {};
             for (var i = 0; i < this.oneToManyRelations.length; i++) {
                 var relationName = this.oneToManyRelations[i].type + '_' + this.oneToManyRelations[i].name;
-                domainsObjects[this.name].controller.oneToManyRelations[relationName] = domainsObjects[this.oneToManyRelations[i].type].controller;
+                that.domainsObjects[this.name].controller.oneToManyRelations[relationName] = that.domainsObjects[this.oneToManyRelations[i].type].controller;
             }
         }
     });
