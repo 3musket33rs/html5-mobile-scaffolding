@@ -209,6 +209,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     var showMapDisplay = function () {
         \$('#map-${classNameLowerCase}-parent').removeClass('invisible');
         \$('#map-${classNameLowerCase}-parent').addClass('visible');
+        mapServiceList.refreshCenterZoomMap();
     };
 
     var  showListDisplay = function () {
@@ -289,9 +290,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     };
 
     var renderElement = function (element) {
-        if (element.offlineAction !== 'DELETED') {
-            \$('#list-${classNameLowerCase}').append(createListItem(element));
-        }
+        \$('#list-${classNameLowerCase}').append(createListItem(element));
     };
 
     var updateElement = function (element) {
@@ -303,7 +302,8 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         var textDisplay = '';
         \$.each(data, function (name, value) {
             if (name !== 'class' && name !== 'id' && name !== 'offlineAction' && name !== 'offlineStatus'
-                && name !== 'status' && name !== 'version' && name != 'longitude' && name != 'latitude') {
+                && name !== 'status' && name !== 'version' && name != 'longitude' && name != 'latitude'
+                && name != 'NOTIFIED') {
                 if (typeof value !== 'object') {   // do not display relation in list view
                     textDisplay += value + ' - ';
                 }

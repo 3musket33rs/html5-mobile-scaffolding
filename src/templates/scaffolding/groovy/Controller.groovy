@@ -45,6 +45,7 @@ class ${className}Controller {
       if (!${classNameLowerCase}Instance.save(flush: true)) {
         ValidationErrors validationErrors = ${classNameLowerCase}Instance.errors
         render validationErrors as JSON
+        return
       }
 
       event topic:"save-${classNameLowerCase}", data: ${classNameLowerCase}Instance
@@ -57,6 +58,7 @@ class ${className}Controller {
       if (!${classNameLowerCase}Instance) {
         flash.message = message(code: 'default.not.found.message', args: [message(code: '${classNameLowerCase}.label', default: '${className}'), params.id])
         render flash as JSON
+        return
       }
       render ${className}Instance as JSON
     }
@@ -86,6 +88,7 @@ class ${className}Controller {
         if (!${classNameLowerCase}Instance) {
           flash.message = message(code: 'default.not.found.message', args: [message(code: '${classNameLowerCase}.label', default: '${className}'), params.id])
           render flash as JSON
+          return
         }
 
         if (jsonObject.version) {
@@ -105,6 +108,7 @@ class ${className}Controller {
         if (!${classNameLowerCase}Instance.save(flush: true)) {
           ValidationErrors validationErrors = ${classNameLowerCase}Instance.errors
           render validationErrors as JSON
+          return
         }
 
         event topic:"update-${classNameLowerCase}", data: ${classNameLowerCase}Instance
@@ -126,6 +130,7 @@ class ${className}Controller {
       if (!${classNameLowerCase}Instance) {
         flash.message = message(code: 'default.not.found.message', args: [message(code: '${classNameLowerCase}.label', default: '${className}'), params.id])
         render flash as JSON
+        return
       }
       try {
         ${classNameLowerCase}Instance.delete(flush: true)
@@ -133,6 +138,7 @@ class ${className}Controller {
       catch (DataIntegrityViolationException e) {
         flash.message = message(code: 'default.not.deleted.message', args: [message(code: '${classNameLowerCase}.label', default: '${className}'), params.id])
         render flash as JSON
+        return
       }
 
       event topic:"delete-${classNameLowerCase}", data: ${classNameLowerCase}Instance
