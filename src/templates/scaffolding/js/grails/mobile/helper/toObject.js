@@ -53,6 +53,9 @@ grails.mobile.helper.toObject = function (inputs) {
                 add = false;
             }
         } else if($(this).attr("data-gorm-relation") === "one-to-many") {
+            if (!objectData[this.name]) {
+                objectData[this.name] = [];
+            }
             if (this.checked) {
                 value = $(this).attr('id');
                 var values = value.split('-');

@@ -53,6 +53,7 @@ grails.mobile.map.googleMapService = function () {
 
     that.refreshCenterZoomMap = function () {
         if (map) {
+            google.maps.event.trigger(map, 'resize');
             var bounds = new google.maps.LatLngBounds();
             var previousZoom = map.getZoom();
             $.each(markers, function (name, value) {

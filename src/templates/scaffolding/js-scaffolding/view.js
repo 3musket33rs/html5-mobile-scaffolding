@@ -59,8 +59,12 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         if (data.item.message) {
             showGeneralMessage(data, event);
         } else {
-            \$('#${classNameLowerCase}-list-' + data.item.id).parents('li').remove();<% if (geolocated) { %>
-            mapServiceList.removeMarker(data.item.id);<% } %>
+            if (data.item.offlineStatus === 'NOT-SYNC') {
+                \$('#${classNameLowerCase}-list-' + data.item.id).parents('li').replaceWith(createListItem(data.item));
+            } else {
+                \$('#${classNameLowerCase}-list-' + data.item.id).parents('li').remove();<% if (geolocated) { %>
+                mapServiceList.removeMarker(data.item.id);<% } %>
+            }
             \$('#list-${classNameLowerCase}').listview('refresh');
             if (!data.item.NOTIFIED) {
                 \$.mobile.changePage(\$('#section-list-${classNameLowerCase}'));
@@ -84,7 +88,18 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     });
 
     \$('#section-show-${classNameLowerCase}').live('pageshow', function() {
-        mapServiceForm.refreshCenterZoomMap();
+        if(\$('#input-${classNameLowerCase}-id').val() === ''){
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var coord = {
+                    latitude : \$('#input-${classNameLowerCase}-latitude'),
+                    longitude :\$('#input-${classNameLowerCase}-longitude')
+                };
+                mapServiceForm.showMap('map-canvas-form-${classNameLowerCase}', position.coords.latitude, position.coords.longitude, coord);
+                mapServiceForm.refreshCenterZoomMap();
+            });
+        } else {
+            mapServiceForm.refreshCenterZoomMap();
+        }
     });
 
     \$('#list-all-${classNameLowerCase}').live('click tap', function (e, ui) {
@@ -138,14 +153,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     });
 
     var createElement = function () {
-        resetForm('form-update-${classNameLowerCase}');<% if (geolocated) { %>
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var coord = {
-                latitude : \$('#input-${classNameLowerCase}-latitude'),
-                longitude :\$('#input-${classNameLowerCase}-longitude')
-            };
-            mapServiceForm.showMap('map-canvas-form-${classNameLowerCase}', position.coords.latitude, position.coords.longitude, coord);
-        });<% } %>
+        resetForm('form-update-${classNameLowerCase}');
         \$.mobile.changePage(\$('#section-show-${classNameLowerCase}'));
         \$('#delete-${classNameLowerCase}').hide();
     };
@@ -160,7 +168,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
                }
                def referencedTypeToLowerCase = referencedType.toLowerCase()
         %>
-        \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').val(element.${it.name}.id);
+        \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').val(element.['${it.name}.id']);
         \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').trigger("change");
         <% } } %><% if(oneToManyProps) {
     oneToManyProps.each {

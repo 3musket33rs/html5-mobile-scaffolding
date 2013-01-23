@@ -98,6 +98,7 @@ grails.mobile.sync.syncmanager = function (url, domainName, controller, store, m
             return;
         }
         store.remove(data);
+        model.deleteItem(data);
     };
 
     // Asynchronous Ajax call to server
@@ -119,8 +120,8 @@ grails.mobile.sync.syncmanager = function (url, domainName, controller, store, m
             },
             error: function (xhr) {
                 var data = [];
-                data[item] = [];
-                data[item][message] = xhr.responseText;
+                data['item'] = [];
+                data['item']['message'] = xhr.responseText;
                 successCallback(data, action, dataToSend);
             }
         };

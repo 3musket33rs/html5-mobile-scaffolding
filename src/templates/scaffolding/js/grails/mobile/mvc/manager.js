@@ -26,7 +26,7 @@ grails.mobile.mvc.manager = function (configuration) {
 
     var baseURL = configuration.baseURL;
     var namespace = configuration.namespace;
-    var grailsEvents = new grails.Events(configuration.applicationContext != "" ? "/"  + configuration.applicationContext : "", {transport: 'sse'});
+    var grailsEvents = new grails.Events(configuration.baseURL, {transport: 'sse'});
 
     var controllers = {};
 
