@@ -155,7 +155,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     var createElement = function () {
         resetForm('form-update-${classNameLowerCase}');
         \$.mobile.changePage(\$('#section-show-${classNameLowerCase}'));
-        \$('#delete-${classNameLowerCase}').hide();
+        \$('#delete-${classNameLowerCase}').css('display', 'none');
     };
 
     var showElement = function (id) {
@@ -168,8 +168,11 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
                }
                def referencedTypeToLowerCase = referencedType.toLowerCase()
         %>
-        \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').val(element.['${it.name}.id']);
-        \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').trigger("change");
+        var value = element['${it.name}.id'];
+        if (!value) {
+           value = element.${it.name}.id;
+        }
+        \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').val(value).trigger("change");
         <% } } %><% if(oneToManyProps) {
     oneToManyProps.each {
         def attributeName = it.name.toLowerCase(); %>
@@ -210,24 +213,20 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
     };
     <% if (geolocated) { %>
     var hideListDisplay = function () {
-        \$('#list-${classNameLowerCase}-parent').removeClass('visible');
-        \$('#list-${classNameLowerCase}-parent').addClass('invisible');
+        \$('#list-${classNameLowerCase}-parent').css('display', 'none');
     };
 
     var showMapDisplay = function () {
-        \$('#map-${classNameLowerCase}-parent').removeClass('invisible');
-        \$('#map-${classNameLowerCase}-parent').addClass('visible');
+        \$('#map-${classNameLowerCase}-parent').css('display', '');
         mapServiceList.refreshCenterZoomMap();
     };
 
     var  showListDisplay = function () {
-        \$('#list-${classNameLowerCase}-parent').removeClass('invisible');
-        \$('#list-${classNameLowerCase}-parent').addClass('visible');
+        \$('#list-${classNameLowerCase}-parent').css('display', '');
     };
 
     var hideMapDisplay = function () {
-        \$('#map-${classNameLowerCase}-parent').removeClass('visible');
-        \$('#map-${classNameLowerCase}-parent').addClass('invisible');
+        \$('#map-${classNameLowerCase}-parent').css('display', 'none');
     };
     <% }
     if(oneToOneProps || oneToManyProps) { %>

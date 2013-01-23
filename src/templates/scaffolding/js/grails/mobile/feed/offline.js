@@ -61,11 +61,12 @@ grails.mobile.feed.offline = function (store) {
 
     that.deleteItem = function (data, deleted) {
         data = store.read(data.id);
-        data.offlineStatus = "NOT-SYNC";
 
         if (data.id && grails.mobile.helper.isString(data.id) && data.id.match("^" + "grails-") == "grails-") {
+            data.offlineStatus = "";
             store.remove(data);
         } else {
+            data.offlineStatus = "NOT-SYNC";
             data.offlineAction = "DELETED";
             store.store(data);
         }

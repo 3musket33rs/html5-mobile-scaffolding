@@ -79,7 +79,7 @@ grails.mobile.mvc.model = function (items) {
         if (item.errors || item.message) {
             return false;
         }
-        if (item.offlineStatus === 'NOT-SYNC') {
+        if (item.offlineStatus != 'NOT-SYNC') {
             delete that.items[item.id];
         }
         return true;

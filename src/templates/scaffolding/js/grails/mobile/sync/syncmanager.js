@@ -68,6 +68,7 @@ grails.mobile.sync.syncmanager = function (url, domainName, controller, store, m
         var oldObj = JSON.parse(usefulString);
 
         store.remove(oldObj);
+        oldObj.offlineStatus = "";
         model.deleteItem(oldObj);
         store.store(data);
         model.createItem(data);

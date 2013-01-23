@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/jquery/validationEngine.jquery.css" type="text/css"/>
     <link rel="stylesheet" href="css/jquery/mobiscroll-2.3.1.custom.min.css" type="text/css"/>
     <script src="js/jquery/jquery-1.8.2.min.js"></script>
+    <script src="js/grails/energize.js"></script>
     <script src="js/jquery/jquery.validationEngine.js"></script>
     <script src="js/jquery/jquery.validationEngine-en.js"></script>
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -76,14 +77,12 @@
             <a data-transition="none" data-role="button" data-icon="star" id="map-all-${classNameLowerCase}">Map</a>
         </div><% } %>
     </div><% if (geolocated) { %>
-    <div data-role="content">
-        <div data-role="content" class="invisible" id="list-${classNameLowerCase}-parent"><% } else { %>
+    <div data-role="content" style="display: none;" id="list-${classNameLowerCase}-parent"><% } else { %>
     <div data-role="content" id="list-${classNameLowerCase}-parent"><% } %>
         <ul data-role="listview" data-inset="true" data-filter="true" id="list-${classNameLowerCase}"/>
     </div><% if (geolocated) { %>
-        <div data-role="content" class="visible" id="map-${classNameLowerCase}-parent">
-            <div style="height: 70%;width: 98%;position: absolute;" id="map-canvas-list-${classNameLowerCase}"></div>
-        </div>
+    <div data-role="content" id="map-${classNameLowerCase}-parent">
+        <div style="height: 70%;width: 91%;position: absolute;" id="map-canvas-list-${classNameLowerCase}"></div>
     </div><% } %>
     <div data-role="footer" data-position="fixed">
         <div data-role="navbar">
