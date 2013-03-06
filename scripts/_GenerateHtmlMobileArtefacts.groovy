@@ -180,12 +180,23 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
         def templateText = getTemplateText("Controller.groovy")
         boolean hasHibernate =pluginManager?.hasGrailsPlugin('hibernate')
         def oneToManyProps = domainClass.properties.findAll { it.isOneToMany() }
+        def geoProps = [:]
+        def listProps = domainClass.properties.findAll {Collection.isAssignableFrom(it.type)}
+        Closure resourceClosure = domainClass.getStaticPropertyValue('mapping', Closure)
+        if (resourceClosure) {
+            def myMap = [:]
+            def populator = new grails.util.ClosureToMapPopulator(myMap)
+            populator.populate resourceClosure
+            geoProps = myMap.findAll { listProps*.name.contains(it?.key) && it?.value?.geoIndex}
+        }
+        println geoProps.size() > 0 ? geoProps.iterator().next().key : null
         def binding = [pluginManager: pluginManager,
                 packageName: domainClass.packageName,
                 domainClass: domainClass,
                 className: domainClass.shortName,
                 oneToManyProps: oneToManyProps,
                 propertyName: getPropertyName(domainClass),
+                geoProperty : geoProps.size() > 0 ? geoProps.iterator().next().key : null,
                 comparator: hasHibernate ? DomainClassPropertyComparator : SimpleDomainClassPropertyComparator]
         def t = engine.createTemplate(templateText)
         t.make(binding).writeTo(out)
@@ -229,13 +240,11 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
                 props = modifyOrderBasedOnConstraints(props, domainClass.constrainedProperties)
             }
             def listProps = domainClass.properties.findAll {Collection.isAssignableFrom(it.type)}
-            def oneToOneProps = props.findAll { it.isOneToOne() }
+            def oneToOneProps = props.findAll { it.isOneToOne() || it.isEmbedded()}
             Map validationMap = getValidation(domainClass.constrainedProperties);
             def oneToManyProps = domainClass.properties.findAll { it.isOneToMany() }
             def latitude = domainClass.properties.find { it.name == "latitude" }
             def longitude = domainClass.properties.find { it.name == "longitude" }
-
-            boolean geolocated = latitude && longitude
 
             Closure resourceClosure = domainClass.getStaticPropertyValue('mapping', Closure)
             def geoProps = [:]
@@ -246,6 +255,9 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
 
                 geoProps = myMap.findAll { listProps*.name.contains(it?.key) && it?.value?.geoIndex}
             }
+
+            boolean geolocated = (latitude && longitude) || geoProps.size() > 0
+
             def binding = [pluginManager: pluginManager,
                     project: project,
                     packageName: packageName,
@@ -254,7 +266,6 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
                     oneToOneProps: oneToOneProps,
                     oneToManyProps: oneToManyProps,
                     geolocated: geolocated,
-                    geoProps:geoProps,
                     validationMap: validationMap,
                     className: domainClass.shortName,
                     grailsApp : grailsApplication]

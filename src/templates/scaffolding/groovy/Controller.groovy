@@ -1,11 +1,9 @@
 <%=packageName ? "package ${packageName}\n" : ''%>
 <% classNameLowerCase = className.toLowerCase() %>
 import grails.converters.JSON
-import grails.validation.ValidationErrors
-import groovy.json.JsonBuilder;
-
-import org.codehaus.groovy.grails.web.json.JSONObject;
+import org.grails.datastore.mapping.validation.ValidationErrors
 import org.springframework.dao.DataIntegrityViolationException
+import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 
 class ${className}Controller {
 
@@ -17,7 +15,11 @@ class ${className}Controller {
 	
     def list() {
       params.max = Math.min(params.max ? params.int('max') : 10, 100)
+      <% if(geoProperty) {%>
+      render getElementsReady(${className}.list(params)) as JSON
+      <% } else { %>
       render ${className}.list(params) as JSON
+      <% } %>
     }
 
     def save() {
@@ -29,14 +31,19 @@ class ${className}Controller {
       %>
       def ${it.name} = []
       jsonObject.${it.name}.each() {
-         String id = it.id
-         ${referencedType} ${referencedTypeToLowerCase} = ${referencedType}.get(id)
-         ${it.name}.add(${referencedTypeToLowerCase})
+         ${it.name} << ${referencedType}.get(it.id)
       }
       jsonObject.${it.name} = null
       <% } } %>
       ${className} ${classNameLowerCase}Instance = new ${className}(jsonObject)
-
+      <% if(geoProperty) {%>
+      if (jsonObject.latitude && jsonObject.longitude) {
+        ${classNameLowerCase}Instance.location = [Double.parseDouble(jsonObject.latitude), Double.parseDouble(jsonObject.longitude)];
+      } else {
+        ${classNameLowerCase}Instance.errors.reject( 'default.null.message', ['${geoProperty}', 'class ${className}'] as Object[], 'Property [{0}] of class [{1}] cannot be null')
+        ${classNameLowerCase}Instance.errors.rejectValue('${geoProperty}', 'default.null.message')
+      }
+      <% } %>
       <% if(oneToManyProps) {
         oneToManyProps.each {
       %>
@@ -47,10 +54,14 @@ class ${className}Controller {
         render validationErrors as JSON
         return
       }
-
+      <% if(geoProperty) {%>
+      def json = populateElement(${classNameLowerCase}Instance).encodeAsJSON()
+      event topic:"save-${classNameLowerCase}", data: json
+      render json
+      <% } else { %>
       event topic:"save-${classNameLowerCase}", data: ${classNameLowerCase}Instance
-
       render ${classNameLowerCase}Instance as JSON
+      <% } %>
     }
     
     def show() {
@@ -60,60 +71,74 @@ class ${className}Controller {
         render flash as JSON
         return
       }
-      render ${className}Instance as JSON
+      <% if(geoProperty) {%>
+      render populateElement(${classNameLowerCase}Instance).encodeAsJSON()
+      <% } else { %>
+      render ${classNameLowerCase}Instance as JSON
+      <% } %>
     }
 
     def update() {
       def jsonObject = JSON.parse(params.${classNameLowerCase})
-        <% if(oneToManyProps) {
-          oneToManyProps.each {
-            referencedType = it.getReferencedDomainClass().getName()
-            referencedTypeToLowerCase = referencedType.toLowerCase()
-        %>
-        def ${it.name} = []
-                jsonObject.${it.name}.each() {
-                    String id = it.id
-                    ${referencedType} ${referencedTypeToLowerCase} = ${referencedType}.get(id)
-                    ${it.name}.add(${referencedTypeToLowerCase})
-                }
-                jsonObject.${it.name} = null
-        <% } } %>
-        ${className} ${classNameLowerCase}Received = new ${className}(jsonObject)
-        <% if(oneToManyProps) {
-          oneToManyProps.each {
-        %>
-        ${classNameLowerCase}Received.${it.name} = ${it.name}
-        <% } } %>
-        def ${classNameLowerCase}Instance = ${className}.get(jsonObject.id)
-        if (!${classNameLowerCase}Instance) {
-          flash.message = message(code: 'default.not.found.message', args: [message(code: '${classNameLowerCase}.label', default: '${className}'), params.id])
-          render flash as JSON
-          return
-        }
 
-        if (jsonObject.version) {
-          def version = jsonObject.version.toLong()
-          if (${classNameLowerCase}Instance.version > version) {
-            ${classNameLowerCase}Instance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                                                             [message(code: '${classNameLowerCase}.label', default: '${className}')] as Object[],
-                                                             "Another user has updated this ${className} while you were editing")
-              ValidationErrors validationErrors = ${classNameLowerCase}Instance.errors
-              render validationErrors as JSON
-              return
-          }
-        }
+      def ${classNameLowerCase}Instance = ${className}.get(jsonObject.id)
 
-        ${classNameLowerCase}Instance.properties = ${classNameLowerCase}Received.properties
+      if (!${classNameLowerCase}Instance) {
+        flash.message = message(code: 'default.not.found.message', args: [message(code: '${classNameLowerCase}.label', default: '${className}'), params.id])
+        render flash as JSON
+        return
+      }
 
-        if (!${classNameLowerCase}Instance.save(flush: true)) {
+      if (jsonObject.version) {
+        def version = jsonObject.version.toLong()
+        if (${classNameLowerCase}Instance.version > version) {
+          ${classNameLowerCase}Instance.errors.rejectValue("version", "default.optimistic.locking.failure",
+                                                           [message(code: '${classNameLowerCase}.label', default: '${className}')] as Object[],
+                                                           "Another user has updated this ${className} while you were editing")
           ValidationErrors validationErrors = ${classNameLowerCase}Instance.errors
           render validationErrors as JSON
           return
         }
+      }
 
-        event topic:"update-${classNameLowerCase}", data: ${classNameLowerCase}Instance
-
-        render ${classNameLowerCase}Instance as JSON
+      new DefaultGrailsDomainClass(${className}.class).persistentProperties.each() {
+          if (it.oneToOne || it.embedded) {
+            ${classNameLowerCase}Instance[it.name] = it.type.get(jsonObject["\${it.name}.id"])
+          } else {
+            ${classNameLowerCase}Instance[it.name] = jsonObject[it.name]
+          }
+      }
+      <% if(oneToManyProps) {
+      oneToManyProps.each {
+        referencedType = it.getReferencedDomainClass().getName()
+        referencedTypeToLowerCase = referencedType.toLowerCase()
+      %>
+      ${classNameLowerCase}Instance.${it.name} = []
+      jsonObject.${it.name}.each() {
+        ${classNameLowerCase}Instance.${it.name} << ${referencedType}.get(it.id)
+      }
+      <% } } %>
+      <% if(geoProperty) {%>
+      if (jsonObject.latitude && jsonObject.longitude) {
+        ${classNameLowerCase}Instance.${geoProperty} = [Double.parseDouble(jsonObject.latitude), Double.parseDouble(jsonObject.longitude)];
+      } else {
+        ${classNameLowerCase}Instance.errors.reject( 'default.null.message', ['${geoProperty}', 'class ${className}'] as Object[], 'Property [{0}] of class [{1}] cannot be null')
+        ${classNameLowerCase}Instance.errors.rejectValue('${geoProperty}', 'default.null.message')
+      }
+      <% } %>
+      if (!${classNameLowerCase}Instance.save(flush: true)) {
+        ValidationErrors validationErrors = ${classNameLowerCase}Instance.errors
+        render validationErrors as JSON
+        return
+      }
+      <% if(geoProperty) {%>
+      def json = populateElement(${classNameLowerCase}Instance).encodeAsJSON()
+      event topic:"update-${classNameLowerCase}", data: json
+      render json
+      <% } else { %>
+      event topic:"update-${classNameLowerCase}", data: ${classNameLowerCase}Instance
+      render ${classNameLowerCase}Instance as JSON
+      <% } %>
     }
 
     def delete() {
@@ -141,8 +166,36 @@ class ${className}Controller {
         return
       }
 
+      <% if(geoProperty) {%>
+      def json = populateElement(${classNameLowerCase}Instance).encodeAsJSON()
+      event topic:"delete-${classNameLowerCase}", data: json
+      render json
+      <% } else { %>
       event topic:"delete-${classNameLowerCase}", data: ${classNameLowerCase}Instance
-
       render ${classNameLowerCase}Instance as JSON
+      <% } %>
     }
+
+    <% if(geoProperty) {%>
+    private List getElementsReady(List elements) {
+      def list = []
+      elements.each {
+        populateElement(it)
+        list << it.dbo as JSON
+      }
+      return list;
+    }
+
+    private def populateElement(def element) {
+      if (element.${geoProperty} && element.${geoProperty}.size() == 2) {
+        element.dbo.latitude = element.${geoProperty}[0]
+        element.dbo.longitude = element.${geoProperty}[1]
+      }
+      element.dbo.'class' = element.class.name
+      element.dbo.id = element.dbo.'_id'
+      element.dbo.remove("_id")
+      element.dbo.remove("location")
+      return element.dbo
+    }
+    <% } %>
 }

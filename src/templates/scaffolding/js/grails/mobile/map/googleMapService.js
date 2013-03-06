@@ -84,8 +84,10 @@ grails.mobile.map.googleMapService = function () {
 
     that.removeMarker = function (id) {
         var marker = markers[id];
-        marker.setMap(null);
-        delete markers[id];
+        if (marker) {
+            marker.setMap(null);
+            delete markers[id];
+        }
     };
 
     var removeMarkers = function () {

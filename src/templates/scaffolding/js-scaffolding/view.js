@@ -170,6 +170,9 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         %>
         var value = element['${it.name}.id'];
         if (!value) {
+            value = element['${it.name}'];
+        }
+        if (!value || (value === Object(value))) {
            value = element.${it.name}.id;
         }
         \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').val(value).trigger("change");
@@ -178,12 +181,19 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         def attributeName = it.name.toLowerCase(); %>
         var ${attributeName}Selected = element.${attributeName};
         \$.each(${attributeName}Selected, function (key, value) {
-            var selector = '#checkbox-${attributeName}-' + value.id
+            var selector;
+            if (value === Object(value)) {
+              selector= '#checkbox-${attributeName}-' + value.id;
+            } else {
+              selector= '#checkbox-${attributeName}-' + value;
+            }
             \$(selector).attr('checked','checked').checkboxradio('refresh');
         });<% } } %>
         \$.each(element, function (name, value) {
             var input = \$('#input-${classNameLowerCase}-' + name);
-            input.val(value);
+            if (input.attr('type') != 'file') {
+                input.val(value);
+            }
             if (input.attr('data-type') == 'date') {
                 input.scroller('setDate', (value === '') ? '' : new Date(value), true);
             }
@@ -208,8 +218,12 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
             });
         });
         var div = \$("#" + form);
-        div.find('input:text, input:hidden, input[type="number"], input:file, input:password').val('');
-        div.find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');//.checkboxradio('refresh');
+        \$("#" + form)[0].reset();
+        \$.each(div.find('input:hidden'), function(id, input) {
+            if (\$(input).attr('type') != 'file') {
+                \$(input).val('');
+            }
+        });
     };
     <% if (geolocated) { %>
     var hideListDisplay = function () {
