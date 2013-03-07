@@ -23,7 +23,7 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        runtime ":jquery:1.8.2", ":cors:1.0.3"
+        runtime ":jquery:1.8.3", ":cors:1.0.3"
         runtime ":events-si:1.0.M3"
         runtime ":events-push:1.0.M3"
     }
