@@ -101,11 +101,13 @@ class ${className}Controller {
         }
       }
 
+      ${className} ${classNameLowerCase}Received = new ${className}(jsonObject)
+
       new DefaultGrailsDomainClass(${className}.class).persistentProperties.each() {
           if (it.oneToOne || it.embedded) {
             ${classNameLowerCase}Instance[it.name] = it.type.get(jsonObject["\${it.name}.id"])
           } else {
-            ${classNameLowerCase}Instance[it.name] = jsonObject[it.name]
+            ${classNameLowerCase}Instance[it.name] = ${classNameLowerCase}Received[it.name]
           }
       }
       <% if(oneToManyProps) {
