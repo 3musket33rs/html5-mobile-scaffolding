@@ -27,9 +27,6 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import org.springframework.util.Assert
 import org.codehaus.groovy.grails.scaffolding.*
 import grails.persistence.Event
-import org.codehaus.groovy.grails.validation.ConstrainedProperty
-import org.codehaus.groovy.grails.commons.DefaultGrailsControllerClass
-
 
 includeTargets << grailsScript("_GrailsCreateArtifacts")
 includeTargets << grailsScript("_GrailsGenerate")
@@ -117,24 +114,19 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
     def event
     def viewName
 
+
+
     HtmlMobileTemplateGenerator(ClassLoader classLoader, String viewName) {
         super(classLoader)
         this.viewName = viewName
     }
 
+    def uncapitalize(s) { s[0].toLowerCase() + s[1..-1]}
 
     void generateEvents(GrailsDomainClass domainClass, String destdir) {
         Assert.hasText destdir, "Argument [destdir] not specified"
 
         if (domainClass) {
-            def fullName = domainClass.fullName
-            def pkg = ""
-            def pos = fullName.lastIndexOf('.')
-            if (pos != -1) {
-                // Package name with trailing '.'
-                pkg = fullName[0..pos]
-            }
-
             def destFile = new File("${destdir}/grails-app/conf/${domainClass.shortName}Events.groovy")
             destFile.withWriter { w ->
                 generateEvents(domainClass, w)
@@ -189,14 +181,22 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
             populator.populate resourceClosure
             geoProps = myMap.findAll { listProps*.name.contains(it?.key) && it?.value?.geoIndex}
         }
-        println geoProps.size() > 0 ? geoProps.iterator().next().key : null
+
+        def latitude = domainClass.properties.find { it.name == "latitude" }
+        def longitude = domainClass.properties.find { it.name == "longitude" }
+        boolean geolocated = (latitude && longitude) || geoProps.size() > 0
+        def geoProperty = null
+        if (geoProps.size() > 0) {
+            geoProperty = geoProps.iterator().next().key
+        }
+
         def binding = [pluginManager: pluginManager,
-                packageName: domainClass.packageName,
                 domainClass: domainClass,
                 className: domainClass.shortName,
                 oneToManyProps: oneToManyProps,
                 propertyName: getPropertyName(domainClass),
-                geoProperty : geoProps.size() > 0 ? geoProps.iterator().next().key : null,
+                geolocated: geolocated,
+                geoProperty : geoProperty,
                 comparator: hasHibernate ? DomainClassPropertyComparator : SimpleDomainClassPropertyComparator]
         def t = engine.createTemplate(templateText)
         t.make(binding).writeTo(out)
@@ -230,7 +230,6 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
         def templateText = getTemplateText(templateViewName)
         if (templateText) {
             def t = engine.createTemplate(templateText)
-            def packageName = domainClass.packageName
             def project = this.grailsApplication.metadata['app.name']
 
             def excludedProps = Event.allEvents.toList() << 'id' << 'version' << 'longitude' << 'latitude'
@@ -255,17 +254,19 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
 
                 geoProps = myMap.findAll { listProps*.name.contains(it?.key) && it?.value?.geoIndex}
             }
-
+            def geoProperty = null
             boolean geolocated = (latitude && longitude) || geoProps.size() > 0
-
+            if (geoProps.size() > 0) {
+                geoProperty = geoProps.iterator().next().key
+            }
             def binding = [pluginManager: pluginManager,
                     project: project,
-                    packageName: packageName,
                     domainClass: domainClass,
                     props: props,
                     oneToOneProps: oneToOneProps,
                     oneToManyProps: oneToManyProps,
                     geolocated: geolocated,
+                    geoProperty: geoProperty,
                     validationMap: validationMap,
                     className: domainClass.shortName,
                     grailsApp : grailsApplication]
@@ -344,18 +345,18 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
     @Override
     void generateView(GrailsDomainClass domainClass, String templateViewName, String destDir) {
         def suffix = templateViewName.find(/\.\w+$/)
-
+        def project = this.grailsApplication.metadata['app.name'].toLowerCase()
         def viewsDir
         def destFile
         if (suffix == '.html') {
             viewsDir = new File("$destDir/web-app")
         } else if (suffix == '.js') {
             if (templateViewName.startsWith("view")) {
-                viewsDir = new File("$destDir/web-app/js/" + domainClass.packageName + "/view")
+                viewsDir = new File("$destDir/web-app/js/" + project + "/view")
             } else if (templateViewName != "configuration-bootstrap.js" && templateViewName != "manager-bootstrap.js"){
-                viewsDir = new File("$destDir/web-app/js/" + domainClass.packageName + "/bootstrap")
+                viewsDir = new File("$destDir/web-app/js/" + project + "/bootstrap")
             } else {
-                viewsDir = new File("$destDir/web-app/js/" + domainClass.packageName)
+                viewsDir = new File("$destDir/web-app/js/" + project)
             }
             copyGrailsMobileFrameworkIfNotPresent(destDir)
         } else if (suffix == '.xml') {

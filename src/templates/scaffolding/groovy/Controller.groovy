@@ -1,5 +1,9 @@
-<%=packageName ? "package ${packageName}\n" : ''%>
-<% classNameLowerCase = className.toLowerCase() %>
+<%=domainClass.packageName ? "package ${domainClass.packageName}\n" : ''%>
+<%
+def uncapitalize(s) { s[0].toLowerCase() + s[1..-1]}
+classNameLowerCase = uncapitalize(className)
+%>
+
 import grails.converters.JSON
 import org.grails.datastore.mapping.validation.ValidationErrors
 import org.springframework.dao.DataIntegrityViolationException
@@ -15,11 +19,8 @@ class ${className}Controller {
 	
     def list() {
       params.max = Math.min(params.max ? params.int('max') : 10, 100)
-      <% if(geoProperty) {%>
-      render getElementsReady(${className}.list(params)) as JSON
-      <% } else { %>
-      render ${className}.list(params) as JSON
-      <% } %>
+      <% if(geoProperty) {%>render getElementsReady(${className}.list(params)) as JSON<% } else {
+      %>render ${className}.list(params) as JSON<% } %>
     }
 
     def save() {
@@ -27,7 +28,7 @@ class ${className}Controller {
       <% if(oneToManyProps) {
         oneToManyProps.each {
           referencedType = it.getReferencedDomainClass().getName()
-          referencedTypeToLowerCase = referencedType.toLowerCase()
+          referencedTypeToLowerCase = uncapitalize(referencedType)
       %>
       def ${it.name} = []
       jsonObject.${it.name}.each() {
@@ -36,15 +37,20 @@ class ${className}Controller {
       jsonObject.${it.name} = null
       <% } } %>
       ${className} ${classNameLowerCase}Instance = new ${className}(jsonObject)
-      <% if(geoProperty) {%>
-      if (jsonObject.latitude && jsonObject.longitude) {
-        ${classNameLowerCase}Instance.location = [Double.parseDouble(jsonObject.latitude), Double.parseDouble(jsonObject.longitude)];
+      <% if(geolocated) {
+      %>if (jsonObject.latitude && jsonObject.longitude) {
+        <% if (geoProperty) {
+        %>${classNameLowerCase}Instance.${geoProperty} = [Double.parseDouble(jsonObject.latitude), Double.parseDouble(jsonObject.longitude)]<% } else {
+        %>${classNameLowerCase}Instance.longitude = Double.parseDouble(jsonObject.longitude)
+        ${classNameLowerCase}Instance.latitude = Double.parseDouble(jsonObject.latitude)<% }%>
       } else {
-        ${classNameLowerCase}Instance.errors.reject( 'default.null.message', ['${geoProperty}', 'class ${className}'] as Object[], 'Property [{0}] of class [{1}] cannot be null')
-        ${classNameLowerCase}Instance.errors.rejectValue('${geoProperty}', 'default.null.message')
+        <% if (geoProperty) {
+        %>${classNameLowerCase}Instance.errors.reject( 'default.null.message', ['${geoProperty}', 'class ${className}'] as Object[], 'Property [{0}] of class [{1}] cannot be null')
+        ${classNameLowerCase}Instance.errors.rejectValue('${geoProperty}', 'default.null.message')<% } else {
+        %>${classNameLowerCase}Instance.errors.reject( 'default.null.message', ['longitude,latitude', 'class ${className}'] as Object[], 'Property [{0}] of class [{1}] cannot be null')
+        ${classNameLowerCase}Instance.errors.rejectValue('longitude,latitude', 'default.null.message')<% }%>
       }
-      <% } %>
-      <% if(oneToManyProps) {
+      <% } %><% if(oneToManyProps) {
         oneToManyProps.each {
       %>
       ${classNameLowerCase}Instance.${it.name} = ${it.name}
@@ -54,14 +60,12 @@ class ${className}Controller {
         render validationErrors as JSON
         return
       }
-      <% if(geoProperty) {%>
-      def json = populateElement(${classNameLowerCase}Instance).encodeAsJSON()
+      <% if(geoProperty) {
+      %>def json = populateElement(${classNameLowerCase}Instance).encodeAsJSON()
       event topic:"save-${classNameLowerCase}", data: json
-      render json
-      <% } else { %>
+      render json<% } else { %>
       event topic:"save-${classNameLowerCase}", data: ${classNameLowerCase}Instance
-      render ${classNameLowerCase}Instance as JSON
-      <% } %>
+      render ${classNameLowerCase}Instance as JSON<% } %>
     }
     
     def show() {
@@ -72,10 +76,8 @@ class ${className}Controller {
         return
       }
       <% if(geoProperty) {%>
-      render populateElement(${classNameLowerCase}Instance).encodeAsJSON()
-      <% } else { %>
-      render ${classNameLowerCase}Instance as JSON
-      <% } %>
+      render populateElement(${classNameLowerCase}Instance).encodeAsJSON()<% } else { %>
+      render ${classNameLowerCase}Instance as JSON<% } %>
     }
 
     def update() {
@@ -113,21 +115,18 @@ class ${className}Controller {
       <% if(oneToManyProps) {
       oneToManyProps.each {
         referencedType = it.getReferencedDomainClass().getName()
-        referencedTypeToLowerCase = referencedType.toLowerCase()
+        referencedTypeToLowerCase = uncapitalize(referencedType)
       %>
       ${classNameLowerCase}Instance.${it.name} = []
       jsonObject.${it.name}.each() {
         ${classNameLowerCase}Instance.${it.name} << ${referencedType}.get(it.id)
-      }
-      <% } } %>
-      <% if(geoProperty) {%>
-      if (jsonObject.latitude && jsonObject.longitude) {
+      }<% } } %><% if(geoProperty) {
+      %>if (jsonObject.latitude && jsonObject.longitude) {
         ${classNameLowerCase}Instance.${geoProperty} = [Double.parseDouble(jsonObject.latitude), Double.parseDouble(jsonObject.longitude)];
       } else {
         ${classNameLowerCase}Instance.errors.reject( 'default.null.message', ['${geoProperty}', 'class ${className}'] as Object[], 'Property [{0}] of class [{1}] cannot be null')
         ${classNameLowerCase}Instance.errors.rejectValue('${geoProperty}', 'default.null.message')
-      }
-      <% } %>
+      }<% } %>
       if (!${classNameLowerCase}Instance.save(flush: true)) {
         ValidationErrors validationErrors = ${classNameLowerCase}Instance.errors
         render validationErrors as JSON
@@ -136,11 +135,9 @@ class ${className}Controller {
       <% if(geoProperty) {%>
       def json = populateElement(${classNameLowerCase}Instance).encodeAsJSON()
       event topic:"update-${classNameLowerCase}", data: json
-      render json
-      <% } else { %>
+      render json<% } else { %>
       event topic:"update-${classNameLowerCase}", data: ${classNameLowerCase}Instance
-      render ${classNameLowerCase}Instance as JSON
-      <% } %>
+      render ${classNameLowerCase}Instance as JSON<% } %>
     }
 
     def delete() {
@@ -148,7 +145,7 @@ class ${className}Controller {
       <% if(oneToManyProps) {
         oneToManyProps.each {
           referencedType = it.getReferencedDomainClass().getName()
-          referencedTypeToLowerCase = referencedType.toLowerCase()
+          referencedTypeToLowerCase = uncapitalize(referencedType)
       %>
       ${classNameLowerCase}Instance.${it.name}.each() {
         ${referencedType}.get(it.getId());
@@ -167,17 +164,13 @@ class ${className}Controller {
         render flash as JSON
         return
       }
-
-      <% if(geoProperty) {%>
-      def json = populateElement(${classNameLowerCase}Instance).encodeAsJSON()
+      <% if(geoProperty) {
+      %>def json = populateElement(${classNameLowerCase}Instance).encodeAsJSON()
       event topic:"delete-${classNameLowerCase}", data: json
-      render json
-      <% } else { %>
+      render json<% } else { %>
       event topic:"delete-${classNameLowerCase}", data: ${classNameLowerCase}Instance
-      render ${classNameLowerCase}Instance as JSON
-      <% } %>
+      render ${classNameLowerCase}Instance as JSON<% } %>
     }
-
     <% if(geoProperty) {%>
     private List getElementsReady(List elements) {
       def list = []
@@ -198,6 +191,5 @@ class ${className}Controller {
       element.dbo.remove("_id")
       element.dbo.remove("location")
       return element.dbo
-    }
-    <% } %>
+    }<% } %>
 }

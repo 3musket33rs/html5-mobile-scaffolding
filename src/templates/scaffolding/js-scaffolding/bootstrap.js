@@ -1,10 +1,12 @@
 <%
-    import org.codehaus.groovy.grails.commons.GrailsDomainClass
-    classNameLowerCase = className.toLowerCase()
-%>var ${packageName} = ${packageName} || {};
+import org.codehaus.groovy.grails.commons.GrailsDomainClass
+def uncapitalize(s) { s[0].toLowerCase() + s[1..-1]}
+classNameLowerCase = uncapitalize(className)
+projectName = project.toLowerCase()
+%>var ${projectName} = ${projectName} || {};
 
-${packageName}.load${classNameLowerCase} = (function () {
-    ${packageName}.configuration.domain.push({
+${projectName}.load${classNameLowerCase} = (function () {
+    ${projectName}.configuration.domain.push({
         name: '${classNameLowerCase}',
         view: {
             'list': \$('#section-list-${classNameLowerCase}'),
@@ -19,10 +21,10 @@ ${packageName}.load${classNameLowerCase} = (function () {
                 if (referencedType.lastIndexOf('.') > 0) {
                     referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
                 }
-                def referencedTypeToLowerCase = referencedType.toLowerCase()
+                def referencedTypeToLowerCase = uncapitalize(referencedType)
         %> {type: '${referencedTypeToLowerCase}', name: '${it.name}'} <% if(it!=oneToOneProps.last()) { %>,<% } %><% } %>]<% }
         if(oneToManyProps) { %>,
-        oneToManyRelations: [<% oneToManyProps.each { %> {type: '${it.getReferencedDomainClass().getName().toLowerCase()}', name: '${it.name}'}<%
+        oneToManyRelations: [<% oneToManyProps.each { %> {type: '${uncapitalize(it.getReferencedDomainClass().getName())}', name: '${it.name}'}<%
         if(it!=oneToManyProps.last()) { %>,<% } } %> ] <% } %>,
         options: {
             offline: true,

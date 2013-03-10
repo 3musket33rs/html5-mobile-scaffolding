@@ -1,14 +1,13 @@
 <%
-    import org.codehaus.groovy.grails.commons.GrailsDomainClass
-    classNameLowerCase = className.toLowerCase()
-%>var ${packageName} = ${packageName} || {};
+projectName = project.toLowerCase()
+%>var ${projectName} = ${projectName} || {};
 
-${packageName}.loadConfiguration = (function () {
-    ${packageName}.configuration = {
+${projectName}.loadConfiguration = (function () {
+    ${projectName}.configuration = {
         baseURL: "http://localhost:8080/${project}/",
         //Uncomment before pushing to cloudfoundry
         //baseURL: "http://${project}.cloudfoundry.com/",
-        namespace: "${packageName}",
+        namespace: "${projectName}",
         domain:[]
     };
 })();

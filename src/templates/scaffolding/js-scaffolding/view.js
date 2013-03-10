@@ -1,10 +1,12 @@
 <%
     import org.codehaus.groovy.grails.commons.GrailsDomainClass
-    classNameLowerCase = className.toLowerCase()
-%>var ${packageName} = ${packageName} || {};
-${packageName}.view = ${packageName}.view || {};
+def uncapitalize(s) { s[0].toLowerCase() + s[1..-1]}
+classNameLowerCase = uncapitalize(className)
+projectName = project.toLowerCase()
+%>var ${projectName} = ${projectName} || {};
+${projectName}.view = ${projectName}.view || {};
 
-${packageName}.view.${classNameLowerCase}view = function (model, elements) {
+${projectName}.view.${classNameLowerCase}view = function (model, elements) {
 
     var that = grails.mobile.mvc.view(model, elements);<% if (geolocated) { %>
     var mapServiceList = grails.mobile.map.googleMapService();
@@ -166,7 +168,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
                if (referencedType.lastIndexOf('.') > 0) {
                    referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
                }
-               def referencedTypeToLowerCase = referencedType.toLowerCase()
+               def referencedTypeToLowerCase = uncapitalize(referencedType)
         %>
         var value = element['${it.name}.id'];
         if (!value) {
@@ -178,7 +180,7 @@ ${packageName}.view.${classNameLowerCase}view = function (model, elements) {
         \$('select[data-gorm-relation="many-to-one"][name="${it.name}"]').val(value).trigger("change");
         <% } } %><% if(oneToManyProps) {
     oneToManyProps.each {
-        def attributeName = it.name.toLowerCase(); %>
+        def attributeName = uncapitalize(it.name); %>
         var ${attributeName}Selected = element.${attributeName};
         \$.each(${attributeName}Selected, function (key, value) {
             var selector;

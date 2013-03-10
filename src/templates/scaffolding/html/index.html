@@ -1,4 +1,8 @@
-<% classNameLowerCase = className.toLowerCase() %><!DOCTYPE html>
+<%
+def uncapitalize(s) { s[0].toLowerCase() + s[1..-1]}
+classNameLowerCase = uncapitalize(className)
+projectName = project.toLowerCase()
+%><!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
@@ -37,17 +41,17 @@
     }
     def referencedTypeToLowerCase = referencedType.toLowerCase()
     %>
-    <script src="js/${packageName}/view/${referencedTypeToLowerCase}-view.js"></script><% }
+    <script src="js/${projectName}/view/${referencedTypeToLowerCase}-view.js"></script><% }
     }
     if(oneToManyProps && !oneToManyProps.isEmpty()) {
     oneToManyProps.each {
     %>
-    <script src="js/${packageName}/view/${it.getReferencedDomainClass().getName().toLowerCase()}-view.js"></script><% }
+    <script src="js/${projectName}/view/${it.getReferencedDomainClass().getName().toLowerCase()}-view.js"></script><% }
     }
     %>
-    <script src="js/${packageName}/view/${classNameLowerCase}-view.js"></script>
-    <script src="js/${packageName}/configuration-bootstrap.js"></script>
-    <script src="js/${packageName}/bootstrap/${classNameLowerCase}-bootstrap.js"></script><%
+    <script src="js/${projectName}/view/${classNameLowerCase.toLowerCase()}-view.js"></script>
+    <script src="js/${projectName}/configuration-bootstrap.js"></script>
+    <script src="js/${projectName}/bootstrap/${classNameLowerCase.toLowerCase()}-bootstrap.js"></script><%
     if(oneToOneProps) {
         oneToOneProps.each {
         def referencedType = it.type.name
@@ -56,15 +60,15 @@
         }
         def referencedTypeToLowerCase = referencedType.toLowerCase()
     %>
-    <script src="js/${packageName}/bootstrap/${referencedTypeToLowerCase}-bootstrap.js"></script><% }
+    <script src="js/${projectName}/bootstrap/${referencedTypeToLowerCase}-bootstrap.js"></script><% }
     }
         if(oneToManyProps) {
         oneToManyProps.each {
     %>
-    <script src="js/${packageName}/bootstrap/${it.getReferencedDomainClass().getName().toLowerCase()}-bootstrap.js"></script><% }
+    <script src="js/${projectName}/bootstrap/${it.getReferencedDomainClass().getName().toLowerCase()}-bootstrap.js"></script><% }
     }
     %>
-    <script src="js/${packageName}/manager-bootstrap.js"></script>
+    <script src="js/${projectName}/manager-bootstrap.js"></script>
     <script src="js/jquery/jquery.mobile-1.3.0.min.js"></script>
     <script src="js/jquery/mobiscroll.custom-2.4.4.min.js"></script>
 </head>
@@ -142,8 +146,8 @@
             </li><% } %><% if(oneToManyProps) {
                 oneToManyProps.eachWithIndex { p, i -> %>
             <li>
-                <label for="multichoice-${p.getName().toLowerCase()}" class="select">Choose some ${p.getName().toLowerCase()}</label>
-                <fieldset id="multichoice-${p.getName().toLowerCase()}" data-gorm-relation="one-to-many" data-role="controlgroup">
+                <label for="multichoice-${uncapitalize(p.getName())}" class="select">Choose some ${uncapitalize(p.getName())}</label>
+                <fieldset id="multichoice-${uncapitalize(p.getName())}" data-gorm-relation="one-to-many" data-role="controlgroup">
                 </fieldset>
             </li><% }  } %>
         </ul><% if (geolocated) { %>

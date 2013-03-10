@@ -1,10 +1,9 @@
 <%
-    import org.codehaus.groovy.grails.commons.GrailsDomainClass
-    classNameLowerCase = className.toLowerCase()
-%>var ${packageName} = ${packageName} || {};
+projectName = project.toLowerCase()
+%>var ${projectName} = ${projectName} || {};
 
-${packageName}.load = (function () {
-    var managerObject = grails.mobile.mvc.manager(${packageName}.configuration);
+${projectName}.load = (function () {
+    var managerObject = grails.mobile.mvc.manager(${projectName}.configuration);
 
 }());
 
