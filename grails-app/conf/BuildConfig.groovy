@@ -4,6 +4,7 @@ grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
+grails.tomcat.nio=true
 
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
@@ -18,13 +19,17 @@ grails.project.dependency.resolution = {
         grailsHome()
         grailsCentral()
         mavenCentral()
+        mavenRepo "https://oss.sonatype.org/content/repositories/snapshots"
     }
     dependencies {
+        compile('org.atmosphere:atmosphere-runtime:1.1.0-SNAPSHOT') {
+            excludes 'slf4j-api', 'atmosphere-ping'
+        }
     }
 
     plugins {
         runtime ":jquery:1.8.3", ":cors:1.0.3"
-        runtime ":events-si:1.0.M3"
-        runtime ":events-push:1.0.M3"
+//        runtime ":events-si:1.0.M7"
+        compile ":events-push:1.0.M7"
     }
 }

@@ -1,0 +1,21 @@
+#div-for-upload {
+    display: inline-block;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 78%;
+    background: no-repeat;
+    background-size: 80px;
+    background-position: center center;
+    background-image: url('../images/camera.png');
+}
+#div-for-upload .upload{
+    opacity: 0;
+    height: 80px;
+    padding: 0;
+    position: relative;
+    left: -moz-calc(50% - 5em);
+    left: -webkit-calc(50% - 5em);
+    left: calc(50% - 5em);
+    display: inline-block;
+}

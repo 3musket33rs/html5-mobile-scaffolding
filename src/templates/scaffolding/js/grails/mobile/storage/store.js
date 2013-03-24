@@ -30,8 +30,13 @@ grails.mobile.storage.store = function (model, domainName) {
     that.store = function (object) {
         var oldValue = localStorage.getItem(key);
         var listDomainObject = grails.mobile.helper.toDomainObject(oldValue);
-
-        listDomainObject[object.id] = object;
+        var newObject = {};
+        $.each(object, function(prop) {
+            if (!$.isArray(object[prop]) || object[prop].length < 50) {
+                newObject[prop] = object[prop];
+            }
+        });
+        listDomainObject[object.id] = newObject;
         localStorage.setItem(key, JSON.stringify(listDomainObject));
         return object;
     };

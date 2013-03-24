@@ -181,7 +181,6 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
             populator.populate resourceClosure
             geoProps = myMap.findAll { listProps*.name.contains(it?.key) && it?.value?.geoIndex}
         }
-
         def latitude = domainClass.properties.find { it.name == "latitude" }
         def longitude = domainClass.properties.find { it.name == "longitude" }
         boolean geolocated = (latitude && longitude) || geoProps.size() > 0
@@ -234,7 +233,9 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
 
             def excludedProps = Event.allEvents.toList() << 'id' << 'version' << 'longitude' << 'latitude'
             def allowedNames = domainClass.persistentProperties*.name << 'dateCreated' << 'lastUpdated'
+
             def props = domainClass.properties.findAll { allowedNames.contains(it.name) && !excludedProps.contains(it.name) && it.type != null && !Collection.isAssignableFrom(it.type) }
+
             if (props.size() == domainClass.constrainedProperties.size()) {
                 props = modifyOrderBasedOnConstraints(props, domainClass.constrainedProperties)
             }
@@ -280,7 +281,9 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
         map.each{ key, value ->
             String validation = "validate["
             if (!value.blank || !value.nullable) {
-                validation += "required,"
+                if(value.propertyType != ([] as Byte[]).class && value.propertyType != ([] as byte[]).class) {
+                    validation += "required,"
+                }
             }
             if (!value.isNotValidStringType() && value.creditCard) {
                 validation += "creditCard,"
@@ -319,6 +322,8 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
                 validation = validation.substring(0, validation.length()-1)
                 validation += "]"
                 validationMap[key] = validation
+
+                println validation
             }
         }
         return validationMap

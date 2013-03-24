@@ -76,7 +76,11 @@ grails.mobile.helper.toObject = function (inputs) {
             if ($(this).data('data-role') === 'calbox') {
                 value = $(this).data('calbox').theDate;
             } else if (this.value !== null) {
-                value = this.value;
+                if ($(this).attr('data-value')) {
+                    value = $(this).attr('data-value');
+                } else {
+                    value = this.value;
+                }
             } else {
                 value = '';
             }

@@ -85,11 +85,11 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
     });<% } %>
 
     // user interface actions<% if (geolocated) { %>
-    \$('#section-list-${classNameLowerCase}').live('pageshow', function() {
+    \$('#section-list-${classNameLowerCase}').on('pageshow', function() {
         mapServiceList.refreshCenterZoomMap();
     });
 
-    \$('#section-show-${classNameLowerCase}').live('pageshow', function() {
+    \$('#section-show-${classNameLowerCase}').on('pageshow', function() {
         if(\$('#input-${classNameLowerCase}-id').val() === ''){
             navigator.geolocation.getCurrentPosition(function (position) {
                 var coord = {
@@ -104,20 +104,20 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         }
     });
 
-    \$('#list-all-${classNameLowerCase}').live('click tap', function (e, ui) {
+    \$('#list-all-${classNameLowerCase}').on('click tap', function (e, ui) {
         hideMapDisplay();
         showListDisplay();
     });
 
-    \$('#map-all-${classNameLowerCase}').live('click tap', function (e, ui) {
+    \$('#map-all-${classNameLowerCase}').on('click tap', function (e, ui) {
         hideListDisplay();
         showMapDisplay();
     });<% } %>
-    that.elements.list.live('pageinit', function (e) {
+    that.elements.list.on('pageinit', function (e) {
         that.listButtonClicked.notify();
     });
 
-    that.elements.save.live('click tap', function (event) {
+    that.elements.save.on('click tap', function (event) {
         event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
         if(\$('#form-update-${classNameLowerCase}').validationEngine('validate')) {
@@ -133,12 +133,12 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         }
     });
 
-    that.elements.remove.live('click tap', function (event) {
+    that.elements.remove.on('click tap', function (event) {
         event.stopPropagation();
         that.deleteButtonClicked.notify({ id: \$('#input-${classNameLowerCase}-id').val() }, event);
     });
 
-    that.elements.add.live('click tap', function (event) {
+    that.elements.add.on('click tap', function (event) {
         event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
         \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});<% if(oneToOneProps || oneToManyProps) { %>
@@ -146,18 +146,26 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         createElement();
     });
 
-    that.elements.show.live('click tap', function (event) {
+    var show = function(dataId, event) {
         event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
         \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});<% if(oneToOneProps || oneToManyProps) { %>
         that.editButtonClicked.notify();<%}%>
-        showElement(\$(event.currentTarget).attr("data-id"));
-    });
+        showElement(dataId);
+    };
 
     var createElement = function () {
         resetForm('form-update-${classNameLowerCase}');
         \$.mobile.changePage(\$('#section-show-${classNameLowerCase}'));
         \$('#delete-${classNameLowerCase}').css('display', 'none');
+    };
+
+
+    var encode = function (data) {
+        var str = "";
+        for (var i = 0; i < data.length; i++)
+            str += String.fromCharCode(data[i]);
+        return str;
     };
 
     var showElement = function (id) {
@@ -195,6 +203,9 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
             var input = \$('#input-${classNameLowerCase}-' + name);
             if (input.attr('type') != 'file') {
                 input.val(value);
+            } else {
+                var img = encode(value);
+                input.parent().css('background-image', 'url("' + img + '")');
             }
             if (input.attr('data-type') == 'date') {
                 input.scroller('setDate', (value === '') ? '' : new Date(value), true);
@@ -220,12 +231,16 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
             });
         });
         var div = \$("#" + form);
-        \$("#" + form)[0].reset();
-        \$.each(div.find('input:hidden'), function(id, input) {
-            if (\$(input).attr('type') != 'file') {
-                \$(input).val('');
-            }
-        });
+        if(div) {
+            div[0].reset();
+            \$.each(div.find('input:hidden'), function(id, input) {
+                if (\$(input).attr('type') != 'file') {
+                    \$(input).val('');
+                } else {
+                    \$(input).parent().css('background-image', 'url("images/camera.png")');
+                }
+            });
+        }
     };
     <% if (geolocated) { %>
     var hideListDisplay = function () {
@@ -254,11 +269,13 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         } else {
             options = select.attr('options');
         }
-        \$('option', select).remove();
-        \$.each(newOptions, function(val, text) {
-            options[options.length] = new Option(text, val);
-        });
-        select.val(options[0]);
+        if (options) {
+            \$('option', select).remove();
+            \$.each(newOptions, function(val, text) {
+                options[options.length] = new Option(text, val);
+            });
+            select.val(options[0]);
+        }
     };
 
     var renderDependentList = function (dependentName, items) {
@@ -299,6 +316,16 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
             'data-transition': 'fade'
         });
         a.text(getText(element));
+        a.on('click tap', function(event) {
+            show(element.id, event);
+        });
+        <%
+            props.eachWithIndex { p, i ->
+            if (p.type==([] as Byte[]).class || p.type==([] as byte[]).class) {
+        %>
+        var image = '<img src="'+ encode(element.${p.name}) +'"/>';
+        a.append(image);
+        <% } } %>
         if (element.offlineStatus === 'NOT-SYNC') {
             li =  \$('<li>').attr({'data-theme': 'e'});
             li.append(a);
