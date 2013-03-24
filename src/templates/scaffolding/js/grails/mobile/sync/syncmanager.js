@@ -121,8 +121,7 @@ grails.mobile.sync.syncmanager = function (url, domainName, controller, store, m
             },
             error: function (xhr) {
                 var data = [];
-                data['item'] = [];
-                data['item']['message'] = xhr.responseText;
+                data['message'] = xhr.responseText;
                 successCallback(data, action, dataToSend);
             }
         };

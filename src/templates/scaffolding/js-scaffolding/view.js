@@ -104,12 +104,12 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         }
     });
 
-    \$('#list-all-${classNameLowerCase}').on('click tap', function (e, ui) {
+    \$('#list-all-${classNameLowerCase}').on('click', function (e, ui) {
         hideMapDisplay();
         showListDisplay();
     });
 
-    \$('#map-all-${classNameLowerCase}').on('click tap', function (e, ui) {
+    \$('#map-all-${classNameLowerCase}').on('click', function (e, ui) {
         hideListDisplay();
         showMapDisplay();
     });<% } %>
@@ -117,7 +117,7 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         that.listButtonClicked.notify();
     });
 
-    that.elements.save.on('click tap', function (event) {
+    that.elements.save.on('click', function (event) {
         event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
         if(\$('#form-update-${classNameLowerCase}').validationEngine('validate')) {
@@ -133,12 +133,12 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         }
     });
 
-    that.elements.remove.on('click tap', function (event) {
+    that.elements.remove.on('click', function (event) {
         event.stopPropagation();
         that.deleteButtonClicked.notify({ id: \$('#input-${classNameLowerCase}-id').val() }, event);
     });
 
-    that.elements.add.on('click tap', function (event) {
+    that.elements.add.on('click', function (event) {
         event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
         \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});<% if(oneToOneProps || oneToManyProps) { %>
@@ -316,7 +316,7 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
             'data-transition': 'fade'
         });
         a.text(getText(element));
-        a.on('click tap', function(event) {
+        a.on('click', function(event) {
             show(element.id, event);
         });
         <%

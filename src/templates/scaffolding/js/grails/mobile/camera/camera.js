@@ -10,7 +10,7 @@ function readURL(input) {
 
         }
     } else {
-        navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+        navigator.camera.getPicture(onSuccess, onFail, { quality: 50, targetWidth: 150, targetHeight: 250,
             destinationType: Camera.DestinationType.DATA_URL
         });
     }

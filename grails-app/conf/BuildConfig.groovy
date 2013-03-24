@@ -19,17 +19,17 @@ grails.project.dependency.resolution = {
         grailsHome()
         grailsCentral()
         mavenCentral()
-//        mavenRepo "https://oss.sonatype.org/content/repositories/snapshots"
+        //mavenRepo "https://oss.sonatype.org/content/repositories/snapshots"
     }
     dependencies {
-        compile('org.atmosphere:atmosphere-runtime:1.1.0.beta3') {
-            excludes 'slf4j-api', 'atmosphere-ping'
-        }
+//        compile('org.atmosphere:atmosphere-runtime:1.1.0.beta3') {
+//            excludes 'slf4j-api', 'atmosphere-ping'
+//        }
     }
 
     plugins {
         runtime ":jquery:1.9.1", ":cors:1.0.3"
 //        runtime ":events-si:1.0.M7"
-        compile ":events-push:1.0.M7"
+        //compile ":events-push:1.0.M7"
     }
 }
