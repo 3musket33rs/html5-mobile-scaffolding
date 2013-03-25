@@ -47,7 +47,13 @@ grails.mobile.storage.store = function (model, domainName) {
         var itemKey;
 
         for (itemKey in object) {
-            listDomainObject[object[itemKey].id] = object[itemKey];
+            var newObject = {};
+            $.each(object[itemKey], function(prop) {
+                if (!$.isArray(object[itemKey][prop]) || object[itemKey][prop].length < 50) {
+                    newObject[prop] = object[itemKey][prop];
+                }
+            });
+            listDomainObject[object[itemKey].id] = newObject;
         }
         localStorage.setItem(key, JSON.stringify(listDomainObject));
     };

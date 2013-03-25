@@ -68,9 +68,15 @@ grails.mobile.feed.online = function (url, store) {
 
     var cfg = function (url, type, action, dataToSend, successCallback) {
         return {
+            beforeSend: function() {
+                $.mobile.showPageLoadingMsg();
+            },
+            complete: function() {
+                $.mobile.hidePageLoadingMsg()
+            },
             cache: false,
             type: type,
-            async: false,
+            async: true,
             data: dataToSend,
             dataType: "json",
             url: url + action,

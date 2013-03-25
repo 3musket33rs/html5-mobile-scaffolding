@@ -24,6 +24,7 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
     });
 
     that.model.createdItem.attach(function (data, event) {
+        \$(that.elements.save).removeClass('ui-disabled');
         if (data.item.errors) {
             \$.each(data.item.errors, function(index, error) {
                 \$('#input-${classNameLowerCase}-' + error.field).validationEngine('showPrompt',error.message, 'fail');
@@ -41,6 +42,7 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
     });
 
     that.model.updatedItem.attach(function (data, event) {
+        \$(that.elements.save).removeClass('ui-disabled');
         if (data.item.errors) {
             \$.each(data.item.errors, function(index, error) {
                 \$('#input-${classNameLowerCase}-' + error.field).validationEngine('showPrompt',error.message, 'fail');
@@ -58,6 +60,7 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
     });
 
     that.model.deletedItem.attach(function (data, event) {
+        \$(that.elements.remove).removeClass('ui-disabled');
         if (data.item.message) {
             showGeneralMessage(data, event);
         } else {
@@ -121,6 +124,7 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
         if(\$('#form-update-${classNameLowerCase}').validationEngine('validate')) {
+            \$(this).addClass('ui-disabled');
             var obj = grails.mobile.helper.toObject(\$('#form-update-${classNameLowerCase}').find('input, select'));
             var newElement = {
                 ${classNameLowerCase}: JSON.stringify(obj)
@@ -134,11 +138,13 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
     });
 
     that.elements.remove.on('click', function (event) {
+        \$(this).addClass('ui-disabled');
         event.stopPropagation();
         that.deleteButtonClicked.notify({ id: \$('#input-${classNameLowerCase}-id').val() }, event);
     });
 
     that.elements.add.on('click', function (event) {
+        \$(this).addClass('ui-disabled');
         event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
         \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});<% if(oneToOneProps || oneToManyProps) { %>
@@ -232,7 +238,9 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         });
         var div = \$("#" + form);
         if(div) {
-            div[0].reset();
+            if (div[0]) {
+                div[0].reset();
+            }
             \$.each(div.find('input:hidden'), function(id, input) {
                 if (\$(input).attr('type') != 'file') {
                     \$(input).val('');
