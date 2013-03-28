@@ -322,8 +322,6 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
                 validation = validation.substring(0, validation.length()-1)
                 validation += "]"
                 validationMap[key] = validation
-
-                println validation
             }
         }
         return validationMap

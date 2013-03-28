@@ -14,7 +14,7 @@ grails.project.dependency.resolution = {
     checksums true // Whether to verify checksums on resolve
 
     repositories {
-        inherits false // Whether to inherit repository definitions from plugins
+        inherits true // Whether to inherit repository definitions from plugins
         grailsPlugins()
         grailsHome()
         grailsCentral()
@@ -22,14 +22,14 @@ grails.project.dependency.resolution = {
         //mavenRepo "https://oss.sonatype.org/content/repositories/snapshots"
     }
     dependencies {
-        compile('org.atmosphere:atmosphere-runtime:1.1.0.beta3') {
-            excludes 'slf4j-api', 'atmosphere-ping'
-        }
+//        compile('org.atmosphere:atmosphere-runtime:1.1.0.beta3') {
+//            excludes 'slf4j-api', 'atmosphere-ping'
+//        }
     }
 
     plugins {
         runtime ":jquery:1.9.1", ":cors:1.0.3"
 //        runtime ":events-si:1.0.M7"
-        compile ":events-push:1.0.M7"
+        compile ":events-push:1.0.M3"
     }
 }

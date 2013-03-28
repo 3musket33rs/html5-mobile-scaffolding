@@ -38,13 +38,25 @@ grails.mobile.mvc.view = function (model, elements) {
     that.offlineEvent = grails.mobile.event();
 
 
-    // Detect online/offline from browser
-    addEventListener('offline', function(e) {
-        that.offlineEvent.notify();
-    });
+    $(function() {
+        if (!window.cordova) {
+            // Detect online/offline from browser
+            addEventListener('offline', function(e) {
+                that.offlineEvent.notify();
+            });
 
-    addEventListener('online', function(e) {
-        that.onlineEvent.notify();
+            addEventListener('online', function(e) {
+                that.onlineEvent.notify();
+            });
+        } else {
+            document.addEventListener("offline", function() {
+                that.offlineEvent.notify();
+            }, false);
+
+            document.addEventListener("online", function() {
+                that.onlineEvent.notify();
+            }, false);
+        }
     });
 
     return that;

@@ -22,10 +22,10 @@ grails.mobile = grails.mobile || {};
 grails.mobile.helper = grails.mobile.helper || {};
 
 
-$( document ).on( "mobileinit", function() {
+$(document).on( "mobileinit", function() {
     $.mobile.allowCrossDomainPages = true;
     $.mobile.phonegapNavigationEnabled = true;
-    $.mobile.buttonMarkup.hoverDelay = 0;
+    $.mobile.buttonMarkup.hoverDelay = 50;
 });
 
 grails.mobile.helper.isString = function isString(o) {
@@ -59,7 +59,7 @@ grails.mobile.helper.getCookie = function(name) {
         }
     }
     return unescape(dc.substring(begin + prefix.length, end));
-}
+};
 
 grails.mobile.helper.toObject = function (inputs) {
     var objectData;
