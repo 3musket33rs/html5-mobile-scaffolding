@@ -1,8 +1,19 @@
 html5-mobile-scaffolding
 ========================
 
-A plugin that scaffolds HTML5 mobile application using jQuery mobile in a single page.
+HTML5-mobile-scaffolding is part of the 3muket33rs mobile suite. We offer Grails plugin around mobile. You want to:
 
+
+- to scaffold CRUD for a mobile first application? Header, footer, list with responsive UI powered by jQuery mobile... 
+You can do it in minutes with html-generate-all command. No more GSP, you will work in single page mode with HTML5 and JavaScript.
+- to geolocate your position. Easy use convention, add **latitude** and **longitude** attribute to you doamain class.
+- geolocate with mongoDB we integrate with
+- use Google Maps to add markers, move markers, we wrapped Google Map services for you
+- offline mode and synchronization
+- push notification using [event-push plugin](http://grails.org/plugin/events-push). We use GETfull API, minimizing server side calls. No need to fetch data from server. Get notified.
+- want to package in hybrid. Easy use [3musket33rs phone gap build plugin](https://github.com/3musket33rs/phonegapbuild)
+
+[Find full documentation here](http://3musket33rs.github.com/html5-mobile-scaffolding/)
 
 Install it
 ===========
@@ -10,7 +21,7 @@ Install it
 Add a dependency to BuildConfig.groovy:
 
     plugins {
-        compile ":html-:0.4.3"
+        compile ":html-mobile-scafolding:0.4.4"
         ...
     }
 
@@ -32,20 +43,10 @@ Refers to full documentation for details of what is generated.
 
 http://3musket33rs.github.com/html5-mobile-scaffolding/
 
-Or even better give it a trial.
+Give it a trial and send us feedback!
 
-TO DO
-=====
-
-Because it is a a version 0.4.3, this plugin is under active development, here is the list of TO DO
-
-* scaffold different UI component depending on contraints defined at domain level. numerical range=>slider
-* finish error handling for validation issue
-* implement ByteArray type(for use case of images storage)
-* i18n
-* add script allowing: like html-generate-all *
-* write demo application with spock tests with all types, relationships etc... to demo full scaffolding
-* generate unit tests scaffolding: groovy/jasmine to promote best pratices
-* template generation
-* gsp tag like
-* introduce a MVC from market or make our own dynamic and extendable
+3mukete33rs on twitter @3muket33rs 
+- Athos is Corinne Krych (@corinnekrych)
+- Aramis is Sebastien Blanc (@sebi2706)
+- Porthos is Fabrice Matrat (@fabricematrat)
+- D'artagnain is Mathieu Bruyen (@mathbruyen)
