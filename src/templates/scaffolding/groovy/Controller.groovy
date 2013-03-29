@@ -64,7 +64,8 @@ class ${className}Controller {
       %>def json = populateElement(${classNameLowerCase}Instance).encodeAsJSON()
       event topic:"save-${classNameLowerCase}", data: json
       render json<% } else { %>
-      event topic:"save-${classNameLowerCase}", data: ${classNameLowerCase}Instance
+      def asJson = ${classNameLowerCase}Instance as JSON
+      event topic:"save-${classNameLowerCase}", data: asJson.toString()
       render ${classNameLowerCase}Instance as JSON<% } %>
     }
     
@@ -136,7 +137,8 @@ class ${className}Controller {
       def json = populateElement(${classNameLowerCase}Instance).encodeAsJSON()
       event topic:"update-${classNameLowerCase}", data: json
       render json<% } else { %>
-      event topic:"update-${classNameLowerCase}", data: ${classNameLowerCase}Instance
+      def asJson = ${classNameLowerCase}Instance as JSON
+      event topic:"update-${classNameLowerCase}", data: asJson.toString()
       render ${classNameLowerCase}Instance as JSON<% } %>
     }
 
