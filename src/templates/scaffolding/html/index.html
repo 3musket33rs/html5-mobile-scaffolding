@@ -6,16 +6,16 @@ projectName = project.toLowerCase()
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1">
     <title>${className}</title>
-    <link rel="shortcut icon" href="images/apple-touch-icon.png" type="image/x-icon">
+    <script src="cordova.js"></script>
+    <link rel="shortcut icon" href="images/apple-touch-icon.png" type="images/x-icon">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-retina.png">
     <link rel="stylesheet" href="css/jquery/jquery.mobile-1.3.0.min.css"/>
     <link rel="stylesheet" href="css/jquery/validationEngine.jquery.css" type="text/css"/>
     <link rel="stylesheet" href="css/jquery/mobiscroll.custom-2.4.4.min.css" type="text/css"/>
     <link rel="stylesheet" href="css/html5-mobile.css" type="text/css"/>
-    <script src="cordova.js"></script>
     <script src="js/jquery/jquery-1.9.1.min.js"></script>
     <script src="js/grails/energize.js"></script>
     <script src="js/jquery/jquery.mobile-1.3.0.min.js"></script>
@@ -139,39 +139,60 @@ projectName = project.toLowerCase()
 <script src="js/grails/mobile/sync/syncmanager.js"></script>
 <script src="js/grails/mobile/push/pushmanager.js"></script>
 <script src="js/grails/mobile/camera/camera.js"></script>
-<script src="js/grails/mobile/mvc/manager.js"></script><% if(oneToOneProps) {
-oneToOneProps.each {
-def referencedType = it.type.name
-if (referencedType.lastIndexOf('.') > 0) {
-referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
-}
-def referencedTypeToLowerCase = referencedType.toLowerCase()
+<script src="js/grails/mobile/mvc/manager.js"></script><%
+if(oneToOneProps) {
+    def props = []
+    oneToOneProps.each {
+        def referencedType = it.type.name
+        if (referencedType.lastIndexOf('.') > 0) {
+            referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
+            props << referencedType.toLowerCase()
+        }
+    }
+    def unique = props as Set
+    unique.each {
 %>
-<script src="js/${projectName}/view/${referencedTypeToLowerCase}-view.js"></script><% }
+<script src="js/${projectName}/view/${it}-model.js"></script>
+<script src="js/${projectName}/view/${it}-view.js"></script>
+<script src="js/${projectName}/view/${it}-controller.js"></script><% }
 }
 if(oneToManyProps && !oneToManyProps.isEmpty()) {
-oneToManyProps.each {
+    def props = []
+    oneToManyProps.each { props << it.getReferencedDomainClass().getName().toLowerCase() }
+    def unique = props as Set
+    unique.each {
 %>
-<script src="js/${projectName}/view/${it.getReferencedDomainClass().getName().toLowerCase()}-view.js"></script><% }
+<script src="js/${projectName}/view/${it}-model.js"></script>
+<script src="js/${projectName}/view/${it}-view.js"></script>
+<script src="js/${projectName}/view/${it}-controller.js"></script><% }
 }
 %>
+<script src="js/${projectName}/view/${classNameLowerCase.toLowerCase()}-model.js"></script>
 <script src="js/${projectName}/view/${classNameLowerCase.toLowerCase()}-view.js"></script>
+<script src="js/${projectName}/view/${classNameLowerCase.toLowerCase()}-controller.js"></script>
 <script src="js/${projectName}/configuration-bootstrap.js"></script>
 <script src="js/${projectName}/bootstrap/${classNameLowerCase.toLowerCase()}-bootstrap.js"></script><%
 if(oneToOneProps) {
-oneToOneProps.each {
-def referencedType = it.type.name
-if (referencedType.lastIndexOf('.') > 0) {
-referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
-}
-def referencedTypeToLowerCase = referencedType.toLowerCase()
+    def props = []
+    oneToOneProps.each {
+        def referencedType = it.type.name
+        if (referencedType.lastIndexOf('.') > 0) {
+            referencedType = referencedType.substring(referencedType.lastIndexOf('.')+1)
+            props << referencedType.toLowerCase()
+        }
+    }
+    def unique = props as Set
+    unique.each {
 %>
-<script src="js/${projectName}/bootstrap/${referencedTypeToLowerCase}-bootstrap.js"></script><% }
+<script src="js/${projectName}/bootstrap/${it}-bootstrap.js"></script><% }
 }
-if(oneToManyProps) {
-oneToManyProps.each {
+if(oneToManyProps  && !oneToManyProps.isEmpty()) {
+    def props = []
+    oneToManyProps.each { props << it.getReferencedDomainClass().getName().toLowerCase() }
+    def unique = props as Set
+    unique.each {
 %>
-<script src="js/${projectName}/bootstrap/${it.getReferencedDomainClass().getName().toLowerCase()}-bootstrap.js"></script><% }
+<script src="js/${projectName}/bootstrap/${it}-bootstrap.js"></script><% }
 }
 %>
 <script src="js/${projectName}/manager-bootstrap.js"></script>

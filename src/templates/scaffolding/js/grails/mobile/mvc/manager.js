@@ -62,7 +62,9 @@ grails.mobile.mvc.manager = function (configuration) {
         var domainName = this.name;
 
         // create model for domain object
-        var model = grails.mobile.mvc.model();
+        var modelName = namespace + '.model.' + this.name + 'model';
+        var funcToApply = resolveNamespace(modelName);
+        var model = funcToApply.call(this);
 
         // create local storage for domain object
         if (this.options.offline) {
@@ -71,14 +73,19 @@ grails.mobile.mvc.manager = function (configuration) {
 
         // create view for domain object
         var viewName = namespace + '.view.' + this.name + 'view';
-        var funcToApply = resolveNamespace(viewName);
+        funcToApply = resolveNamespace(viewName);
         var view = funcToApply.call(this, model, this.view);
 
         // Create Feed
-        var feed = grails.mobile.feed.feed(baseURL + this.name + '/', store);
+        var feed = grails.mobile.feed.feed({
+                                             url: baseURL + this.name + '/',
+                                             on401: configuration.on401
+                                           }, store);
 
         // create controller for domain object
-        var controller = grails.mobile.mvc.controller(feed, model, view);
+        var controllerName = namespace + '.controller.' + this.name + 'controller';
+        funcToApply = resolveNamespace(controllerName);
+        var controller = funcToApply.call(this, feed, model, view);
 
         var sync = grails.mobile.sync.syncmanager(baseURL + this.name + '/', domainName, controller, store, model, this.options);
 

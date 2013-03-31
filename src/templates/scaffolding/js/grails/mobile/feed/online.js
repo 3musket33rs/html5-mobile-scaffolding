@@ -18,8 +18,10 @@ var grails = grails || {};
 grails.mobile = grails.mobile || {};
 grails.mobile.feed = grails.mobile.feed || {};
 
-grails.mobile.feed.online = function (url, store) {
+grails.mobile.feed.online = function (cfg, store) {
     var that = {};
+    var url = cfg.url;
+    var on401 = cfg.on401;
     var store = store;
 
     that.listItems = function (listed) {
@@ -62,11 +64,11 @@ grails.mobile.feed.online = function (url, store) {
 
     // Asynchronous Ajax call to server
     var send = function (item, action, type, callback) {
-        $.ajax(cfg(url, type, action, item, callback));
+        $.ajax(config(url, type, action, item, callback));
     };
 
 
-    var cfg = function (url, type, action, dataToSend, successCallback) {
+    var config = function (url, type, action, dataToSend, successCallback) {
         return {
             beforeSend: function() {
                 $.mobile.showPageLoadingMsg();
@@ -85,8 +87,14 @@ grails.mobile.feed.online = function (url, store) {
             },
             error: function (xhr) {
                 var data = [];
-                data['message'] = xhr.responseText;
-                successCallback(data, action, dataToSend);
+                if (xhr.status == "401" ) {
+                    if (on401) {
+                       on401();
+                    }
+                } else {
+                    data['message'] = xhr.responseText;
+                    successCallback(data, action, dataToSend);
+                }
             }
         };
     };

@@ -18,9 +18,9 @@ var grails = grails || {};
 grails.mobile = grails.mobile || {};
 grails.mobile.feed = grails.mobile.feed || {};
 
-grails.mobile.feed.feed = function (baseUrl, store) {
+grails.mobile.feed.feed = function (cfg, store) {
     var that = {};
-    var onlineFeed = grails.mobile.feed.online(baseUrl, store);
+    var onlineFeed = grails.mobile.feed.online(cfg, store);
     if (store) {
         var offlineFeed = grails.mobile.feed.offline(store);
         var currentFeed = navigator.onLine ? onlineFeed : offlineFeed;

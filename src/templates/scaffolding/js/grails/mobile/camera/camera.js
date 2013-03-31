@@ -33,7 +33,11 @@ grails.mobile.camera.getPicture = function(input) {
         });
     } else {
         input.on('click', function() {
-            navigator.camera.getPicture(onSuccess, onFail, { quality: 50, targetWidth: 150, targetHeight: 250,
+            navigator.camera.getPicture(onSuccess, onFail, {
+                quality: 70,
+                targetWidth: 150,
+                targetHeight: 250,
+                correctOrientation: true,
                 destinationType: Camera.DestinationType.DATA_URL
             });
         });
