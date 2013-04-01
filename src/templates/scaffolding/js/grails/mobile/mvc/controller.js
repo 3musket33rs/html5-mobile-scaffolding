@@ -42,8 +42,8 @@ grails.mobile.mvc.controller = function (feed, model, view) {
         that.listItem(true);
     });
 
-    view.editButtonClicked.attach(function () {
-        listDependent();
+    view.editButtonClicked.attach(function (callback) {
+        listDependent(callback);
     });
 
     view.createButtonClicked.attach(function (item, context) {
@@ -58,7 +58,7 @@ grails.mobile.mvc.controller = function (feed, model, view) {
         deleteItem(itemId, context);
     });
 
-    var listDependent = function () {
+    var listDependent = function (callback) {
         if (that.hasOneRelations) {
             $.each(that.hasOneRelations, function(key, controller) {
                 var myListedDependent = function(data) {
@@ -66,6 +66,7 @@ grails.mobile.mvc.controller = function (feed, model, view) {
                     var dependent = qualifyAttributes[0];
                     var dependentName = qualifyAttributes[1];
                     listedDependent(dependent, dependentName, "many-to-one", data);
+                    callback();
                 };
                 controller.listItem(false, myListedDependent);
             });
@@ -77,6 +78,7 @@ grails.mobile.mvc.controller = function (feed, model, view) {
                     var dependent = qualifyAttributes[0];
                     var dependentName = qualifyAttributes[1];
                     listedDependent(dependent, dependentName, "one-to-many", data);
+                    callback();
                 };
                 controller.listItem(false, myListedDependent);
             });

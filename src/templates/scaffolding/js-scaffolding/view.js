@@ -160,8 +160,10 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
         \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});<% if(oneToOneProps || oneToManyProps) { %>
-        that.editButtonClicked.notify();<%}%>
-        showElement(dataId);
+        that.editButtonClicked.notify(function() {
+            showElement(dataId);
+        });<%} else {%>
+        showElement(dataId);<%}%>
     };
 
     var createElement = function () {
