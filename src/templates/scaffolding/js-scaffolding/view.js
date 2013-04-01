@@ -281,6 +281,7 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
             });
             select.val(options[0]);
         }
+        select.selectmenu('refresh');
     };
 
     var renderDependentList = function (dependentName, items) {
