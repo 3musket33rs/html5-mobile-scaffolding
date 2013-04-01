@@ -64,11 +64,11 @@ grails.mobile.feed.online = function (cfg, store) {
 
     // Asynchronous Ajax call to server
     var send = function (item, action, type, callback) {
-        $.ajax(config(url, type, action, item, callback));
+        $.ajax(cfg(url, type, action, item, callback));
     };
 
 
-    var config = function (url, type, action, dataToSend, successCallback) {
+    var cfg = function (url, type, action, dataToSend, successCallback) {
         return {
             beforeSend: function() {
                 $.mobile.showPageLoadingMsg();

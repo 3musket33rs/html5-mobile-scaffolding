@@ -356,6 +356,10 @@ class HtmlMobileTemplateGenerator extends DefaultGrailsTemplateGenerator {
         } else if (suffix == '.js') {
             if (templateViewName.startsWith("view")) {
                 viewsDir = new File("$destDir/web-app/js/" + project + "/view")
+            } else if (templateViewName.startsWith("model")) {
+                viewsDir = new File("$destDir/web-app/js/" + project + "/model")
+            } else if (templateViewName.startsWith("controller")) {
+                viewsDir = new File("$destDir/web-app/js/" + project + "/controller")
             } else if (templateViewName != "configuration-bootstrap.js" && templateViewName != "manager-bootstrap.js"){
                 viewsDir = new File("$destDir/web-app/js/" + project + "/bootstrap")
             } else {

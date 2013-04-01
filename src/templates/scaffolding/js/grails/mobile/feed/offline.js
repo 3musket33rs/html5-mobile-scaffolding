@@ -28,9 +28,10 @@ grails.mobile.feed.offline = function (store) {
     };
 
     that.createItem = function (data, created) {
-        for (var k in data) {
-            data = data[k]; // remove formatting done in view needed by controller {domain: {id: "", ...}}
-        }
+        $.each(data, function(key, value) {
+            data = value; // remove formatting done in view needed by controller {domain: {id: "", ...}}
+        });
+
         if (grails.mobile.helper.isString(data)) {
             data = grails.mobile.helper.toDomainObject(data);
         }
@@ -43,9 +44,10 @@ grails.mobile.feed.offline = function (store) {
     };
 
     that.updateItem = function (data, updated) {
-        for (var k in data) {
-            data = data[k]; // remove formatting done in view needed by controller {domain: {id: "", ...}}
-        }
+        $.each(data, function(key, value) {
+            data = value; // remove formatting done in view needed by controller {domain: {id: "", ...}}
+        });
+
         if (grails.mobile.helper.isString(data)) {
             data = grails.mobile.helper.toDomainObject(data);
         }
