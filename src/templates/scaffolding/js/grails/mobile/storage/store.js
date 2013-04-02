@@ -65,7 +65,7 @@ grails.mobile.storage.store = function (model, domainName) {
             var domainKey;
             $.each(listDomainObject, function(key, value) {
                 if (key == object.id) {
-                    delete value;
+                    delete listDomainObject[key];
                 }
             });
             localStorage.setItem(localStorageKey, JSON.stringify(listDomainObject));

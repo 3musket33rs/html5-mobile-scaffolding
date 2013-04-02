@@ -10,7 +10,9 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
 
     var that = grails.mobile.mvc.view(model, elements);<% if (geolocated) { %>
     var mapServiceList = grails.mobile.map.googleMapService();
-    var mapServiceForm = grails.mobile.map.googleMapService();<% } %>
+    var mapServiceForm = grails.mobile.map.googleMapService();
+    var listed = true;
+    var pageShow = true;<% } %>
     <%  props.eachWithIndex { p, i ->
             if (p.type==([] as Byte[]).class || p.type==([] as byte[]).class) { %>
     \$(function () {
@@ -26,6 +28,11 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
             renderElement(value);
         });
         \$('#list-${classNameLowerCase}').listview('refresh');
+        <% if (geolocated) { %>
+        listed = true;
+        if (pageShow) {
+            mapServiceList.refreshCenterZoomMap();
+        }<% } %>
     });
 
     that.model.createdItem.attach(function (data, event) {
@@ -94,7 +101,10 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
 
     // user interface actions<% if (geolocated) { %>
     \$('#section-list-${classNameLowerCase}').on('pageshow', function() {
-        mapServiceList.refreshCenterZoomMap();
+        pageShow = true;
+        if (listed) {
+            mapServiceList.refreshCenterZoomMap();
+        }
     });
 
     \$('#section-show-${classNameLowerCase}').on('pageshow', function() {
@@ -122,7 +132,9 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         showMapDisplay();
     });<% } %>
     that.elements.list.on('pageinit', function (e) {
-        that.listButtonClicked.notify();
+        that.listButtonClicked.notify();<% if (geolocated) { %>
+        listed = false;
+        pageShow = false;<% } %>
     });
 
     that.elements.save.on('vclick', function (event) {
@@ -160,10 +172,8 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
         \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});<% if(oneToOneProps || oneToManyProps) { %>
-        that.editButtonClicked.notify(function() {
-            showElement(dataId);
-        });<%} else {%>
-        showElement(dataId);<%}%>
+        that.editButtonClicked.notify();<%}%>
+        showElement(dataId);
     };
 
     var createElement = function () {
@@ -283,7 +293,6 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
             });
             select.val(options[0]);
         }
-        select.selectmenu('refresh');
     };
 
     var renderDependentList = function (dependentName, items) {

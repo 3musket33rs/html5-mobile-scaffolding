@@ -85,7 +85,7 @@ grails.mobile.mvc.manager = function (configuration) {
         // create controller for domain object
         var controllerName = namespace + '.controller.' + this.name + 'controller';
         funcToApply = resolveNamespace(controllerName);
-        var controller = funcToApply.call(this, feed, model, view);
+        var controller = funcToApply.call(this, feed, model, view, {baseURL: baseURL + this.name + '/'});
 
         var sync = grails.mobile.sync.syncmanager(baseURL + this.name + '/', domainName, controller, store, model, this.options);
 

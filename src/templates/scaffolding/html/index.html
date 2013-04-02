@@ -151,20 +151,22 @@ if(oneToOneProps) {
     }
     def unique = props as Set
     unique.each {
+    if(it != classNameLowerCase.toLowerCase() ) {
 %>
 <script src="js/${projectName}/model/${it}-model.js"></script>
 <script src="js/${projectName}/view/${it}-view.js"></script>
-<script src="js/${projectName}/controller/${it}-controller.js"></script><% }
+<script src="js/${projectName}/controller/${it}-controller.js"></script><% } }
 }
 if(oneToManyProps && !oneToManyProps.isEmpty()) {
     def props = []
     oneToManyProps.each { props << it.getReferencedDomainClass().getName().toLowerCase() }
     def unique = props as Set
     unique.each {
+    if(it != classNameLowerCase.toLowerCase() ) {
 %>
 <script src="js/${projectName}/model/${it}-model.js"></script>
 <script src="js/${projectName}/view/${it}-view.js"></script>
-<script src="js/${projectName}/controller/${it}-controller.js"></script><% }
+<script src="js/${projectName}/controller/${it}-controller.js"></script><% }  }
 }
 %>
 <script src="js/${projectName}/model/${classNameLowerCase.toLowerCase()}-model.js"></script>
@@ -183,16 +185,18 @@ if(oneToOneProps) {
     }
     def unique = props as Set
     unique.each {
+    if(it != classNameLowerCase.toLowerCase() ) {
 %>
-<script src="js/${projectName}/bootstrap/${it}-bootstrap.js"></script><% }
+<script src="js/${projectName}/bootstrap/${it}-bootstrap.js"></script><% } }
 }
 if(oneToManyProps  && !oneToManyProps.isEmpty()) {
     def props = []
     oneToManyProps.each { props << it.getReferencedDomainClass().getName().toLowerCase() }
     def unique = props as Set
     unique.each {
+    if(it != classNameLowerCase.toLowerCase() ) {
 %>
-<script src="js/${projectName}/bootstrap/${it}-bootstrap.js"></script><% }
+<script src="js/${projectName}/bootstrap/${it}-bootstrap.js"></script><% }  }
 }
 %>
 <script src="js/${projectName}/manager-bootstrap.js"></script>

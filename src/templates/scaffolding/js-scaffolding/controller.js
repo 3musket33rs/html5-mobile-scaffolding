@@ -6,8 +6,8 @@ projectName = project.toLowerCase()
 %>var ${projectName} = ${projectName} || {};
 ${projectName}.controller = ${projectName}.controller || {};
 
-${projectName}.controller.${classNameLowerCase}controller = function (feed, model, view) {
-    var that = grails.mobile.mvc.controller(feed, model, view);
+${projectName}.controller.${classNameLowerCase}controller = function (feed, model, view, cfg) {
+    var that = grails.mobile.mvc.controller(feed, model, view, cfg);
 
     //Place here your custom event
 //    view.somethingButtonClicked.attach(function (item, context) {
