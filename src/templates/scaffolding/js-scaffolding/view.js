@@ -10,9 +10,7 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
 
     var that = grails.mobile.mvc.view(model, elements);<% if (geolocated) { %>
     var mapServiceList = grails.mobile.map.googleMapService();
-    var mapServiceForm = grails.mobile.map.googleMapService();
-    var listed = true;
-    var pageShow = true;<% } %>
+    var mapServiceForm = grails.mobile.map.googleMapService();<% } %>
     <%  props.eachWithIndex { p, i ->
             if (p.type==([] as Byte[]).class || p.type==([] as byte[]).class) { %>
     \$(function () {
@@ -29,10 +27,7 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         });
         \$('#list-${classNameLowerCase}').listview('refresh');
         <% if (geolocated) { %>
-        listed = true;
-        if (pageShow) {
-            mapServiceList.refreshCenterZoomMap();
-        }<% } %>
+        mapServiceList.refreshCenterZoomMap();<% } %>
     });
 
     that.model.createdItem.attach(function (data, event) {
@@ -101,10 +96,7 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
 
     // user interface actions<% if (geolocated) { %>
     \$('#section-list-${classNameLowerCase}').on('pageshow', function() {
-        pageShow = true;
-        if (listed) {
-            mapServiceList.refreshCenterZoomMap();
-        }
+        mapServiceList.refreshCenterZoomMap();
     });
 
     \$('#section-show-${classNameLowerCase}').on('pageshow', function() {
@@ -132,9 +124,7 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         showMapDisplay();
     });<% } %>
     that.elements.list.on('pageinit', function (e) {
-        that.listButtonClicked.notify();<% if (geolocated) { %>
-        listed = false;
-        pageShow = false;<% } %>
+        that.listButtonClicked.notify();
     });
 
     that.elements.save.on('vclick', function (event) {
@@ -218,8 +208,11 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
             if (input.attr('type') != 'file') {
                 input.val(value);
             } else {
-                var img = grails.mobile.camera.encode(value);
-                input.parent().css('background-image', 'url("' + img + '")');
+                if (value) {
+                    var img = grails.mobile.camera.encode(value);
+                    input.parent().css('background-image', 'url("' + img + '")');
+                    input.attr('data-value', img);
+                }
             }
             if (input.attr('data-type') == 'date') {
                 input.scroller('setDate', (value === '') ? '' : new Date(value), true);
@@ -340,8 +333,10 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
             props.eachWithIndex { p, i ->
             if (p.type==([] as Byte[]).class || p.type==([] as byte[]).class) {
         %>
-        var image = '<img src="'+ grails.mobile.camera.encode(element.${p.name}) +'"/>';
-        a.append(image);
+        if(element.${p.name}) {
+            var image = '<img src="'+ grails.mobile.camera.encode(element.${p.name}) +'"/>';
+            a.append(image);
+        }
         <% } } %>
         if (element.offlineStatus === 'NOT-SYNC') {
             li =  \$('<li>').attr({'data-theme': 'e'});
