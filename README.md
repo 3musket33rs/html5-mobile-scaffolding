@@ -1,13 +1,12 @@
 html5-mobile-scaffolding
 ========================
 
-HTML5-mobile-scaffolding is part of the 3muket33rs mobile suite. We offer Grails plugin around mobile. You want to:
-
+HTML5-mobile-scaffolding is part of the 3musket33rs mobile suite. We offer Grails plugins around mobile. You want to:
 
 - to scaffold CRUD for a mobile first application? Header, footer, list with responsive UI powered by jQuery mobile... 
 You can do it in minutes with html-generate-all command. No more GSP, you will work in single page mode with HTML5 and JavaScript.
 - to geolocate your position. Easy use convention, add **latitude** and **longitude** attribute to you doamain class.
-- geolocate with mongoDB we integrate with
+- geolocate with mongoDB plugin (3musket33rs plugin integrates well)
 - use Google Maps to add markers, move markers, we wrapped Google Map services for you
 - offline mode and synchronization
 - push notification using [event-push plugin](http://grails.org/plugin/events-push). We use GETfull API, minimizing server side calls. No need to fetch data from server. Get notified.
