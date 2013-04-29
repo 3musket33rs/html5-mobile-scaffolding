@@ -1,0 +1,2 @@
+Key benefit of HTML5 mobile Apps is "Write once, Run everywhere"… but don't get into the pitfall: "Write once, Sucks everywhere".
+With the various screen sizes, responsive web design is such a hot topic. Split you screen in different blocks, visualize either two consecutive blocks in vertical mode or two spans aligned together in horizontal mode. [jQuery Mobile|http://jquerymobile.com/] is handling all that for you. Html5-mobile-plugin is powered by jQuery Mobile.

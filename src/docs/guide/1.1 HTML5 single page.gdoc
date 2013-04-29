@@ -1,0 +1,8 @@
+HTML5 alone might still be the future not yet the present (Mr Zuckerberg), but HTML5 with Apache Cordova is the present answer for Hybrid Mobile Apps. What does it take to write Hybrid Mobile Apps? 
+
+First of all, you need to forget about server side templating. If you want ot be able to package your app in Hybrid app, support offline mode... You need a rich client.
+
+No GSP here. 
+Vanilla HTML5 (which also means JavaScript) or use it with your preferres JS framework. 3musket33rs is working on scaffolding with AngularJS (comming soon, stay tune).
+
+Let’s have a tour. 

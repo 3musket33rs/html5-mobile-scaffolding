@@ -1,0 +1,34 @@
+<plugin name='html5-mobile-scaffolding' version='0.4' grailsVersion='2.2.1 &gt; *'>
+  <author>3.musket33rs</author>
+  <authorEmail>th33musk3t33rs@gmail.com</authorEmail>
+  <title>Html5 Mobile Scaffolding Plugin</title>
+  <description>
+A plugin that scaffold HTML5 mobile application using JQuery mobile in one-page. No GSP anymore.
+</description>
+  <documentation>http://3musket33rs.github.com/html5-mobile-scaffolding/</documentation>
+  <type>Html5MobileScaffoldingGrailsPlugin</type>
+  <resources />
+  <repositories>
+    <repository name='grailsCentral' url='http://grails.org/plugins' />
+    <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
+    <repository name='http://maven.springframework.org/milestone' url='http://maven.springframework.org/milestone/' />
+  </repositories>
+  <dependencies />
+  <plugins>
+    <compile>
+      <plugin group='org.grails.plugins' name='cache' version='1.0.0' />
+    </compile>
+    <runtime>
+      <plugin group='org.grails.plugins' name='hibernate' version='2.2.1' />
+      <plugin group='org.grails.plugins' name='database-migration' version='1.1' />
+      <plugin group='org.grails.plugins' name='jquery' version='1.7.2' />
+      <plugin group='org.grails.plugins' name='cloud-foundry' version='1.2.3' />
+      <plugin group='org.grails.plugins' name='resources' version='1.1.6' />
+    </runtime>
+    <build>
+      <plugin group='org.grails.plugins' name='tomcat' version='2.2.1' />
+    </build>
+  </plugins>
+  <runtimePluginRequirements />
+  <behavior />
+</plugin>

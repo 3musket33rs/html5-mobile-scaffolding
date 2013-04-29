@@ -1,0 +1,8 @@
+Nowadays there is a plethora of MV* framework around, I recommend you to the excellent [TODO web site|http://todomvc.com/] from Addy Osmani to know which one to use. 
+
+3musket33rs has implemented a very basic MVC and provides mobile services. 
+If you want to use the MV* JavaScript framework of your choice, you can implement the MVC logic of your own and use 3musket33rs offline/online synch, push notification.
+
+{note}
+New 3musket33rs plugin angular-mobile-scaffolding (for the popular [AngularJS|http://angularjs.org/]) is ongoing.
+{note}

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project relativePaths="false" version="4">
+  <component name="ProjectFileVersion" converted="true" />
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/html5-mobile-scaffolding.iml" filepath="$PROJECT_DIR$/html5-mobile-scaffolding.iml" />
+    </modules>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="libraryTable">
+    <library name="Grails 2.1.0">
+      <CLASSES>
+        <root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-bootstrap-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-core-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-crud-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-docs-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-hibernate-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-logging-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-async-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-codecs-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-controllers-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-converters-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-datasource-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-domain-class-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-filters-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-gsp-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-i18n-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-log4j-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-mimetypes-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-scaffolding-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-services-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-servlets-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-testing-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-tomcat-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-url-mappings-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-plugin-validation-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-resources-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-scripts-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-spring-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-test-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-test-suite-base-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-web-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-webflow-2.1.0.jar!/" />
+
+<root url="jar:///usr/local/Cellar/grails/2.1.0/libexec/dist/grails-wrapper-support-2.1.0.jar!/" />
+
+
+      </CLASSES>
+    </library>
+  </component>
+</project>
