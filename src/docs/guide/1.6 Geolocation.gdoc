@@ -1,0 +1,2 @@
+Add geolocation with html5-mobile-scaffolding is really easy: it’s all about convention. Just add to your domain class the attributes: longitude, latitude. The plugin uses Google Map API.
+JavaScript class grails.mobile.map.googleMapService contains all methods needed to display a map, add markers to it, drag and drop them, geolocate current position, recenter the map.

@@ -1,0 +1,65 @@
+h3. When do you need it?
+If you're working on a real-time multi-user application, like our ThreeCircles tutorial, you want to be notified when somebody else does a checkin. How can you do it nicely without polling your server?
+
+Based on event-push Grails plugin (which uses Atmosphere framework on SSE protocol), html5-mobile-scaffoling provides support for server side push. By default, create/update/delete will raise anEvent on Groovy controller. 
+
+h3. How to use it server side?
+Event push are white listed in the file:
+
+{code}
+grails-app/conf/PlaceEvents.groovy
+{code}
+
+which contains the following decalaration:
+
+{code}
+events = {
+    'save-place' browser:true
+    'update-place' browser:true
+    'delete-place' browser:true
+}
+{code}
+
+Events are thrown in each controller like:
+
+{code}
+    def save() {
+      ...
+      def asJson = placeInstance as JSON
+      event topic:"save-place", data: asJson.toString()
+      ...
+    }
+{code}
+
+If you need to add new push event, you should add then to the white list and raise them when needed.
+
+h3. How to configure it on the client?
+To enable push notification at domain class level, open _*js/threecircles/bootstrap/place-bootstrap.js*_ file and check _*eventPush*_ is set to true.
+{code}
+    threecircles.configuration.domain.push({
+        name: 'place',
+        view: {
+			...
+        },
+        options: {
+            offline: true,
+            eventPush: true
+        }
+
+    }
+{code}
+
+PushManager is the client service implementation. In its first implementation PushManager is implemented as a broadcast. On receiving (for example) *save-place* event, Push Manager will update the data model (filtering its own eveant is done for you). if offline support is on it will update local storage too. PushManager also enhance data model with a NOTIFED boolean attribute so you know this callback is coming from broadcast push notification.
+
+h3. Hybrid support
+As shown in the the following tables:
+- [SSE browsers support|http://caniuse.com/#feat=eventsource]
+- [WebSockets browsers support|http://caniuse.com/#feat=websockets]
+Most *modern* browsers supports SSE but not the Android browser. As a result, current 3musket33rs Push notification is not available for Hybrid app.
+
+{note}
+3musket33rs team is writing a Cordova plugin to provide Push notification support on Hybrid Android applications. Stay tune.
+{note}
+
+
+

@@ -1,0 +1,50 @@
+3musket33rs includes a very easy custom MCV in JavaScript. As we've seen ealier this MCV catters for the default CRUD operations. For exemple see the update flow explained below:
+
+!img/mvc.png!
+
+Most of the time those CRUD operations could be enough for your need. Most of the times, even without adding new method you do need cutomization to write your view your own way. 
+
+Going back to the directory structure:
+
+{code}
+- web-app
+  place-index.html
+  - js
+    - threecircles ----------------> Folder to customize
+      configuration-bootstrap.js
+      manager-bootstrap.js
+      - bootstrap
+        place-bootstrap.js ------> describe your domain class relationships 
+      - controller 
+        place-controller.js-------------> add new methods other than CRUD
+      - model 
+        place-model.js -----------------> entry point to enhance model
+      - view
+        place-view.js ------------------> entry point to enhance view
+    - grails.mobile -------------------> 3musketeers Mobile Framework
+      - camera
+      - feed
+      - map
+      - mvc
+      - push
+      - storage
+      - sync
+{code}
+
+To customize your view, you will modify scaffolded code in:
+- js/threecircles/view/place-view.js
+
+{note}
+ A default view is generated for you by the scaffolding. It uses jQuery mobile. It's up to you to customize it.
+ For controller and model, if you only use CRUD server side operation, you don't need to extends Controller or Model.
+{note} 
+
+Suppose now that we want to add a new verb, let's say for exemple: login. We need to extend Controller to do our cutom ajax call. Extending Controller could be enough if we don't need to store any data in the model. 
+
+If we want to add data to the model (like let's say the firstname of the user logged) we need to extend Model. 
+In the directory structure, you will use the generated files (empty for now):
+
+- js/threecircles/view/place-model.js
+- js/threecircles/view/place-controller.js
+
+Refer to [step9|https://github.com/3musket33rs/ThreeCircles#step9-login] of tutorial for an exemple of implementation.

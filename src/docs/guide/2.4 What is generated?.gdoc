@@ -14,8 +14,23 @@ Views are generated in web-app directory. for each domain class one html file wi
 - web-app
   book-index.html
   - js
-    book-bootstrap.js
+    - bookstore ----------------> Folder to customize
+      configuration-bootstrap.js
+      manager-bootstrap.js
+      - bootstrap
+        book-bootstrap.js ------> describe your domain class relationships 
+      - controller 
+        book-controller.js-------------> add new methods other than CRUD
+      - model 
+        book-model.js -----------------> entry point to enhance model
       - view
-        book-view.js
-    - Grails Mobile Framework
+        book-view.js ------------------> entry point to enhance view
+    - grails.mobile -------------------> 3musketeers Mobile Framework
+      - camera
+      - feed
+      - map
+      - mvc
+      - push
+      - storage
+      - sync
 {code}

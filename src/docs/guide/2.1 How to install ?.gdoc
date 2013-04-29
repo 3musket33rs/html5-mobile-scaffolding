@@ -2,7 +2,7 @@ Ideally, add the plugin dependency into @BuildConfig.groovy@. It is important th
 
 {code}
 plugins {
-   compile ':html5-mobile-scaffolding:0.4'
+   compile ':html5-mobile-scaffolding:0.6'
 }
 {code}
 

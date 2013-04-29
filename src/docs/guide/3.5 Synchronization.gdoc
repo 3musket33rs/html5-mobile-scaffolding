@@ -1,0 +1,10 @@
+For now, Synchronization is in its simpliest model: unidirectional. 
+
+SyncManager implements *one way synch with optimistic locking*. Granularity is set to domain class. Using Grails instance version mechanism, when online mobile devices get notified (push notification) of other server updates and get a version of the doamain object. 
+
+When offline, modifications are stored locally. Back online, SyncManager triggers sync. Server can reject updates if the version number from the mobile device is different from the server one. At the moment, there is no smart fine-grained reconciliation.
+
+{note}
+html5-mobile-scaffolding v0.6 contains first implementation of Synch Manager. 
+Later implementation will allows configuration of Synchronization stategies. More to come, stay tune...
+{note}

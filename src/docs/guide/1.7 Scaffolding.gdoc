@@ -1,0 +1,1 @@
+Scaffolding is the strength of Grails. The core 3musket33rs plugin is powered by Grails static scaffolding, allowing creation of CRUD mobile user interface within no time. html5-mobile-scaffolding provides a way to scaffold a web app in minutes. It is plugged to the default mechanism copying templates into your project src/templates folder

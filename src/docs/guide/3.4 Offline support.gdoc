@@ -1,0 +1,21 @@
+To enable offline support at domain class level, open _*js/threecircles/bootstrap/place-bootstrap.js*_ file and check _*offline*_ is set to true.
+{code}
+    threecircles.configuration.domain.push({
+        name: 'place',
+        view: {
+			...
+        },
+        options: {
+            offline: true,
+            eventPush: true
+        }
+
+    }
+{code}
+
+When on, each create/update/delete operation is saved on your local storage whether you are online or offline. when online the operation is also send to the server. When going under a tunel and loosing the connexion, your browser detects offline mode, 3musket33rs Feed service switch to offline mode and won't send the data to the server. Instead it offlinefeed will store the dirty state of the data on your device storage.
+
+To render a visual effect we display the data using jQuery yellow thme, so you know you've lost the connexion and which data will need synchronization.
+
+What will happen when back online?
+Keep cool, 3mukst33rs services provides data synchronization :-)
