@@ -1,4 +1,5 @@
 h5. Generated Controller
+
 From domain class controller class is generated. Controller renders as JSON.
 {code}
     def list() {
@@ -8,6 +9,7 @@ From domain class controller class is generated. Controller renders as JSON.
 {code}
 
 h5. Generated views
+
 Views are generated in web-app directory. for each domain class one html file will be generated. This file contains different sections for each CRUD operations. 2 associated JavaScript files are generated.
 
 {code}
@@ -20,7 +22,7 @@ Views are generated in web-app directory. for each domain class one html file wi
       - bootstrap
         book-bootstrap.js ------> describe your domain class relationships 
       - controller 
-        book-controller.js-------------> add new methods other than CRUD
+        book-controller.js-------------> add methods other than CRUD
       - model 
         book-model.js -----------------> entry point to enhance model
       - view

@@ -1,0 +1,27 @@
+<plugin name='html5-mobile-scaffolding' version='0.4' grailsVersion='2.0 &gt; *'>
+  <author>3.musket33rs</author>
+  <authorEmail>th33musk3t33rs@gmail.com</authorEmail>
+  <title>Html5 Mobile Scaffolding Plugin</title>
+  <description>
+A plugin that scaffold HTML5 mobile application using JQuery mobile in one-page. No GSP anymore.
+</description>
+  <documentation>http://3musket33rs.github.com/html5-mobile-scaffolding/</documentation>
+  <type>Html5MobileScaffoldingGrailsPlugin</type>
+  <resources />
+  <repositories>
+    <repository name='grailsCentral' url='http://grails.org/plugins' />
+    <repository name='http://repo.grails.org/grails/core' url='http://repo.grails.org/grails/core/' />
+    <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
+  </repositories>
+  <dependencies />
+  <plugins>
+    <runtime>
+      <plugin group='org.grails.plugins' name='jquery' version='1.7.1' />
+    </runtime>
+    <build>
+      <plugin group='org.grails.plugins' name='tomcat' version='2.1.0' />
+    </build>
+  </plugins>
+  <runtimePluginRequirements />
+  <behavior />
+</plugin>

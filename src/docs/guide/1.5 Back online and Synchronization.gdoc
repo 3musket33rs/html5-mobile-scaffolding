@@ -1,6 +1,6 @@
 Upon receiving an online event, Feed is switched to online mode. All new entries is sent directly to the server controller through ajax call.
 
-!img/figure3.png!
+!figure3.png!
 
 SynchManager is also listening for online event. When online, synchronization is triggered.
 Synchronization looks for all items in Store that are flagged as NOT-SYNC. As reconciliation happens, records are removed from local storage, sent to server with ajax call and on success are added to the model.

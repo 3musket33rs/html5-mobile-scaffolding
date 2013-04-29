@@ -35,6 +35,7 @@ If you need to add new push event, you should add then to the white list and rai
 
 h3. How to configure it on the client?
 To enable push notification at domain class level, open _*js/threecircles/bootstrap/place-bootstrap.js*_ file and check _*eventPush*_ is set to true.
+
 {code}
     threecircles.configuration.domain.push({
         name: 'place',
@@ -49,7 +50,9 @@ To enable push notification at domain class level, open _*js/threecircles/bootst
     }
 {code}
 
-PushManager is the client service implementation. In its first implementation PushManager is implemented as a broadcast. On receiving (for example) *save-place* event, Push Manager will update the data model (filtering its own eveant is done for you). if offline support is on it will update local storage too. PushManager also enhance data model with a NOTIFED boolean attribute so you know this callback is coming from broadcast push notification.
+PushManager is the client service implementation. In its first implementation PushManager is implemented as a broadcast. On receiving (for example) *save-place* event, Push Manager will update the data model (filtering its own eveant is done for you). 
+
+if offline support is on it will update local storage too. PushManager also enhances data model with a NOTIFED boolean attribute so you know this callback is coming from broadcast push notification.
 
 h3. Hybrid support
 As shown in the the following tables:

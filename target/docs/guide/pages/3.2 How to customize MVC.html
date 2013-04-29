@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>3.2 How to customize MVC 0.4</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8"/>
+    <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8"/>
+    <script type="text/javascript">
+function addJsClass() {
+    var classes = document.body.className.split(" ");
+    classes.push("js");
+    document.body.className = classes.join(" ");
+}
+    </script>
+</head>
+
+<body class="body" onload="addJsClass();">
+<div id="navigation">
+    <ul>
+        <li>
+            <div id="nav-summary" onmouseover="toggleNavSummary(false)" onmouseout="toggleNavSummary(true)">
+                <a href="../../guide/index.html" class="button">Table of contents</a>
+
+                <div id="nav-summary-childs" style="display:none;">
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/1%20Introduction%20to%20HTML5%20mobile%20scaffolding%20Plugin.html"><strong>1</strong><span>Introduction to HTML5 mobile scaffolding Plugin</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/2%20Getting%20Started.html"><strong>2</strong><span>Getting Started</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/3%20Reference.html"><strong>3</strong><span>Reference</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/4%20Configuration.html"><strong>4</strong><span>Configuration</span></a>
+                    </div>
+                    
+                </div>
+            </div>
+        </li>
+        <li class="separator selected">
+            <a id="ref-button" onclick="localToggle(); return false;" href="#">Quick Reference</a>
+        </li>
+    </ul>
+</div>
+<div id="header">
+    <div class="images clearfix">
+        
+        
+    </div>
+    <p>
+A plugin that scaffold HTML5 mobile application using JQuery mobile in one-page. No GSP anymore.
+</p>
+</div>
+
+
+<table id="colset" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td id="col1">
+            <div id="main" class="corner-all">
+
+                
+                    <div class="toc-item prev-left"><a href="../../guide/2%20Getting%20Started.html">&lt;&lt; <strong>2</strong><span>Getting Started</span></a></div>
+                
+
+                <span id='toggle-col1' class="toggle">(<a href="#" onclick="localToggle(); return false;">Quick Reference</a>)</span>
+
+                
+                    <div class="toc-item next-right"><a href="../../guide/4%20Configuration.html"><strong>4</strong><span>Configuration</span> >></a></div>
+                
+
+
+                <div class="project">
+                    <h1>3.2 How to customize MVC - Reference Documentation</h1>
+
+                    <p><strong>Authors:</strong> 3.musket33rs</p>
+
+                    <p><strong>Version:</strong> 0.4</p>
+
+                    
+                </div>
+
+                
+
+                
+
+<h2 id="3.2 How to customize MVC">3.2 How to customize MVC</h2>
+3musket33rs includes a very easy custom MCV in JavaScript. As we've seen ealier this MCV catters for the default CRUD operations. For exemple see the update flow explained below:<p class="paragraph"/><img border="0" class="center" src="../img/mvc.png"></img><p class="paragraph"/>Most of the time those CRUD operations could be enough for your need. Most of the times, even without adding new method you do need cutomization to write your view your own way.<p class="paragraph"/>Going back to the directory structure:<p class="paragraph"/><div class="code"><pre>&#45; web&#45;app
+  place&#45;index.html
+  &#45; js
+    &#45; threecircles &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#62; Folder to customize
+      configuration&#45;bootstrap.js
+      manager&#45;bootstrap.js
+      &#45; bootstrap
+        place&#45;bootstrap.js &#45;&#45;&#45;&#45;&#45;&#45;&#62; describe your domain class relationships 
+      &#45; controller 
+        place&#45;controller.js&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#62; add methods other than CRUD
+      &#45; model 
+        place&#45;model.js &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#62; entry point to enhance model
+      &#45; view
+        place&#45;view.js &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#62; entry point to enhance view
+    &#45; grails.mobile &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#62; 3musketeers Mobile Framework
+      &#45; camera
+      &#45; feed
+      &#45; map
+      &#45; mvc
+      &#45; push
+      &#45; storage
+      &#45; sync</pre></div><p class="paragraph"/>To customize your view, you will modify scaffolded code in:
+<ul class="minus">
+<li>js/threecircles/view/place-view.js</li>
+</ul><p class="paragraph"/><blockquote class="note">
+ A default view is generated for you by the scaffolding. It uses jQuery mobile. It's up to you to customize it.
+ For controller and model, if you only use CRUD server side operation, you don't need to extends Controller or Model.
+</blockquote><p class="paragraph"/>Suppose now that we want to add a new verb, let's say for exemple: login. We need to extend Controller to do our cutom ajax call. Extending Controller could be enough if we don't need to store any data in the model.<p class="paragraph"/>If we want to add data to the model (like let's say the firstname of the user logged) we need to extend Model. 
+In the directory structure, you will use the generated files (empty for now):
+<ul class="minus">
+<li>js/threecircles/view/place-model.js</li>
+<li>js/threecircles/view/place-controller.js</li>
+</ul><p class="paragraph"/>Refer to <a href="https://github.com/3musket33rs/ThreeCircles#step9-login" target="blank">step9</a> of tutorial for an exemple of implementation.
+
+
+                <div style="clear:both;margin-top:15px;"></div>
+                
+                    <div class="toc-item prev-left"><a href="../../guide/2%20Getting%20Started.html">&lt;&lt; <strong>2</strong><span>Getting Started</span></a></div>
+                
+                    <div class="toc-item next-right"><a href="../../guide/4%20Configuration.html"><strong>4</strong><span>Configuration</span> >></a></div>
+                
+                <div style="clear:both"></div>
+            </div>
+        </td>
+        <td id="col2">
+            <div class="local clearfix">
+                <div class="local-title">
+                    <a href="../../guide/index.html" target="mainFrame">Quick Reference</a>
+                    <span class="toggle">(<a href="#" onclick="localToggle(); return false;">hide</a>)</span>
+                </div>
+                <div class="menu">
+                    
+                    <div class="menu-block"><h1 class="menu-title" onclick="toggleRef(this.parentNode.childNodes[1])">Scripts</h1><div class="menu-sub">
+                        
+                            
+                            <div class="menu-item"><a href="../../ref/Scripts/html-generate-all.html">html-generate-all</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../../ref/Scripts/html-generate-controllers.html">html-generate-controllers</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../../ref/Scripts/html-generate-views.html">html-generate-views</a>
+                            </div>
+                            
+                            </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div id="footer">
+    
+    
+</div>
+
+<script type="text/javascript" src="../js/docs.js"></script>
+
+</body>
+</html>

@@ -1,5 +1,6 @@
 h4. Double longitude latitude convention
 By convention if you define 2 attributes: longitude and latitude as double, the plugin will know those attribute contains geolocation information. When doing a create, the browser will search your location.
+
 {code}
 class Place {
     String name
@@ -11,6 +12,7 @@ class Place {
 
 h4. with MongoDB indexing
 When using MongoDB you can use a different convention to stick with MongoDB plugin. Location is expressed by a list of latitude and longitude. As shown below:
+
 {code}
 class Place {
     String name

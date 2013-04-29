@@ -1,11 +1,12 @@
 RIA web application can implement offline mode. Wikipedia achieve offline mode by using HTML5 caching. Detecting offline/online event is also part of HTML5 specifications.
 But caching is not enough if your application handles and store new data. 
 
-When receiving an offline event from either user selection or browser detection, View notifies Controller which notifies Feeder. Feed is switched to offline mode.
-!img/figure2.png!
-When saving, updating or deleting in offline mode, data are visualy marked as yellow.
-!img/figure7.png!
+When receiving an offline event from either user selection or browser detection, View notifies Controller which notifies Feeder. Feed is switched to offline mode. When saving, updating or deleting in offline mode, data are visualy marked as yellow.
+
+!figure8.png!
+
 When offline, data are stored and retrieved from localStorage using Store abstraction class. At the same time than saving domain data, a journal is maintained with dirty stated and operation type. This journal will drive the synchronization when back online. If you want to see the offline storage, open your browser console and type in:
+
 {code}
 localStorage
 {code}

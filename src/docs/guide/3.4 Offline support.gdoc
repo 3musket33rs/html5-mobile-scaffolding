@@ -1,4 +1,5 @@
 To enable offline support at domain class level, open _*js/threecircles/bootstrap/place-bootstrap.js*_ file and check _*offline*_ is set to true.
+
 {code}
     threecircles.configuration.domain.push({
         name: 'place',

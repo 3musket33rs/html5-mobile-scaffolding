@@ -1,0 +1,275 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>3 Reference 0.4</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8"/>
+    <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8"/>
+    <script type="text/javascript">
+function addJsClass() {
+    var classes = document.body.className.split(" ");
+    classes.push("js");
+    document.body.className = classes.join(" ");
+}
+    </script>
+</head>
+
+<body class="body" onload="addJsClass();">
+<div id="navigation">
+    <ul>
+        <li>
+            <div id="nav-summary" onmouseover="toggleNavSummary(false)" onmouseout="toggleNavSummary(true)">
+                <a href="../guide/index.html" class="button">Table of contents</a>
+
+                <div id="nav-summary-childs" style="display:none;">
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/1%20Introduction%20to%20HTML5%20mobile%20scaffolding%20Plugin.html"><strong>1</strong><span>Introduction to HTML5 mobile scaffolding Plugin</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/2%20Getting%20Started.html"><strong>2</strong><span>Getting Started</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/3%20Reference.html"><strong>3</strong><span>Reference</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/4%20Configuration.html"><strong>4</strong><span>Configuration</span></a>
+                    </div>
+                    
+                </div>
+            </div>
+        </li>
+        <li class="separator selected">
+            <a id="ref-button" onclick="localToggle(); return false;" href="#">Quick Reference</a>
+        </li>
+    </ul>
+</div>
+<div id="header">
+    <div class="images clearfix">
+        
+        
+    </div>
+    <p>
+A plugin that scaffold HTML5 mobile application using JQuery mobile in one-page. No GSP anymore.
+</p>
+</div>
+
+
+<table id="colset" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td id="col1">
+            <div id="main" class="corner-all">
+
+                
+                    <div class="toc-item prev-left"><a href="../guide/2%20Getting%20Started.html">&lt;&lt; <strong>2</strong><span>Getting Started</span></a></div>
+                
+
+                <span id='toggle-col1' class="toggle">(<a href="#" onclick="localToggle(); return false;">Quick Reference</a>)</span>
+
+                
+                    <div class="toc-item next-right"><a href="../guide/4%20Configuration.html"><strong>4</strong><span>Configuration</span> >></a></div>
+                
+
+
+                <div class="project">
+                    <h1>3 Reference - Reference Documentation</h1>
+
+                    <p><strong>Authors:</strong> 3.musket33rs</p>
+
+                    <p><strong>Version:</strong> 0.4</p>
+
+                    
+                </div>
+
+                
+                <div id="table-of-content">
+                    <h2>Table of Contents</h2>
+                    
+                    <div class="toc-item" style="margin-left:0px"><a href="#3.1%20Scaffolding"><strong>3.1</strong><span>Scaffolding</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0px"><a href="#3.2%20How%20to%20customize%20MVC"><strong>3.2</strong><span>How to customize MVC</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0px"><a href="#3.3%20Geolocation"><strong>3.3</strong><span>Geolocation</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0px"><a href="#3.4%20Offline%20support"><strong>3.4</strong><span>Offline support</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0px"><a href="#3.5%20Synchronization"><strong>3.5</strong><span>Synchronization</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0px"><a href="#3.6%20Push%20notifications"><strong>3.6</strong><span>Push notifications</span></a>
+                    </div>
+                    
+                </div>
+                
+
+                
+
+<h1 id="3 Reference">3 Reference</h1>
+Because it's always better to illustrate with code, our reference manual is based on tutorial application <a href="https://github.com/3musket33rs/ThreeCircles" target="blank">ThreeCircles</a>.<p class="paragraph"/><h4>Hybrid Mobile App in minutes not days</h4><p class="paragraph"/>Can you build your own version of Foursquare in minutes? Yes, you can. To survive offline your presentation logic should reside on the client. Using HTML5 power and jQuery mobile responsive UI your web app becomes Mobile. Ready to take the mobile challenges: geolocation, offline caching, data synchronization, server side event push, camera and packaging as Hybrid using PhoneGap. At the end of the session, you will have a clone of Foursquare on your mobile, with a REST backend in Grails running on the cloud. All that with one goal in mind: have fun! 
+
+
+<h2 id="3.1 Scaffolding">3.1 Scaffolding</h2>
+Read scripts description:
+<ul class="minus">
+<li>guide:html-generate-all</li>
+<li>guide:html-generate-controllers</li>
+<li>guide:html-generate-views</li>
+</ul><p class="paragraph"/>Refer to <a href="https://github.com/3musket33rs/ThreeCircles#step1-scaffolding" target="blank">step1</a>  of tutorial
+
+
+<h2 id="3.2 How to customize MVC">3.2 How to customize MVC</h2>
+3musket33rs includes a very easy custom MCV in JavaScript. As we've seen ealier this MCV catters for the default CRUD operations. For exemple see the update flow explained below:<p class="paragraph"/><img border="0" class="center" src="../img/mvc.png"></img><p class="paragraph"/>Most of the time those CRUD operations could be enough for your need. Most of the times, even without adding new method you do need cutomization to write your view your own way.<p class="paragraph"/>Going back to the directory structure:<p class="paragraph"/><div class="code"><pre>&#45; web&#45;app
+  place&#45;index.html
+  &#45; js
+    &#45; threecircles &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#62; Folder to customize
+      configuration&#45;bootstrap.js
+      manager&#45;bootstrap.js
+      &#45; bootstrap
+        place&#45;bootstrap.js &#45;&#45;&#45;&#45;&#45;&#45;&#62; describe your domain class relationships 
+      &#45; controller 
+        place&#45;controller.js&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#62; add methods other than CRUD
+      &#45; model 
+        place&#45;model.js &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#62; entry point to enhance model
+      &#45; view
+        place&#45;view.js &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#62; entry point to enhance view
+    &#45; grails.mobile &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#62; 3musketeers Mobile Framework
+      &#45; camera
+      &#45; feed
+      &#45; map
+      &#45; mvc
+      &#45; push
+      &#45; storage
+      &#45; sync</pre></div><p class="paragraph"/>To customize your view, you will modify scaffolded code in:
+<ul class="minus">
+<li>js/threecircles/view/place-view.js</li>
+</ul><p class="paragraph"/><blockquote class="note">
+ A default view is generated for you by the scaffolding. It uses jQuery mobile. It's up to you to customize it.
+ For controller and model, if you only use CRUD server side operation, you don't need to extends Controller or Model.
+</blockquote><p class="paragraph"/>Suppose now that we want to add a new verb, let's say for exemple: login. We need to extend Controller to do our cutom ajax call. Extending Controller could be enough if we don't need to store any data in the model.<p class="paragraph"/>If we want to add data to the model (like let's say the firstname of the user logged) we need to extend Model. 
+In the directory structure, you will use the generated files (empty for now):
+<ul class="minus">
+<li>js/threecircles/view/place-model.js</li>
+<li>js/threecircles/view/place-controller.js</li>
+</ul><p class="paragraph"/>Refer to <a href="https://github.com/3musket33rs/ThreeCircles#step9-login" target="blank">step9</a> of tutorial for an exemple of implementation.
+
+
+<h2 id="3.3 Geolocation">3.3 Geolocation</h2>
+<h4>Double longitude latitude convention</h4>
+By convention if you define 2 attributes: longitude and latitude as double, the plugin will know those attribute contains geolocation information. When doing a create, the browser will search your location.<p class="paragraph"/><div class="code"><pre>class Place &#123;
+    <span class="java&#45;object">String</span> name
+    <span class="java&#45;object">Double</span> latitude
+    <span class="java&#45;object">Double</span> longitude
+    <span class="java&#45;keyword">static</span> constraints = &#123;&#125;
+&#125;</pre></div><p class="paragraph"/><h4>with MongoDB indexing</h4>
+When using MongoDB you can use a different convention to stick with MongoDB plugin. Location is expressed by a list of latitude and longitude. As shown below:<p class="paragraph"/><div class="code"><pre>class Place &#123;
+    <span class="java&#45;object">String</span> name
+	List location
+	<span class="java&#45;keyword">static</span> mapping = &#123;
+   		location geoIndex: <span class="java&#45;keyword">true</span>
+	&#125;
+    <span class="java&#45;keyword">static</span> constraints = &#123;&#125;
+&#125;</pre></div>
+
+
+<h2 id="3.4 Offline support">3.4 Offline support</h2>
+To enable offline support at domain class level, open  <em class="italic"><strong class="bold">js/threecircles/bootstrap/place-bootstrap.js</strong></em>  file and check  <em class="italic"><strong class="bold">offline</strong></em>  is set to true.<p class="paragraph"/><div class="code"><pre>threecircles.configuration.domain.push(&#123;
+        name: 'place',
+        view: &#123;
+			&#8230;
+        &#125;,
+        options: &#123;
+            offline: <span class="java&#45;keyword">true</span>,
+            eventPush: <span class="java&#45;keyword">true</span>
+        &#125;<p class="paragraph"/>    &#125;</pre></div><p class="paragraph"/>When on, each create/update/delete operation is saved on your local storage whether you are online or offline. when online the operation is also send to the server. When going under a tunel and loosing the connexion, your browser detects offline mode, 3musket33rs Feed service switch to offline mode and won't send the data to the server. Instead it offlinefeed will store the dirty state of the data on your device storage.<p class="paragraph"/>To render a visual effect we display the data using jQuery yellow thme, so you know you've lost the connexion and which data will need synchronization.<p class="paragraph"/>What will happen when back online?
+Keep cool, 3mukst33rs services provides data synchronization :-)
+
+
+<h2 id="3.5 Synchronization">3.5 Synchronization</h2>
+For now, Synchronization is in its simpliest model: unidirectional.<p class="paragraph"/>SyncManager implements <strong class="bold">one way synch with optimistic locking</strong>. Granularity is set to domain class. Using Grails instance version mechanism, when online mobile devices get notified (push notification) of other server updates and get a version of the doamain object.<p class="paragraph"/>When offline, modifications are stored locally. Back online, SyncManager triggers sync. Server can reject updates if the version number from the mobile device is different from the server one. At the moment, there is no smart fine-grained reconciliation.<p class="paragraph"/><blockquote class="note">
+html5-mobile-scaffolding v0.6 contains first implementation of Synch Manager. 
+Later implementation will allows configuration of Synchronization stategies. More to come, stay tune&#8230;
+</blockquote>
+
+
+<h2 id="3.6 Push notifications">3.6 Push notifications</h2>
+<h3>When do you need it?</h3>
+If you're working on a real-time multi-user application, like our ThreeCircles tutorial, you want to be notified when somebody else does a checkin. How can you do it nicely without polling your server?<p class="paragraph"/>Based on event-push Grails plugin (which uses Atmosphere framework on SSE protocol), html5-mobile-scaffoling provides support for server side push. By default, create/update/delete will raise anEvent on Groovy controller.<p class="paragraph"/><h3>How to use it server side?</h3>
+Event push are white listed in the file:<p class="paragraph"/><div class="code"><pre>grails&#45;app/conf/PlaceEvents.groovy</pre></div><p class="paragraph"/>which contains the following decalaration:<p class="paragraph"/><div class="code"><pre>events = &#123;
+    'save&#45;place' browser:<span class="java&#45;keyword">true</span>
+    'update&#45;place' browser:<span class="java&#45;keyword">true</span>
+    'delete&#45;place' browser:<span class="java&#45;keyword">true</span>
+&#125;</pre></div><p class="paragraph"/>Events are thrown in each controller like:<p class="paragraph"/><div class="code"><pre>def save() &#123;
+      &#8230;
+      def asJson = placeInstance as JSON
+      event topic:<span class="java&#45;quote">"save&#45;place"</span>, data: asJson.toString()
+      &#8230;
+    &#125;</pre></div><p class="paragraph"/>If you need to add new push event, you should add then to the white list and raise them when needed.<p class="paragraph"/><h3>How to configure it on the client?</h3>
+To enable push notification at domain class level, open  <em class="italic"><strong class="bold">js/threecircles/bootstrap/place-bootstrap.js</strong></em>  file and check  <em class="italic"><strong class="bold">eventPush</strong></em>  is set to true.<p class="paragraph"/><div class="code"><pre>threecircles.configuration.domain.push(&#123;
+        name: 'place',
+        view: &#123;
+			&#8230;
+        &#125;,
+        options: &#123;
+            offline: <span class="java&#45;keyword">true</span>,
+            eventPush: <span class="java&#45;keyword">true</span>
+        &#125;<p class="paragraph"/>    &#125;</pre></div><p class="paragraph"/>PushManager is the client service implementation. In its first implementation PushManager is implemented as a broadcast. On receiving (for example) <strong class="bold">save-place</strong> event, Push Manager will update the data model (filtering its own eveant is done for you).<p class="paragraph"/>if offline support is on it will update local storage too. PushManager also enhances data model with a NOTIFED boolean attribute so you know this callback is coming from broadcast push notification.<p class="paragraph"/><h3>Hybrid support</h3>
+As shown in the the following tables:
+<ul class="minus">
+<li><a href="http://caniuse.com/#feat=eventsource" target="blank">SSE browsers support</a></li>
+<li><a href="http://caniuse.com/#feat=websockets" target="blank">WebSockets browsers support</a></li>
+</ul><p class="paragraph"/>Most <strong class="bold">modern</strong> browsers supports SSE but not the Android browser. As a result, current 3musket33rs Push notification is not available for Hybrid app.<p class="paragraph"/><blockquote class="note">
+3musket33rs team is writing a Cordova plugin to provide Push notification support on Hybrid Android applications. Stay tune.
+</blockquote><p class="paragraph"/><p class="paragraph"/>
+
+
+                <div style="clear:both;margin-top:15px;"></div>
+                
+                    <div class="toc-item prev-left"><a href="../guide/2%20Getting%20Started.html">&lt;&lt; <strong>2</strong><span>Getting Started</span></a></div>
+                
+                    <div class="toc-item next-right"><a href="../guide/4%20Configuration.html"><strong>4</strong><span>Configuration</span> >></a></div>
+                
+                <div style="clear:both"></div>
+            </div>
+        </td>
+        <td id="col2">
+            <div class="local clearfix">
+                <div class="local-title">
+                    <a href="../guide/index.html" target="mainFrame">Quick Reference</a>
+                    <span class="toggle">(<a href="#" onclick="localToggle(); return false;">hide</a>)</span>
+                </div>
+                <div class="menu">
+                    
+                    <div class="menu-block"><h1 class="menu-title" onclick="toggleRef(this.parentNode.childNodes[1])">Scripts</h1><div class="menu-sub">
+                        
+                            
+                            <div class="menu-item"><a href="../ref/Scripts/html-generate-all.html">html-generate-all</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Scripts/html-generate-controllers.html">html-generate-controllers</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Scripts/html-generate-views.html">html-generate-views</a>
+                            </div>
+                            
+                            </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div id="footer">
+    
+    
+</div>
+
+<script type="text/javascript" src="../js/docs.js"></script>
+
+</body>
+</html>

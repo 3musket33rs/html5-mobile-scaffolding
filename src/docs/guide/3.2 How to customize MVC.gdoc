@@ -1,6 +1,6 @@
 3musket33rs includes a very easy custom MCV in JavaScript. As we've seen ealier this MCV catters for the default CRUD operations. For exemple see the update flow explained below:
 
-!img/mvc.png!
+!mvc.png!
 
 Most of the time those CRUD operations could be enough for your need. Most of the times, even without adding new method you do need cutomization to write your view your own way. 
 
@@ -16,7 +16,7 @@ Going back to the directory structure:
       - bootstrap
         place-bootstrap.js ------> describe your domain class relationships 
       - controller 
-        place-controller.js-------------> add new methods other than CRUD
+        place-controller.js-------------> add methods other than CRUD
       - model 
         place-model.js -----------------> entry point to enhance model
       - view
