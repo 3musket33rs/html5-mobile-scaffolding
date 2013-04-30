@@ -33,5 +33,8 @@ grails.project.dependency.resolution = {
         runtime ":jquery:1.9.1", ":cors:1.0.3"
 //        runtime ":events-si:1.0.M7"
         compile ":events-push:1.0.M3"
+        build ':release:2.2.1', ':rest-client-builder:1.0.3', {
+          export = false
+        }
     }
 }

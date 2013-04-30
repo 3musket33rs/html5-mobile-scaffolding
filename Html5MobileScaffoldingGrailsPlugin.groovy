@@ -25,7 +25,7 @@ import org.grails.html.mobile.JavascriptDateRegistrar
 
 class Html5MobileScaffoldingGrailsPlugin {
 
-  def version = '0.5'
+  def version = '0.6'
   def grailsVersion = '2.0 > *'
   def title = 'Html5 Mobile Scaffolding Plugin'
   def author = '3.musket33rs'
