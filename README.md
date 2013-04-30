@@ -20,7 +20,7 @@ Install it
 Add a dependency to BuildConfig.groovy:
 
     plugins {
-        compile ":html-mobile-scafolding:0.4.4"
+        compile ":html-mobile-scafolding:0.6"
         ...
     }
 
