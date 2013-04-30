@@ -1,5 +1,5 @@
 <%
-projectName = project.toLowerCase()
+projectName = project.replaceAll('[\\-]', '').toLowerCase()
 %>var ${projectName} = ${projectName} || {};
 
 ${projectName}.load = (function () {

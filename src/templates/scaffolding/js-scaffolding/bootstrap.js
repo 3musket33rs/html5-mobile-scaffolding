@@ -2,7 +2,7 @@
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
 def uncapitalize(s) { s[0].toLowerCase() + s[1..-1]}
 classNameLowerCase = uncapitalize(className)
-projectName = project.toLowerCase()
+projectName = project.replaceAll("[\\-]", "").toLowerCase()
 %>var ${projectName} = ${projectName} || {};
 
 ${projectName}.load${classNameLowerCase} = (function () {
