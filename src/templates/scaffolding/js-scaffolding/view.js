@@ -17,6 +17,11 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         grails.mobile.camera.getPicture(\$('#input-${classNameLowerCase}-${p.name}'));
     });
     <% } }%>
+
+    that.init = function() {
+        that.listButtonClicked.notify();
+    };
+
     // Register events
     that.model.listedItems.attach(function (data) {<% if (geolocated) { %>
         mapServiceList.emptyMap('map-canvas-list-${classNameLowerCase}');<% } %>
@@ -123,9 +128,6 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         hideListDisplay();
         showMapDisplay();
     });<% } %>
-    that.elements.list.on('pageinit', function (e) {
-        that.listButtonClicked.notify();
-    });
 
     that.elements.save.on('vclick', function (event) {
         event.stopPropagation();

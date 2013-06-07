@@ -9,6 +9,7 @@ projectName = project.toLowerCase()
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1">
     <title>${className}</title>
     <script src="cordova.js"></script>
+    <script src="browserpush.js"></script>
     <link rel="shortcut icon" href="images/apple-touch-icon.png" type="images/x-icon">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-retina.png">
@@ -18,6 +19,7 @@ projectName = project.toLowerCase()
     <link rel="stylesheet" href="css/html5-mobile.css" type="text/css"/>
     <script src="js/jquery/jquery-1.9.1.min.js"></script>
     <script src="js/grails/energize.js"></script>
+    <script src="js/${projectName}/manager-bootstrap.js"></script>
     <script src="js/jquery/jquery.mobile-1.3.0.min.js"></script>
 </head>
 <body>
@@ -199,7 +201,6 @@ if(oneToManyProps  && !oneToManyProps.isEmpty()) {
 <script src="js/${projectName}/bootstrap/${it}-bootstrap.js"></script><% }  }
 }
 %>
-<script src="js/${projectName}/manager-bootstrap.js"></script>
 <script src="js/jquery/mobiscroll.custom-2.4.4.min.js"></script>
 
 </body>

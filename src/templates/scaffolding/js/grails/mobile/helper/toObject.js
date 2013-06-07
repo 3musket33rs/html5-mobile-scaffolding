@@ -22,12 +22,6 @@ grails.mobile = grails.mobile || {};
 grails.mobile.helper = grails.mobile.helper || {};
 
 
-$(document).on( "mobileinit", function() {
-    $.mobile.allowCrossDomainPages = true;
-    $.mobile.phonegapNavigationEnabled = true;
-    $.mobile.buttonMarkup.hoverDelay = 50;
-});
-
 grails.mobile.helper.isString = function isString(o) {
     return typeof o === "string" || (typeof o === "object" && o.constructor === String);
 };
