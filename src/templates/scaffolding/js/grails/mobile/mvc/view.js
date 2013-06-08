@@ -59,10 +59,6 @@ grails.mobile.mvc.view = function (model, elements) {
         }
     });
 
-    that.init = function() {
-        // to be redefine in the view used
-    };
-
     return that;
 };
 
