@@ -14,9 +14,9 @@ ${projectName}.load = (function () {
     });
 
     var onLoadDeferred = \$.Deferred();
-    window.onload = function() {
+    \$(document).ready(function() {
         onLoadDeferred.resolve();
-    };
+    });
 
     if (window.cordova) {
         var deviceReadyDeferred = \$.Deferred();
