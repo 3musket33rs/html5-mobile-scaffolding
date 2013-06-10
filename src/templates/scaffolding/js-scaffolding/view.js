@@ -8,7 +8,11 @@ ${projectName}.view = ${projectName}.view || {};
 
 ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
 
-    var that = grails.mobile.mvc.view(model, elements);<% if (geolocated) { %>
+    var that = grails.mobile.mvc.view(model, elements);
+
+    that.init = function () {
+    that.listButtonClicked.notify();
+    };<% if (geolocated) { %>
     var mapServiceList = grails.mobile.map.googleMapService();
     var mapServiceForm = grails.mobile.map.googleMapService();<% } %>
     <%  props.eachWithIndex { p, i ->

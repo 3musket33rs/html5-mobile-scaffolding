@@ -9,7 +9,7 @@ ${projectName}.load = (function () {
         init();
     };
     var mobileInitDeferred = \$.Deferred();
-    \$(document).on("mobileinit", function () {
+    \$(document).on("pageinit", function () {
         mobileInitDeferred.resolve();
     });
 
@@ -32,5 +32,6 @@ ${projectName}.load = (function () {
 
     var init = function() {
         var managerObject = grails.mobile.mvc.manager(${projectName}.configuration);
+        managerObject.domainsObjects[threecirclesweb5.mainView].view.init();
     }
 }());
