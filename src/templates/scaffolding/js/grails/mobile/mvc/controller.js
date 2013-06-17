@@ -40,7 +40,9 @@ grails.mobile.mvc.controller = function (feed, model, view, cfg) {
     });
 
     view.listButtonClicked.attach(function (item) {
-        that.listItem(true);
+        that.listItem(function (data) {
+            that.model.listItems(data, true);
+        }, that.model.getItems());
     });
 
     view.editButtonClicked.attach(function () {
@@ -62,20 +64,24 @@ grails.mobile.mvc.controller = function (feed, model, view, cfg) {
     var listDependent = function () {
         if (that.hasOneRelations) {
             $.each(that.hasOneRelations, function(key, controller) {
-                controller.listItem(false);
                 var qualifyAttributes = key.split('_');
                 var dependent = qualifyAttributes[0];
                 var dependentName = qualifyAttributes[1];
-                listedDependent(dependent, dependentName, "many-to-one", controller.model.getItems());
+                controller.listItem(function(data) {
+                    listedDependent(dependent, dependentName, "many-to-one", data);
+                    controller.model.listItems(data, false);
+                }, controller.model.getItems());
             });
         }
         if (that.oneToManyRelations) {
             $.each(that.oneToManyRelations, function(key, controller) {
-                controller.listItem(false);
                 var qualifyAttributes = key.split('_');
                 var dependent = qualifyAttributes[0];
                 var dependentName = qualifyAttributes[1];
-                listedDependent(dependent, dependentName, "one-to-many",controller.model.getItems());
+                controller.listItem(function(data) {
+                    listedDependent(dependent, dependentName, "one-to-many",data);
+                    controller.model.listItems(data, false);
+                }, controller.model.getItems());
             });
         }
     };
@@ -84,12 +90,9 @@ grails.mobile.mvc.controller = function (feed, model, view, cfg) {
         that.model.listDependent(dependent, dependentName, relationType, data);
     };
 
-    that.listItem = function (notifyView) {
-        var listed = function (data) {
-            that.model.listItems(data, notifyView);
-        };
-        if ($.isEmptyObject(that.model.getItems())) {
-            var list = feed.listItems(listed);
+    that.listItem = function (listedItems, data) {
+        if ($.isEmptyObject(data)) {
+            var list = feed.listItems(listedItems);
         }
     };
 

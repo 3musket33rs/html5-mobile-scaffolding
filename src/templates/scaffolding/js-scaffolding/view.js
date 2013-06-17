@@ -158,17 +158,17 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
     that.elements.add.on('vclick', function (event) {
         event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
-        \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});<% if(oneToOneProps || oneToManyProps) { %>
+        \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});
+        createElement();<% if(oneToOneProps || oneToManyProps) { %>
         that.editButtonClicked.notify();<%}%>
-        createElement();
     });
 
     var show = function(dataId, event) {
         event.stopPropagation();
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
-        \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});<% if(oneToOneProps || oneToManyProps) { %>
+        \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});
+        showElement(dataId);<% if(oneToOneProps || oneToManyProps) { %>
         that.editButtonClicked.notify();<%}%>
-        showElement(dataId);
     };
 
     var createElement = function () {

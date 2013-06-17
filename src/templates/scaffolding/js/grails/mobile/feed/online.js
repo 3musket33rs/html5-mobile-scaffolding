@@ -64,21 +64,35 @@ grails.mobile.feed.online = function (cfg, store) {
 
     // Asynchronous Ajax call to server
     var send = function (item, action, type, callback) {
-        $.ajax(cfg(url, type, action, item, callback));
+        $.ajax(grails.mobile.feed.online.AjaxConfig.getConfig(url, type, action, item, callback));
     };
 
+    return that;
+};
 
-    var cfg = function (url, type, action, dataToSend, successCallback) {
+
+grails.mobile.feed.online.AjaxConfig = (function () {
+    var that = this;
+
+    var counter = 0;
+
+    that.getConfig = function(url, type, action, dataToSend, successCallback) {
         return {
             beforeSend: function() {
-                $.mobile.showPageLoadingMsg();
+                if (counter === 0) {
+                    $.mobile.showPageLoadingMsg();
+                }
+                counter++;
             },
             complete: function() {
-                $.mobile.hidePageLoadingMsg()
+                counter--;
+                if (counter === 0) {
+                    $.mobile.hidePageLoadingMsg();
+                }
             },
             cache: false,
             type: type,
-            async: false,
+            async: true,
             data: dataToSend,
             dataType: "json",
             url: url + action,
@@ -89,7 +103,7 @@ grails.mobile.feed.online = function (cfg, store) {
                 var data = [];
                 if (xhr.status == "401" ) {
                     if (on401) {
-                       on401();
+                        on401();
                     }
                 } else {
                     data['message'] = xhr.responseText;
@@ -100,4 +114,4 @@ grails.mobile.feed.online = function (cfg, store) {
     };
 
     return that;
-};
+}());

@@ -112,7 +112,7 @@ grails.mobile.sync.syncmanager = function (url, domainName, controller, store, m
         return {
             cache: false,
             type: type,
-            async: false,
+            async: true,
             data: dataToSend,
             dataType: "json",
             url: url + action,
