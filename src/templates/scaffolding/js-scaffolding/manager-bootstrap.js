@@ -32,6 +32,6 @@ ${projectName}.load = (function () {
 
     var init = function() {
         var managerObject = grails.mobile.mvc.manager(${projectName}.configuration);
-        managerObject.domainsObjects[threecirclesweb5.mainView].view.init();
+        managerObject.domainsObjects[${projectName}.mainView].view.init();
     }
 }());

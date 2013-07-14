@@ -45,8 +45,8 @@ grails.mobile.mvc.controller = function (feed, model, view, cfg) {
         }, that.model.getItems());
     });
 
-    view.editButtonClicked.attach(function () {
-        listDependent();
+    view.editButtonClicked.attach(function (selected) {
+        listDependent(selected);
     });
 
     view.createButtonClicked.attach(function (item, context) {
@@ -61,7 +61,7 @@ grails.mobile.mvc.controller = function (feed, model, view, cfg) {
         deleteItem(itemId, context);
     });
 
-    var listDependent = function () {
+    var listDependent = function (selected) {
         if (that.hasOneRelations) {
             $.each(that.hasOneRelations, function(key, controller) {
                 var qualifyAttributes = key.split('_');
@@ -70,6 +70,9 @@ grails.mobile.mvc.controller = function (feed, model, view, cfg) {
                 controller.listItem(function(data) {
                     listedDependent(dependent, dependentName, "many-to-one", data);
                     controller.model.listItems(data, false);
+                    if (selected) {
+                        selected();
+                    }
                 }, controller.model.getItems());
             });
         }
@@ -81,6 +84,9 @@ grails.mobile.mvc.controller = function (feed, model, view, cfg) {
                 controller.listItem(function(data) {
                     listedDependent(dependent, dependentName, "one-to-many",data);
                     controller.model.listItems(data, false);
+                    if (selected) {
+                        selected();
+                    }
                 }, controller.model.getItems());
             });
         }
@@ -93,6 +99,8 @@ grails.mobile.mvc.controller = function (feed, model, view, cfg) {
     that.listItem = function (listedItems, data) {
         if ($.isEmptyObject(data)) {
             var list = feed.listItems(listedItems);
+        } else {
+            listedItems(data);
         }
     };
 

@@ -168,17 +168,48 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
         \$('#form-update-${classNameLowerCase}').validationEngine('hide');
         \$('#form-update-${classNameLowerCase}').validationEngine({promptPosition: 'bottomLeft'});
         showElement(dataId);<% if(oneToOneProps || oneToManyProps) { %>
-        that.editButtonClicked.notify();<%}%>
+        that.editButtonClicked.notify(function () {
+            showDependentElement(dataId);
+        });<%}%>
     };
 
     var createElement = function () {
         resetForm('form-update-${classNameLowerCase}');
         \$.mobile.changePage(\$('#section-show-${classNameLowerCase}'));
-        \$('#delete-${classNameLowerCase}').css('display', 'none');
+        \$('#delete-${classNameLowerCase}').css('display', 'none');<% if(oneToOneProps || oneToManyProps) { %>
+        that.editButtonClicked.notify(function () {
+        });<%}%>
     };
 
     var showElement = function (id) {
         resetForm('form-update-${classNameLowerCase}');
+        showDependentElement(id);
+        var element = that.model.items[id];
+        \$.each(element, function (name, value) {
+            var input = \$('#input-${classNameLowerCase}-' + name);
+            if (input.attr('type') != 'file') {
+                input.val(value);
+            } else {
+                if (value) {
+                    var img = grails.mobile.camera.encode(value);
+                    input.parent().css('background-image', 'url("' + img + '")');
+                    input.attr('data-value', img);
+                }
+            }
+            if (input.attr('data-type') == 'date') {
+                input.scroller('setDate', (value === '') ? '' : new Date(value), true);
+            }
+        });<% if (geolocated) { %>
+        var coord = {
+            latitude : \$('#input-${classNameLowerCase}-latitude'),
+            longitude :\$('#input-${classNameLowerCase}-longitude')
+        };
+        mapServiceForm.showMap('map-canvas-form-${classNameLowerCase}', element.latitude, element.longitude, coord);<% } %>
+        \$('#delete-${classNameLowerCase}').show();
+        \$.mobile.changePage(\$('#section-show-${classNameLowerCase}'));
+    };
+
+    var showDependentElement = function (id) {
         var element = that.model.items[id];<% if(oneToOneProps) {
                oneToOneProps.each {
                def referencedType = it.type.name
@@ -208,29 +239,7 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
             }
             \$(selector).attr('checked','checked').checkboxradio('refresh');
         });<% } } %>
-        \$.each(element, function (name, value) {
-            var input = \$('#input-${classNameLowerCase}-' + name);
-            if (input.attr('type') != 'file') {
-                input.val(value);
-            } else {
-                if (value) {
-                    var img = grails.mobile.camera.encode(value);
-                    input.parent().css('background-image', 'url("' + img + '")');
-                    input.attr('data-value', img);
-                }
-            }
-            if (input.attr('data-type') == 'date') {
-                input.scroller('setDate', (value === '') ? '' : new Date(value), true);
-            }
-        });<% if (geolocated) { %>
-        var coord = {
-            latitude : \$('#input-${classNameLowerCase}-latitude'),
-            longitude :\$('#input-${classNameLowerCase}-longitude')
-        };
-        mapServiceForm.showMap('map-canvas-form-${classNameLowerCase}', element.latitude, element.longitude, coord);<% } %>
-        \$('#delete-${classNameLowerCase}').show();
-        \$.mobile.changePage(\$('#section-show-${classNameLowerCase}'));
-    };
+    }
 
     var resetForm = function (form) {
         \$('input[data-type="date"]').each(function() {
@@ -291,6 +300,7 @@ ${projectName}.view.${classNameLowerCase}view = function (model, elements) {
             });
             select.val(options[0]);
         }
+        select.selectmenu("refresh");
     };
 
     var renderDependentList = function (dependentName, items) {
