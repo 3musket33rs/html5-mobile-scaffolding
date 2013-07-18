@@ -30,6 +30,8 @@ grails.mobile.mvc.manager = function (configuration) {
 
     var controllers = {};
 
+    var userIdNotification = grails.mobile.helper.generateId();
+
     var resolveNamespace = function (functionPath) {
         var namespaces = functionPath.split(".");
         var funcName = namespaces.pop();
@@ -55,8 +57,11 @@ grails.mobile.mvc.manager = function (configuration) {
         if (this.options === undefined) {
             this.options = {
                 offline: true,
-                eventPush: true
+                eventPush: true,
+                userIdNotification : userIdNotification
             }
+        } else {
+            this.options.userIdNotification = userIdNotification
         }
 
         var domainName = this.name;

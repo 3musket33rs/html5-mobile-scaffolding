@@ -5,6 +5,7 @@ classNameLowerCase = uncapitalize(className)
 %>
 
 import grails.converters.JSON
+import groovy.json.JsonBuilder
 import org.grails.datastore.mapping.validation.ValidationErrors
 import org.springframework.dao.DataIntegrityViolationException
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
@@ -65,7 +66,12 @@ class ${className}Controller {
       event topic:"save-${classNameLowerCase}", data: json
       render json<% } else { %>
       def asJson = ${classNameLowerCase}Instance as JSON
-      event topic:"save-${classNameLowerCase}", data: asJson.toString()
+      def builder = new JsonBuilder()
+      builder {
+        userIdNotification  params.userIdNotification
+        instance  asJson.toString()
+      }
+      event topic:"save-${classNameLowerCase}", data: builder.toString()
       render ${classNameLowerCase}Instance as JSON<% } %>
     }
     
@@ -138,7 +144,12 @@ class ${className}Controller {
       event topic:"update-${classNameLowerCase}", data: json
       render json<% } else { %>
       def asJson = ${classNameLowerCase}Instance as JSON
-      event topic:"update-${classNameLowerCase}", data: asJson.toString()
+      def builder = new JsonBuilder()
+      builder {
+          userIdNotification  params.userIdNotification
+          instance  asJson.toString()
+      }
+      event topic:"update-${classNameLowerCase}", data: builder.toString()
       render ${classNameLowerCase}Instance as JSON<% } %>
     }
 
@@ -170,7 +181,13 @@ class ${className}Controller {
       %>def json = populateElement(${classNameLowerCase}Instance).encodeAsJSON()
       event topic:"delete-${classNameLowerCase}", data: json
       render json<% } else { %>
-      event topic:"delete-${classNameLowerCase}", data: ${classNameLowerCase}Instance
+      def asJson = ${classNameLowerCase}Instance as JSON
+      def builder = new JsonBuilder()
+      builder {
+          userIdNotification  params.userIdNotification
+          instance  asJson.toString()
+      }
+      event topic:"delete-${classNameLowerCase}", data: builder.toString()
       render ${classNameLowerCase}Instance as JSON<% } %>
     }
     <% if(geoProperty) {%>

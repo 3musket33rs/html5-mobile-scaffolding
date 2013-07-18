@@ -23,6 +23,7 @@ grails.mobile.feed.online = function (cfg, store) {
     var url = cfg.url;
     var on401 = cfg.on401;
     var store = store;
+    var userIdNotification = cfg.userIdNotification;
 
     that.listItems = function (listed) {
         send(null, "list", "GET", function (data) {
@@ -64,6 +65,9 @@ grails.mobile.feed.online = function (cfg, store) {
 
     // Asynchronous Ajax call to server
     var send = function (item, action, type, callback) {
+        if (item) {
+            item.userIdNotification = userIdNotification;
+        }
         $.ajax(grails.mobile.feed.online.AjaxConfig.getConfig(url, type, action, item, callback));
     };
 

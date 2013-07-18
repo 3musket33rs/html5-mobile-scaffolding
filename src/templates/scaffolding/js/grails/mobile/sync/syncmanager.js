@@ -18,11 +18,12 @@ var grails = grails || {};
 grails.mobile = grails.mobile || {};
 grails.mobile.sync = grails.mobile.sync || {};
 
-grails.mobile.sync.syncmanager = function (url, domainName, controller, store, model) {
+grails.mobile.sync.syncmanager = function (url, domainName, controller, store, model, options) {
     var that = {};
     var store = store;
     var domainName = domainName;
     var model = model;
+    var userIdNotification = options.userIdNotification;
 
     controller.onlineEvent.attach(function (item) {
         synchronization();
@@ -109,6 +110,9 @@ grails.mobile.sync.syncmanager = function (url, domainName, controller, store, m
 
 
     var cfg = function (url, type, action, dataToSend, successCallback) {
+        if (dataToSend) {
+            dataToSend.userIdNotification = userIdNotification;
+        }
         return {
             cache: false,
             type: type,

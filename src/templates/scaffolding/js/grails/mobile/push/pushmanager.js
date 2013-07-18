@@ -24,9 +24,18 @@ grails.mobile.push.pushmanager = function (grailsEvents, domainName, store, mode
     var domainName = domainName;
     var model = model;
     that.grailsEvents = grailsEvents;
+    var userIdNotification = options.userIdNotification;
 
     if (options && options.eventPush) {
         that.grailsEvents.on('save-' + domainName , function (data) {
+            if (data !== Object(data)) {
+                data = JSON.parse(data);
+            }
+            var userId = data.userIdNotification;
+            if (userId == userIdNotification) {
+                return;
+            }
+            data = data.instance;
             if (data !== Object(data)) {
                 data = JSON.parse(data);
             }
@@ -43,6 +52,14 @@ grails.mobile.push.pushmanager = function (grailsEvents, domainName, store, mode
             if (data !== Object(data)) {
                 data = JSON.parse(data);
             }
+            var userId = data.userIdNotification;
+            if (userId == userIdNotification) {
+                return;
+            }
+            data = data.instance;
+            if (data !== Object(data)) {
+                data = JSON.parse(data);
+            }
             var retrievedData = model.getItems()[data.id];
             if (retrievedData && retrievedData.version < data.version) {
                 data.NOTIFIED = true;
@@ -54,6 +71,14 @@ grails.mobile.push.pushmanager = function (grailsEvents, domainName, store, mode
         });
 
         that.grailsEvents.on('delete-' + domainName , function (data) {
+            if (data !== Object(data)) {
+                data = JSON.parse(data);
+            }
+            var userId = data.userIdNotification;
+            if (userId == userIdNotification) {
+                return;
+            }
+            data = data.instance;
             if (data !== Object(data)) {
                 data = JSON.parse(data);
             }
