@@ -83,9 +83,10 @@ grails.mobile.mvc.manager = function (configuration) {
 
         // Create Feed
         var feed = grails.mobile.feed.feed({
-                                             url: baseURL + this.name + '/',
-                                             on401: configuration.on401
-                                           }, store);
+            url: baseURL + this.name + '/',
+            on401: configuration.on401,
+            userIdNotification : userIdNotification
+        }, store);
 
         // create controller for domain object
         var controllerName = namespace + '.controller.' + this.name + 'controller';
