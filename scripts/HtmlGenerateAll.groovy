@@ -25,7 +25,7 @@ includeTargets << new File("${html5MobileScaffoldingPluginDir}/scripts/_HtmlMobi
 
 target(default: 'Generates HTML5 Mobile templates, views and controller for a specified domain class') {
 	depends checkVersion, parseArguments, packageApp, htmlMobileCopyTemplates
-
+    //println "::::::::1"
 	promptForName type: 'Domain Class'
 	generateForName = argsMap.params[0]
     htmlViewName = argsMap.params[1]

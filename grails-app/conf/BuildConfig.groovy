@@ -5,6 +5,7 @@ grails.project.test.reports.dir = "target/test-reports"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 grails.tomcat.nio=true
+//grails.plugin.location."events-push" = "../grails-events-push"
 
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
@@ -21,7 +22,7 @@ grails.project.dependency.resolution = {
         mavenCentral()
         mavenRepo "http://maven.springframework.org/milestone/"
 
-        //mavenRepo "https://oss.sonatype.org/content/repositories/snapshots"
+        mavenRepo "https://oss.sonatype.org/content/repositories/snapshots"
     }
     dependencies {
 //        compile('org.atmosphere:atmosphere-runtime:1.1.0.beta3') {
@@ -30,10 +31,11 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
+        compile ":scaffolding:2.0.2"
         runtime ":jquery:1.9.1"
 //        runtime ":events-si:1.0.M7"
-        compile ":events-push:1.0.M3"
-        build ':release:2.2.1', ':rest-client-builder:1.0.3', {
+        //compile ":events-push:1.0.M3"
+        build ':release:3.0.1', ':rest-client-builder:1.0.3', {
           export = false
         }
     }
