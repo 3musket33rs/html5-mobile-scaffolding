@@ -26,6 +26,8 @@ Add a dependency to BuildConfig.groovy:
 
 
 **NOTES:**
+Not yet published on Grails central, the latest source code has been updated for Grails 2.3.6.
+
 html5-mobile-scaffolding depends on events-push. As the only deployed version in grails central is 1.0.M3, you need to get the latest one from [github repo](https://github.com/smaldini/grails-events-push) and change BuildConfig to point to source code
 
 	grails.plugin.location."events-push" = "../grails-events-push"
